@@ -8,5 +8,5 @@ create table if not exists members (
     description varchar(256),
     creation_date date,
     modification_date date,
-    deleted bit NOT NULL
+    deleted bit(1) NOT NULL default 0
 );
