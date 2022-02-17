@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "testimonials")
@@ -14,7 +14,7 @@ public class Testimonial {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Column(name = "name", nullable = false)
     private String name;
     @Column(name = "image")
@@ -22,8 +22,10 @@ public class Testimonial {
     @Column(name = "content")
     private String content;
     @Column(name = "creation_date")
-    private LocalDate creationDate;
+    private LocalDateTime creationDate;
+    @Column(name = "modification_date")
+    private LocalDateTime modificationDate;
     @Column(name = "is_deleted")
     @Type(type = "numeric_boolean")
-    private boolean is_deleted;
+    private boolean is_deleted = Boolean.FALSE;
 }
