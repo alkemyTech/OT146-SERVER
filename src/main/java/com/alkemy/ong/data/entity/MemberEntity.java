@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Setter
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
-public class Member {
+public class MemberEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
