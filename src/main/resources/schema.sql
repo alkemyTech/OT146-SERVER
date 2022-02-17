@@ -16,5 +16,5 @@ CREATE TABLE IF NOT EXISTS users (
    updated_at TIMESTAMP NOT NULL,
    active BIT(1) NOT NULL DEFAULT 0,
    PRIMARY KEY (id)
---   FOREIGN KEY (roleId) REFERENCES Role(id)
+--   FOREIGN KEY (role_id) REFERENCES Role(id)
 );
