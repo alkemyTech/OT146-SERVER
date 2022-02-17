@@ -1,5 +1,12 @@
-create table if not exists lucas (
-    id int not null primary key AUTO_INCREMENT,
-    name varchar(256) not null,
-    age int
+create table if not exists members (
+    id int NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name varchar(256) NOT NULL,
+    facebookUrl varchar(256),
+    instagramUrl varchar(256),
+    linkedinUrl varchar(256),
+    image varchar(256) NOT NULL,
+    description varchar(256),
+    creation_date date,
+    modification_date date,
+    deleted bit NOT NULL
 );
