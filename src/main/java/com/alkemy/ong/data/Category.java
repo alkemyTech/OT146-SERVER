@@ -25,13 +25,16 @@ public class Category {
 
     private String description;
 
+    @Column(nullable = false)
     private Boolean deleted;
 
+    @Column(nullable = false)
     @CreationTimestamp
-    private LocalDateTime createDateTime;
+    private LocalDateTime createdAt;
 
+    @Column(nullable = false)
     @UpdateTimestamp
-    private LocalDateTime updateDateTime;
+    private LocalDateTime updatedAt;
 
 
     public Long getId() {
@@ -67,21 +70,21 @@ public class Category {
     }
 
 
-    public LocalDateTime getCreateDateTime() {
-        return this.createDateTime;
+    public LocalDateTime getCreatedAt() {
+        return this.createdAt;
     }
 
-    public void setCreateDateTime(LocalDateTime createDateTime) {
-        this.createDateTime = createDateTime;
+    public void setCreateDateTime(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
 
-    public LocalDateTime getUpdateDateTime() {
-        return this.updateDateTime;
+    public LocalDateTime getUpdatedAt() {
+        return this.updatedAt;
     }
 
-    public void setUpdateDateTime(LocalDateTime updateDateTime) {
-        this.updateDateTime = updateDateTime;
+    public void setUpdateDateTime(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }    
     
 }
