@@ -1,5 +1,6 @@
-package com.alkemy.ong.data;
+package com.alkemy.ong.data.repository;
 
+import com.alkemy.ong.data.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

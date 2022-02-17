@@ -1,4 +1,4 @@
-package com.alkemy.ong.data;
+package com.alkemy.ong.data.entity;
 
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -14,7 +14,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String firstName;
