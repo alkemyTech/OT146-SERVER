@@ -48,8 +48,8 @@ create table if not exists roles (
 CREATE TABLE IF NOT EXISTS organizations (
   id_organization BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   name VARCHAR(45) NOT NULL,
-  image VARCHAR(45) NOT NULL,
-  address VARCHAR(45) NULL,
+  image VARCHAR(256) NOT NULL,
+  address VARCHAR(256) NULL,
   phone INT UNSIGNED NULL,
   email VARCHAR(45) NOT NULL,
   aboutUsText TEXT NULL,
