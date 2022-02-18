@@ -1,5 +1,10 @@
-create table if not exists lucas (
-    id int not null primary key AUTO_INCREMENT,
-    name varchar(256) not null,
-    age int
+
+CREATE TABLE IF NOT EXISTS commentaries (
+   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+   body VARCHAR(500) NOT NULL,
+--   user_id BIGINT NOT NULL,
+--   news_id BIGINT NOT NULL,
+   PRIMARY KEY (id)
+--   FOREIGN KEY (user_id) REFERENCES User(id)
+--   FOREIGN KEY (news_id) REFERENCES News(id)
 );
