@@ -9,5 +9,5 @@ create table if not exists activities (
     content  varchar(256) not null,
     image  varchar(256) not null,
     created_at TIMESTAMP not null,
-    updated_at TIMESTAMP not null,
+    updated_at TIMESTAMP ,
     deleted  bit(1) not null default = 0)
