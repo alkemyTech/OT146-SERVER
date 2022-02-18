@@ -47,9 +47,9 @@ public class OrganizationEntity implements Serializable {
 
     @NotEmpty
     @Column(nullable = false)
-    private LocalDateTime deletedAt;
+    private LocalDateTime updatedAt;
 
     @Column
-    private Boolean isDelete;
+    private Boolean delete;
 
 }

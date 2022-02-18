@@ -28,13 +28,18 @@ CREATE TABLE IF NOT EXISTS users (
 create table if not exists testimonials (
     id bigint unsigned not null AUTO_INCREMENT,
     name varchar(256) not null,
-    age int
+    image varchar(256),
+    content varchar(500),
+    createdAt timestamp not null,
+    updatedAt timestamp null on update current_timestamp,
+    deleted bit(1) not null default 0,
+    primary key(id)
 );
 
 create table if not exists roles (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
-	description varchar(256),
+    description varchar(256),
     created_at timestamp not null,
     updated_at timestamp
     deleted bit(1) not null default 0
