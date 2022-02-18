@@ -1,7 +1,8 @@
-package com.alkemy.ong.domain.service;
+package com.alkemy.ong.data;
 
 import com.alkemy.ong.data.entity.Commentary;
 import com.alkemy.ong.data.repository.CommentaryRepository;
+import com.alkemy.ong.domain.service.CommentaryGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

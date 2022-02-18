@@ -40,9 +40,9 @@ create table if not exists testimonials (
 CREATE TABLE IF NOT EXISTS commentaries (
    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    body VARCHAR(500) NOT NULL,
---   user_id BIGINT NOT NULL,
+   user_id BIGINT UNSIGNED NOT NULL,
 --   news_id BIGINT NOT NULL,
-   PRIMARY KEY (id)
---   FOREIGN KEY (user_id) REFERENCES User(id)
+   PRIMARY KEY (id),
+   FOREIGN KEY (user_id) REFERENCES users(id)
 --   FOREIGN KEY (news_id) REFERENCES News(id)
 );
