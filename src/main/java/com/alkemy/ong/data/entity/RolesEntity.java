@@ -26,4 +26,7 @@ public class RolesEntity {
     @Column
     private LocalDateTime updatedAt;
 
+    @Column
+    private Boolean deleted = Boolean.FALSE;
+
 }
