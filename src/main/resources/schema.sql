@@ -37,9 +37,10 @@ create table if not exists testimonials (
     primary key(id)
 );
 create table if not exists roles (
-    id int not null primary key AUTO_INCREMENT,
+    id bigint unsigned not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
 	description varchar(256),
     created_at timestamp not null,
     updated_at timestamp
+    deleted bit(1) not null default 0
 );
