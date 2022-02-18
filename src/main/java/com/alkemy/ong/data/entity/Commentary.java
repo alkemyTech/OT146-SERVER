@@ -10,17 +10,23 @@ import javax.persistence.*;
 public class Commentary {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-//    @Column(name = "user_id")
-//    private User userId;
+/*
+TODO:
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @Column(name = "user_id")
+    private User userId;
+ */
 
     private String body;
 
-//    @OneToOne(fetch = FetchType.EAGER, optional = false)
-//    @JoinColumn(name = "news_id")
-//    private News newsId;
+/*
+TODO:
+    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "news_id")
+    private News newsId;
+ */
 
 }
