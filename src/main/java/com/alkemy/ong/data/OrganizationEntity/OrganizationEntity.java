@@ -1,7 +1,8 @@
-package com.alkemy.ong.data;
+package com.alkemy.ong.data.OrganizationEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "organizations")
@@ -32,12 +33,18 @@ public class OrganizationEntity implements Serializable {
     @Column
     private String aboutUsText;
 
+    @Column(nullable = false)
+    private Timestamp timestamp;
+
+    @Column
+    private Boolean isDelete;
+
     //Constructors
     public OrganizationEntity() {
     }
 
-    public OrganizationEntity(long idOrganization, String name, String image, String address,
-                              Integer phone, String email, String welcomeText, String aboutUsText) {
+    public OrganizationEntity(long idOrganization, String name, String image, String address, Integer phone,
+                              String email, String welcomeText, String aboutUsText, Timestamp timestamp, Boolean isDelete) {
         this.idOrganization = idOrganization;
         this.name = name;
         this.image = image;
@@ -46,6 +53,8 @@ public class OrganizationEntity implements Serializable {
         this.email = email;
         this.welcomeText = welcomeText;
         this.aboutUsText = aboutUsText;
+        this.timestamp = timestamp;
+        this.isDelete = isDelete;
     }
 
     //Getters and Setters
@@ -114,5 +123,19 @@ public class OrganizationEntity implements Serializable {
         this.aboutUsText = aboutUsText;
     }
 
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
 
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
+    }
 }
