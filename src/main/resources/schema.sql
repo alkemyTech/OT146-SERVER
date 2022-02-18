@@ -31,25 +31,6 @@ create table if not exists testimonials (
     age int
 );
 
-CREATE TABLE IF NOT EXISTS `alkemy_ong`.`organizations` (
-  `id_organization` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `image` VARCHAR(45) NOT NULL,
-  `address` VARCHAR(45) NULL,
-  `phone` INT UNSIGNED NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `aboutUsText` TEXT NULL,
-  `welcomeText` TEXT NOT NULL,
-  `timestamp` TIMESTAMP NOT NULL,
-  `isDelete` TINYINT NOT NULL,
-  PRIMARY KEY (`id_organization`))
-    image varchar(256),
-    content varchar(500),
-    createdAt timestamp not null,
-    updatedAt timestamp null on update current_timestamp,
-    deleted bit(1) not null default 0,
-    primary key(id)
-);
 create table if not exists roles (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
@@ -59,15 +40,16 @@ create table if not exists roles (
     deleted bit(1) not null default 0
 );
 
-CREATE TABLE IF NOT EXISTS `alkemy_ong`.`organizations` (
-  `id_organization` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NOT NULL,
-  `image` VARCHAR(45) NOT NULL,
-  `address` VARCHAR(45) NULL,
-  `phone` INT UNSIGNED NULL,
-  `email` VARCHAR(45) NOT NULL,
-  `aboutUsText` TEXT NULL,
-  `welcomeText` TEXT NOT NULL,
-  `timestamp` TIMESTAMP NOT NULL,
-  `isDelete` TINYINT NOT NULL,
-  PRIMARY KEY (`id_organization`));
+CREATE TABLE IF NOT EXISTS organizations (
+  id_organization BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  image VARCHAR(45) NOT NULL,
+  address VARCHAR(45) NULL,
+  phone INT UNSIGNED NULL,
+  email VARCHAR(45) NOT NULL,
+  aboutUsText TEXT NULL,
+  welcomeText TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
+  deleted BIT(1) NOT NULL DEFAULT 0
+);
