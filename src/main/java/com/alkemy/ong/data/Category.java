@@ -28,11 +28,10 @@ public class Category {
     @Column(nullable = false)
     private Boolean deleted;
 
-    @Column(nullable = false)
+    
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
@@ -61,7 +60,7 @@ public class Category {
         this.description = description;
     }
 
-    public Boolean getDeleted() {
+    public Boolean isDeleted() {
         return this.deleted;
     }
 
@@ -74,7 +73,7 @@ public class Category {
         return this.createdAt;
     }
 
-    public void setCreateDateTime(LocalDateTime createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
@@ -83,7 +82,7 @@ public class Category {
         return this.updatedAt;
     }
 
-    public void setUpdateDateTime(LocalDateTime updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }    
     
