@@ -6,7 +6,7 @@ create table if not exists members (
     linkedinUrl varchar(256),
     image varchar(256) NOT NULL,
     description varchar(256),
-    creation_date date,
-    modification_date date,
+    created_at date,
+    updated_at date,
     deleted bit(1) NOT NULL default 0
 );
