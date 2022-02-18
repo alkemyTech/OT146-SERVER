@@ -1,3 +1,5 @@
+
+
 create table if not exists members (
     id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name varchar(256) NOT NULL,
@@ -24,4 +26,15 @@ CREATE TABLE IF NOT EXISTS users (
    deleted BIT(1) NOT NULL DEFAULT 0,
    PRIMARY KEY (id)
 --   FOREIGN KEY (role_id) REFERENCES Role(id)
+);
+
+create table if not exists testimonials (
+    id bigint unsigned not null AUTO_INCREMENT,
+    name varchar(256) not null,
+    image varchar(256),
+    content varchar(500),
+    createdAt timestamp not null,
+    updatedAt timestamp null on update current_timestamp,
+    deleted bit(1) not null default 0,
+    primary key(id)
 );
