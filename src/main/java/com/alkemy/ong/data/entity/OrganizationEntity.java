@@ -1,4 +1,4 @@
-package com.alkemy.ong.data.OrganizationEntity;
+package com.alkemy.ong.data.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
