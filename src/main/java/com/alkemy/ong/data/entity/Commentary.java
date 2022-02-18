@@ -20,6 +20,7 @@ TODO:
     private User userId;
  */
 
+    @Column(nullable = false, length = 500)
     private String body;
 
 /*
