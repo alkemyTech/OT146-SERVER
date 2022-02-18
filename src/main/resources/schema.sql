@@ -5,7 +5,7 @@ create table if not exists lucas (
 );
 
 CREATE TABLE IF NOT EXISTS users (
-   id INT NOT NULL AUTO_INCREMENT,
+   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    first_name VARCHAR(255) NOT NULL,
    last_name VARCHAR(255) NOT NULL,
    email VARCHAR(255) NOT NULL UNIQUE,
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS users (
 --   role_id INT NOT NULL,
    created_at TIMESTAMP NOT NULL,
    updated_at TIMESTAMP NOT NULL,
-   active BIT(1) NOT NULL DEFAULT 0,
+   deleted BIT(1) NOT NULL DEFAULT 0,
    PRIMARY KEY (id)
 --   FOREIGN KEY (role_id) REFERENCES Role(id)
 );

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -30,17 +30,7 @@ public class User {
 
     private String photo;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "user_role",
-//            joinColumns = {
-//                    @JoinColumn(name = "user_id", referencedColumnName = "id")
-//            },
-//            inverseJoinColumns = {
-//                    @JoinColumn(name = "role_id", referencedColumnName = "id")
-//            }
-//    )
-//    private List<Role> roles;
+// TODO: Implement relationship USER-ROLE
 
     @Column(name = "created_at")
     @CreatedDate
@@ -50,6 +40,6 @@ public class User {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    private boolean active;
+    private boolean deleted;
 
 }
