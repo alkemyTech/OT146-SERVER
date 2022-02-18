@@ -1,3 +1,5 @@
+
+
 create table if not exists members (
     id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name varchar(256) NOT NULL,
@@ -35,6 +37,15 @@ create table if not exists testimonials (
     updatedAt timestamp null on update current_timestamp,
     deleted bit(1) not null default 0,
     primary key(id)
+);
+
+create table if not exists roles (
+    id bigint unsigned not null primary key AUTO_INCREMENT,
+    name varchar(256) not null,
+	description varchar(256),
+    created_at timestamp not null,
+    updated_at timestamp
+    deleted bit(1) not null default 0
 );
 
 CREATE TABLE IF NOT EXISTS commentaries (
