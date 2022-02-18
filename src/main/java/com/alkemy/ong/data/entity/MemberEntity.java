@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class MemberEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -34,11 +34,11 @@ public class MemberEntity {
 
     @Column(name = "creation_date")
     @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private LocalDate creationDate;
+    private LocalDate createdAt;
 
     @Column(name = "modification_date")
     @DateTimeFormat(pattern = "yyyy/MM/dd")
-    private LocalDate modificationDate;
+    private LocalDate updatedAt;
 
     private boolean deleted = Boolean.FALSE;
 }
