@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class Testimonial {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
     @Column(name = "name", nullable = false)
@@ -21,11 +21,11 @@ public class Testimonial {
     private String image;
     @Column(name = "content")
     private String content;
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
-    @Column(name = "modification_date")
-    private LocalDateTime modificationDate;
-    @Column(name = "is_deleted")
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
+    @Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
+    @Column(name = "deleted")
     @Type(type = "numeric_boolean")
-    private boolean is_deleted = Boolean.FALSE;
+    private boolean deleted = Boolean.FALSE;
 }

@@ -5,12 +5,12 @@ create table if not exists lucas (
 );
 
 create table if not exists testimonials (
-    id bigint not null AUTO_INCREMENT,
+    id bigint unsigned not null AUTO_INCREMENT,
     name varchar(256) not null,
     image varchar(256),
     content varchar(500),
-    creation_date timestamp not null,
-    modification_date timestamp not null default current_timestamp on update current_timestamp,
-    is_deleted bit(1) not null default 0,
+    createdAt timestamp not null,
+    updatedAt timestamp not null default current_timestamp on update current_timestamp,
+    deleted bit(1) not null default 0,
     primary key(id)
 );
