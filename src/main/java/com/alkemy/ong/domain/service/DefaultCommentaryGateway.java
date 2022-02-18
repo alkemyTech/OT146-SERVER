@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CommentaryServiceImpl implements CommentaryService {
+public class DefaultCommentaryGateway implements CommentaryGateway {
 
     @Autowired
     private CommentaryRepository commentaryRepository;
@@ -29,7 +29,9 @@ public class CommentaryServiceImpl implements CommentaryService {
 
     private boolean validateCommentary(/*CommentaryDTO dto*/) {
     /*
-        if(newsRepository.existsById(dto.getNewsId()) && userRepository.existsById(dto.getUserId())){
+        if (newsRepository.existsById(dto.getNewsId())
+                && userRepository.existsById(dto.getUserId())
+                && (!dto.getBody().isEmpty())) {
             return true;
         }
      */
