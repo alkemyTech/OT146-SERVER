@@ -41,7 +41,7 @@ create table if not exists roles (
     name varchar(256) not null,
     description varchar(256),
     created_at timestamp not null,
-    updated_at timestamp
+    updated_at timestamp,
     deleted bit(1) not null default 0
 );
 
