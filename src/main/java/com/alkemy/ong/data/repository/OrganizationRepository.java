@@ -6,8 +6,4 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface OrganizationRepository extends CrudRepository<OrganizationEntity, Long> {
-    public List<OrganizationEntity> findByName(String name);
-    public List<OrganizationEntity> findByAddress(String address);
-    public List<OrganizationEntity> findByImage(String image);
-    public List<OrganizationEntity> findByPhone(String phone);
 }

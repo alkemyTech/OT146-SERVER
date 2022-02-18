@@ -3,6 +3,7 @@ package com.alkemy.ong.data.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "organizations")
@@ -12,9 +13,11 @@ public class OrganizationEntity implements Serializable {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long idOrganization;
 
+    @NotEmpty
     @Column(nullable = false)
     private String name;
 
+    @NotEmpty
     @Column(nullable = false)
     private String image;
 
@@ -24,15 +27,18 @@ public class OrganizationEntity implements Serializable {
     @Column
     private Integer phone;
 
+    @NotEmpty
     @Column(nullable = false)
     private String email;
 
+    @NotEmpty
     @Column(nullable = false)
     private String welcomeText;
 
     @Column
     private String aboutUsText;
 
+    @NotEmpty
     @Column(nullable = false)
     private Timestamp timestamp;
 
