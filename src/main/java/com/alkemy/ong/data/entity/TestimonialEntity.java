@@ -21,9 +21,9 @@ public class Testimonial {
     private String image;
     @Column(name = "content")
     private String content;
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
-    @Column(name = "updatedAt")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     @Column(name = "deleted")
     @Type(type = "numeric_boolean")

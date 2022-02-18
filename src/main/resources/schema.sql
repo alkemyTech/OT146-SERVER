@@ -33,8 +33,8 @@ create table if not exists testimonials (
     name varchar(256) not null,
     image varchar(256),
     content varchar(500),
-    createdAt timestamp not null,
-    updatedAt timestamp null on update current_timestamp,
+    created_at timestamp not null,
+    updated_at timestamp null on update current_timestamp,
     deleted bit(1) not null default 0,
     primary key(id)
 );
