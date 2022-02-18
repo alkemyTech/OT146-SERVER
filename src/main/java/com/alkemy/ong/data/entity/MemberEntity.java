@@ -32,11 +32,11 @@ public class MemberEntity {
     private String image;
     private String description;
 
-    @Column(name = "creation_date")
+    @Column(name = "created_at")
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate createdAt;
 
-    @Column(name = "modification_date")
+    @Column(name = "updated_at")
     @DateTimeFormat(pattern = "yyyy/MM/dd")
     private LocalDate updatedAt;
 
