@@ -13,12 +13,9 @@ public class Commentary {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-/*
-TODO:
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @Column(name = "user_id")
+    @JoinColumn(name = "user_id")
     private User userId;
- */
 
     @Column(nullable = false, length = 500)
     private String body;
