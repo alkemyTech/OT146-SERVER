@@ -29,25 +29,8 @@ CREATE TABLE IF NOT EXISTS users (
 create table if not exists testimonials (
     id bigint unsigned not null AUTO_INCREMENT,
     name varchar(256) not null,
-<<<<<<< HEAD
-    age int)
+    age int);
 
-create table if not exists activities (
-    id int not null primary key AUTO_INCREMENT,
-    name  varchar (256)not null,
-    content  varchar(256) not null,
-    image  varchar(256) not null,
-    created_at TIMESTAMP not null,
-    updated_at TIMESTAMP ,
-    deleted  bit(1) not null default = 0)
-=======
-    image varchar(256),
-    content varchar(500),
-    createdAt timestamp not null,
-    updatedAt timestamp null on update current_timestamp,
-    deleted bit(1) not null default 0,
-    primary key(id)
-);
 create table if not exists roles (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
@@ -56,4 +39,12 @@ create table if not exists roles (
     updated_at timestamp
     deleted bit(1) not null default 0
 );
->>>>>>> 4aad662de649c8500e65373bf6449067b5ef9edb
+
+create table if not exists activities (
+    id int not null primary key AUTO_INCREMENT,
+    name  varchar (256)not null,
+    content  varchar(256) not null,
+    image  varchar(256) not null,
+    created_at TIMESTAMP not null,
+    updated_at TIMESTAMP ,
+    deleted  bit(1) not null default = 0);
