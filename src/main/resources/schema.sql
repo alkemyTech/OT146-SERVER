@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS users (
    created_at TIMESTAMP NOT NULL,
    updated_at TIMESTAMP NOT NULL,
    deleted BIT(1) NOT NULL DEFAULT 0,
-   PRIMARY KEY (id)}
+   PRIMARY KEY (id)
 );
 
 create table if not exists testimonials (
