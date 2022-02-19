@@ -7,22 +7,22 @@ import javax.persistence.*;
 @Entity
 @Table(name = "commentaries")
 @Data
-public class Commentary {
+public class CommentaryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id")
-    private User userId;
+    private UserEntity userId;
 
     @Column(nullable = false, length = 500)
     private String body;
 
 /*
 TODO:
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "news_id")
     private News newsId;
  */
