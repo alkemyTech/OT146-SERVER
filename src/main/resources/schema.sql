@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS users (
    updated_at TIMESTAMP NOT NULL,
    deleted BIT(1) NOT NULL DEFAULT 0,
    PRIMARY KEY (id)
+   FOREIGN KEY (role_id) REFERENCES Role(id)
 );
 
 create table if not exists testimonials (
@@ -39,6 +40,7 @@ create table if not exists testimonials (
 create table if not exists roles (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
+    description varchar(256),
     description varchar(256),
     created_at timestamp not null,
     updated_at timestamp,
