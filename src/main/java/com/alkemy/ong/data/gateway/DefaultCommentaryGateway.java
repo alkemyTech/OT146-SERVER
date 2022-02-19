@@ -8,6 +8,8 @@ import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 public class DefaultCommentaryGateway implements CommentaryGateway {
 
@@ -15,7 +17,7 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
     private final UserRepository userRepository;
     //private final NewsRepository newsRepository;
 
-    public DefaultCommentaryGateway(CommentaryRepository commentaryRepository, UserRepository userRepository /*, NewsRepository newsRepository*/) {
+    public DefaultCommentaryGateway(CommentaryRepository commentaryRepository, UserRepository userRepository/*, NewsRepository newsRepository*/) {
         this.commentaryRepository = commentaryRepository;
         this.userRepository = userRepository;
         //this.newsRepository = newsRepository;
@@ -23,17 +25,19 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
 
 
     @Override
-    public Commentary create(Commentary commentary) {
-        UserEntity user = new userRepository.findById(commentary.getUserId().getId()).get();
-        NewsEntity news = new newsRepository.findById(commentary.getNewsId().getId()).get();
-
-        CommentaryEntity entity = new CommentaryEntity();
-        entity.setUserId(user);
-        entity.setBody(commentary.getBody());
-        entity.setNewsId(news);
-        commentaryRepository.save(entity);
-
-        return commentary;
+    public Commentary create(Commentary commentary) { /*
+        CommentaryEntity entity;
+        Optional<UserEntity> user = userRepository.findById(commentary.getUserId().getId());
+        Optional<NewsEntity> news = newsRepository.findById(commentary.getNewsId().getId());
+        if (user.isPresent() && news.isPresent()){
+            entity = new CommentaryEntity();
+            entity.setUserId(user.get());
+            entity.setBody(commentary.getBody());
+            entity.setNewsId(news.get());
+            commentaryRepository.save(entity);
+            return commentary;
+        } */
+        return null;
     }
 
 }
