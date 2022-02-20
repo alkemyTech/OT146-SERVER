@@ -21,10 +21,10 @@ public class News {
     private String content;
     @Column(nullable = false)
     private String image;
-    @Column(name = "creation_date")
-    private LocalDateTime creationDate;
-    @Column(name = "modification_date")
-    private LocalDateTime modificationDate;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     private boolean deleted;
 

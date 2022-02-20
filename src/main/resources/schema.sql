@@ -1,14 +1,3 @@
-create table if not exists news (
-    id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(256) NOT NULL,
-    content VARCHAR(256) NOT NULL,
-    image VARCHAR(256) NOT NULL,
-    -- category_id INT NOT NULL,
-    creation_date TIMESTAMP NOT NULL,
-    modification_date TIMESTAMP NOT NULL,
-    deleted bit(1) NOT NULL default 0
-    --  FOREIGN KEY (category_id) REFERENCES Category(id)
-
 create table if not exists members (
     id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name varchar(256) NOT NULL,
@@ -64,3 +53,13 @@ create table if not exists category (
     updated_at date, 
     deleted bit(1) not null default 0
 );
+create table if not exists news (
+    id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(256) NOT NULL,
+    content VARCHAR(256) NOT NULL,
+    image VARCHAR(256) NOT NULL,
+    -- category_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    deleted bit(1) NOT NULL default 0
+    --  FOREIGN KEY (category_id) REFERENCES Category(id)
