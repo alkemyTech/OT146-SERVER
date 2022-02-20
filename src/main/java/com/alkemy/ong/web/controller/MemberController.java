@@ -1,8 +1,8 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.domain.Member;
+import com.alkemy.ong.domain.model.Member;
 import com.alkemy.ong.domain.service.MemberService;
-import com.alkemy.ong.web.exception.FieldException;
+import com.alkemy.ong.web.exception.FieldError;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("/members")
@@ -30,15 +27,15 @@ public class MemberController {
     @PostMapping
     public ResponseEntity<MemberDTO> save(@RequestBody MemberDTO dto) throws Exception {
         if (dto.getName().isEmpty() || dto.getName() == null) {
-            throw new FieldException("name field cannot be empty");
+            throw new FieldError("name field cannot be empty");
         }
-        Member memberSaved = this.memberService.save(this.memberDTO2MemberDomain(dto));
-        MemberDTO resultDTO = this.memberDomain2MemberDTO(memberSaved);
+        Member memberSaved = this.memberService.save(this.memberDTO2MemberModel(dto));
+        MemberDTO resultDTO = this.memberModel2MemberDTO(memberSaved);
         return ResponseEntity.status(HttpStatus.CREATED).body(resultDTO);
     }
 
     // =================================================================================================
-    public Member memberDTO2MemberDomain(MemberDTO dto) {
+    public Member memberDTO2MemberModel(MemberDTO dto) {
         Member memberDomain = new Member();
         memberDomain.setName(dto.getName());
         memberDomain.setFacebookUrl(dto.getFacebookUrl());
@@ -50,7 +47,7 @@ public class MemberController {
         return memberDomain;
     }
 
-    public MemberDTO memberDomain2MemberDTO(Member member) {
+    public MemberDTO memberModel2MemberDTO(Member member) {
         MemberDTO memberDTO = new MemberDTO();
         memberDTO.setId(member.getId());
         memberDTO.setName(member.getName());
