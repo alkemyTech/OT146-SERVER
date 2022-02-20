@@ -1,7 +1,7 @@
 package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.web.exception.ApiErrorDTO;
-import com.alkemy.ong.web.exception.FieldException;
+import com.alkemy.ong.web.exception.FieldError;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import java.util.Arrays;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {FieldException.class})
+    @ExceptionHandler(value = {FieldError.class})
     protected ResponseEntity<Object> handleFieldException(RuntimeException ex, WebRequest request) {
         ApiErrorDTO apiErrorDTO = new ApiErrorDTO(
                 HttpStatus.BAD_REQUEST,

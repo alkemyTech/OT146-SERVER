@@ -1,7 +1,7 @@
 package com.alkemy.ong.web.exception;
 
-public class FieldException extends RuntimeException {
-    public FieldException(String error) {
+public class FieldError extends RuntimeException {
+    public FieldError(String error) {
         super(error);
     }
 }
