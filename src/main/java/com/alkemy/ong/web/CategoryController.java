@@ -1,0 +1,82 @@
+package com.alkemy.ong.web;
+
+import java.time.LocalDateTime;
+
+import com.alkemy.ong.domain.CategoryService;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/ong")
+public class CategoryController {
+
+
+
+    @Autowired
+    CategoryService categoryService;
+
+    @GetMapping("/categories")
+    public Iterable<Object[]> getAllCategories() {
+        
+        return categoryService.getAllCategories();
+    }
+    
+
+
+
+
+    public static class CategoryDto { 
+
+        private Long id;
+        private String name;
+        private String description;
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
+    
+        public Long getId() {
+            return this.id;
+        }
+    
+        public void setId(Long id) {
+            this.id = id;
+        }
+    
+        public String getName() {
+            return this.name;
+        }
+    
+        public void setName(String name) {
+            this.name = name;
+        }
+    
+        public String getDescription() {
+            return this.description;
+        }
+    
+        public void setDescription(String description) {
+            this.description = description;
+        }
+    
+        public LocalDateTime getCreatedAt() {
+            return this.createdAt;
+        }
+    
+        public void setCreatedAt(LocalDateTime createdAt) {
+            this.createdAt = createdAt;
+        }
+    
+        public LocalDateTime getUpdatedAt() {
+            return this.updatedAt;
+        }
+    
+        public void setUpdatedAt(LocalDateTime updatedAt) {
+            this.updatedAt = updatedAt;
+        }
+    } 
+    
+}

@@ -1,4 +1,4 @@
-package com.alkemy.ong.data;
+package com.alkemy.ong.data.entity;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +14,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name= "category")
-public class Category {
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
