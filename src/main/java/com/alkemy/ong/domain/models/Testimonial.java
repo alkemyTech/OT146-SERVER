@@ -1,11 +1,11 @@
 package com.alkemy.ong.domain.models;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter @Setter @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Testimonial {
     private Long id;
     private String name;

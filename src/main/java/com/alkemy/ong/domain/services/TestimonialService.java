@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TestimonialService {
-    private TestimonialGateway testimonialGateway;
+    private final TestimonialGateway testimonialGateway;
 
     public TestimonialService(TestimonialGateway testimonialGateway) {
         this.testimonialGateway = testimonialGateway;

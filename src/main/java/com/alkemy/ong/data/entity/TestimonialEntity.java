@@ -1,7 +1,6 @@
 package com.alkemy.ong.data.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -10,6 +9,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "testimonials")
 @Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TestimonialEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,63 +2,62 @@ package com.alkemy.ong.web;
 
 import com.alkemy.ong.domain.models.Testimonial;
 import com.alkemy.ong.domain.services.TestimonialService;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/testimonials")
 public class TestimonialController {
 
-    private TestimonialService testimonialService;
+    private final TestimonialService testimonialService;
 
     public TestimonialController(TestimonialService testimonialService) {
         this.testimonialService = testimonialService;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<?> getAll(@RequestBody TestimonialDTO testimonialInput) {
+    @PostMapping(value = "")
+    public ResponseEntity<?> save(@RequestBody TestimonialDTO dto) {
         try{
-            if (testimonialInput == null)
+            if (dto == null)
                 throw new Exception("not request content");
-            if(testimonialInput.name == null || testimonialInput.name.equals(""))
+            if(dto.name == null || dto.name.equals(""))
                 throw new Exception("name is invalid");
-            if(testimonialInput.content == null || testimonialInput.content.equals(""))
+            if(dto.content == null || dto.content.equals(""))
                 throw new Exception("content is invalid");
 
-            Testimonial testimonial = testimonialService.save(convertToDomain(testimonialInput));
+            Testimonial testimonial = testimonialService.save(convertToDomain(dto));
 
-            TestimonialDTO testimonialOut = convertToOutput(testimonial);
+            TestimonialDTO testimonialOut = convertToDto(testimonial);
 
             return ResponseEntity.status(HttpStatus.OK).body(testimonialOut);
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorResponseBasic(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
+                    new ErrorResponseBasic(e.getMessage()));
         }
     }
 
-    private Testimonial convertToDomain(TestimonialDTO testimonialDTO){
-        return new Testimonial(
-                null,
-                testimonialDTO.getName(),
-                testimonialDTO.getImage(),
-                testimonialDTO.getContent());
+    private Testimonial convertToDomain(TestimonialDTO dto){
+        return Testimonial.builder()
+                .id(null)
+                .name(dto.getName())
+                .image(dto.getImage())
+                .content(dto.getContent())
+                .build();
     }
 
-    private TestimonialDTO convertToOutput(Testimonial testimonialDomain){
-        return new TestimonialDTO(
-                testimonialDomain.getId(),
-                testimonialDomain.getName(),
-                testimonialDomain.getImage(),
-                testimonialDomain.getContent());
+
+    private TestimonialDTO convertToDto(Testimonial testimonial){
+        return TestimonialDTO.builder()
+                .id(testimonial.getId())
+                .name(testimonial.getName())
+                .image(testimonial.getImage())
+                .content(testimonial.getContent())
+                .build();
     }
 
+    @Builder
     @Getter @Setter @AllArgsConstructor
     public static class TestimonialDTO {
         private Long id;
@@ -69,10 +68,8 @@ public class TestimonialController {
 
     @Getter @Setter @AllArgsConstructor
     public static class ErrorResponseBasic{
-        private int status;
         private String messaje;
     }
-
 
 }
 

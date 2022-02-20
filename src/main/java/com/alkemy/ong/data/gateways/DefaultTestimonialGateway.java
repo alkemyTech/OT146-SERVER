@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultTestimonialGateway implements TestimonialGateway {
 
-    private TestimonialRepository repository;
+    private final TestimonialRepository repository;
 
     public DefaultTestimonialGateway(TestimonialRepository repository) {
         this.repository = repository;
@@ -17,23 +17,24 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
 
     @Override
     public Testimonial create(Testimonial testimonial) {
-        TestimonialEntity entity = convertAt(testimonial);
-        return convertAt(repository.save(entity));
+        TestimonialEntity entity = convertToEntity(testimonial);
+        return convertToModel(repository.save(entity));
     }
 
-    public Testimonial convertAt(TestimonialEntity testimonialEntity){
-        return new Testimonial(
-                testimonialEntity.getId(),
-                testimonialEntity.getName(),
-                testimonialEntity.getImage(),
-                testimonialEntity.getContent());
+    public Testimonial convertToModel(TestimonialEntity testimonialEntity){
+        return Testimonial.builder()
+                .id(testimonialEntity.getId())
+                .name(testimonialEntity.getName())
+                .image(testimonialEntity.getImage())
+                .content(testimonialEntity.getContent())
+                .build();
     }
 
-    public TestimonialEntity convertAt(Testimonial testimonial){
-        TestimonialEntity entity = new TestimonialEntity();
-        entity.setName(testimonial.getName());
-        entity.setContent(testimonial.getContent());
-        entity.setImage(testimonial.getImage());
-        return entity;
+    public TestimonialEntity convertToEntity(Testimonial testimonial){
+        return TestimonialEntity.builder()
+                .name(testimonial.getName())
+                .content(testimonial.getContent())
+                .image(testimonial.getImage())
+                .build();
     }
 }
