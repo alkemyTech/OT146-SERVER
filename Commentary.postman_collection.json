@@ -30,7 +30,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userId\": 1,\n    \"body\": \"Este es el comentario del usuario 1\"\n}",
+					"raw": "{\n    \"userId\": 1,\n    \"body\": \"Este es el comentario del usuario 1 en la noticia 1\",\n    \"newsId\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"

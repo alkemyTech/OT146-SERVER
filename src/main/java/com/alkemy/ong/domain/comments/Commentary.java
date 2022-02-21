@@ -11,6 +11,6 @@ public class Commentary {
 
     private Long userId;
     private String body;
-//  private Long newsId;
+    private Long newsId;
 
 }

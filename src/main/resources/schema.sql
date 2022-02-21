@@ -60,10 +60,10 @@ create table if not exists news (
     image VARCHAR(256) NOT NULL,
     -- category_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL,
-    updated_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NULL,
     deleted bit(1) NOT NULL default 0
     --  FOREIGN KEY (category_id) REFERENCES Category(id)
-
+);
 create table if not exists activities (
     id int not null primary key AUTO_INCREMENT,
     name  varchar (256)not null,
@@ -71,14 +71,14 @@ create table if not exists activities (
     image  varchar(256) not null,
     created_at TIMESTAMP not null,
     updated_at TIMESTAMP ,
-    deleted  bit(1) not null default = 0
+    deleted  bit(1) not null default 0
 );
 CREATE TABLE IF NOT EXISTS commentaries (
    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    body VARCHAR(500) NOT NULL,
    user_id BIGINT UNSIGNED NOT NULL,
---   news_id BIGINT NOT NULL,
+   news_id BIGINT UNSIGNED NOT NULL,
    PRIMARY KEY (id),
-   FOREIGN KEY (user_id) REFERENCES users(id)
---   FOREIGN KEY (news_id) REFERENCES News(id)
+   FOREIGN KEY (user_id) REFERENCES users(id),
+   FOREIGN KEY (news_id) REFERENCES news(id)
 );

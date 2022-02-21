@@ -26,7 +26,7 @@ public class CommentaryController {
     public List<CommentaryDTO> findAll() {
         List<Commentary> models = commentaryService.findAll();
         return models.stream()
-                .map(model -> (new CommentaryDTO(model.getUserId(), model.getBody())))
+                .map(model -> (new CommentaryDTO(model.getUserId(), model.getBody(), model.getNewsId())))
                 .collect(Collectors.toList());
     }
 
@@ -47,6 +47,6 @@ class CommentaryDTO {
 
     private Long userId;
     private String body;
-//  private Long newsId;
+    private Long newsId;
 
 }

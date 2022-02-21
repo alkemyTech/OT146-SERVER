@@ -20,11 +20,8 @@ public class CommentaryEntity {
     @Column(nullable = false, length = 500)
     private String body;
 
-/*
-TODO:
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "news_id")
-    private News newsId;
- */
+    private NewsEntity newsId;
 
 }
