@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/commentary")
+@RequestMapping("/comments")
 public class CommentaryController {
 
     private final CommentaryService commentaryService;
@@ -23,10 +23,10 @@ public class CommentaryController {
     }
 
     @GetMapping
-    public List<CommentaryDTO> findAll() {
+    public List<CommentaryDtoResponse> findAll() {
         List<Commentary> models = commentaryService.findAll();
         return models.stream()
-                .map(model -> (new CommentaryDTO(model.getUserId(), model.getBody(), model.getNewsId())))
+                .map(model -> (new CommentaryDtoResponse(model.getBody())))
                 .collect(Collectors.toList());
     }
 
@@ -50,3 +50,11 @@ class CommentaryDTO {
     private Long newsId;
 
 }
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+class CommentaryDtoResponse {
+    private String body;
+}
+

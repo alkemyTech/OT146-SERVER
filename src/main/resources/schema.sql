@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS commentaries (
    body VARCHAR(500) NOT NULL,
    user_id BIGINT UNSIGNED NOT NULL,
    news_id BIGINT UNSIGNED NOT NULL,
+   created_at TIMESTAMP NULL,
    PRIMARY KEY (id),
    FOREIGN KEY (user_id) REFERENCES users(id),
    FOREIGN KEY (news_id) REFERENCES news(id)

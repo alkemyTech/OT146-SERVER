@@ -11,6 +11,7 @@ import com.alkemy.ong.domain.comments.CommentaryGateway;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,7 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
         entity.setUserId(user);
         entity.setBody(commentary.getBody());
         entity.setNewsId(news);
+        entity.setCreatedAt(LocalDateTime.now());
         commentaryRepository.save(entity);
 
     }

@@ -1,8 +1,10 @@
 package com.alkemy.ong.data.entity;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "commentaries")
@@ -23,5 +25,8 @@ public class CommentaryEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "news_id")
     private NewsEntity newsId;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
 }
