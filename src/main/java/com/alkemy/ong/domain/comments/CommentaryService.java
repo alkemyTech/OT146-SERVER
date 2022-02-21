@@ -12,7 +12,7 @@ public class CommentaryService implements CommentaryGateway {
     }
 
     @Override
-    public Commentary create(Commentary commentary) {
-        return gateway.create(commentary);
+    public void create(Commentary commentary) {
+        gateway.create(commentary);
     }
 }

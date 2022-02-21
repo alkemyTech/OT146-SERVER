@@ -6,9 +6,8 @@ import com.alkemy.ong.data.repository.CommentaryRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
+import javassist.NotFoundException;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
 
 @Component
 public class DefaultCommentaryGateway implements CommentaryGateway {
@@ -25,19 +24,21 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
 
 
     @Override
-    public Commentary create(Commentary commentary) { /*
-        CommentaryEntity entity;
-        Optional<UserEntity> user = userRepository.findById(commentary.getUserId().getId());
-        Optional<NewsEntity> news = newsRepository.findById(commentary.getNewsId().getId());
-        if (user.isPresent() && news.isPresent()){
-            entity = new CommentaryEntity();
-            entity.setUserId(user.get());
-            entity.setBody(commentary.getBody());
-            entity.setNewsId(news.get());
-            commentaryRepository.save(entity);
-            return commentary;
-        } */
-        return null;
+    public void create(Commentary commentary) { /*
+        UserEntity user = userRepository.findById(commentary.getUserId().getId())
+                .orElseThrow(
+                        () -> new NotFoundException("User with id: " + commentary.getUserId().getId() + " not found.")
+                );
+        NewsEntity news = newsRepository.findById(commentary.getNewsId().getId())
+                .orElseThrow(
+                        () -> new NotFoundException("News with id: " + commentary.getNewsId().getId() + " not found.")
+                );
+        CommentaryEntity entity = new CommentaryEntity();
+        entity.setUserId(user.get());
+        entity.setBody(commentary.getBody());
+        entity.setNewsId(news.get());
+        commentaryRepository.save(entity);
+        */
     }
 
 }
