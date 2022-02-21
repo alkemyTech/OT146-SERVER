@@ -1,4 +1,4 @@
-package com.alkemy.ong.domain.Models;
+package com.alkemy.ong.domain.Category;
 
 import java.time.LocalDateTime;
 
@@ -18,11 +18,6 @@ public class Category {
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-	
-
-
-
 
     
 }

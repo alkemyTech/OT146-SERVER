@@ -1,5 +1,6 @@
-package com.alkemy.ong.domain;
+package com.alkemy.ong.domain.Category;
 
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,9 +12,9 @@ public class CategoryService  {
     CategoryGateway categoryGateway;
 
 
-    public Iterable<Object[]> getAllCategories() {
+    public List<Category> findAll() {
         
-        return categoryGateway.getAllCategories();
+        return categoryGateway.findAll();
     }
     
 }

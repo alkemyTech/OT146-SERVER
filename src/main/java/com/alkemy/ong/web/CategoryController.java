@@ -1,9 +1,10 @@
 package com.alkemy.ong.web;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import com.alkemy.ong.domain.CategoryService;
-
+import com.alkemy.ong.domain.Category.Category;
+import com.alkemy.ong.domain.Category.CategoryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -21,9 +22,10 @@ public class CategoryController {
     CategoryService categoryService;
 
     @GetMapping("/categories")
-    public Iterable<Object[]> getAllCategories() {
+    public List<CategoryDto> findAll() {
+        List<Category> category = categoryService.findAll();
         
-        return categoryService.getAllCategories();
+        return category.stream().map(mapper).;
     }
     
 
