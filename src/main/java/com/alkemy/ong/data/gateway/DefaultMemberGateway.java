@@ -2,8 +2,8 @@ package com.alkemy.ong.data.gateway;
 
 import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.repository.MemberRepository;
-import com.alkemy.ong.domain.model.Member;
-import com.alkemy.ong.domain.gateway.MemberGateway;
+import com.alkemy.ong.domain.members.Member;
+import com.alkemy.ong.domain.members.MemberGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,38 +22,40 @@ public class DefaultMemberGateway implements MemberGateway {
 
     @Override
     public Member create(Member model) {
-        MemberEntity entity = this.memberModel2MemberEntity(model);
+        MemberEntity entity = this.toEntity(model);
         MemberEntity entitySaved = this.memberRepository.save(entity);
-        return this.memberEntity2MemberModel(entitySaved);
+        return this.toModel(entitySaved);
     }
 
     //======================================================================================================
-    public MemberEntity memberModel2MemberEntity(Member member) {
-        MemberEntity entity = new MemberEntity();
-        entity.setName(member.getName());
-        entity.setFacebookUrl(member.getFacebookUrl());
-        entity.setInstagramUrl(member.getInstagramUrl());
-        entity.setLinkedinUrl(member.getLinkedinUrl());
-        entity.setImage(member.getImage());
-        entity.setDescription(member.getDescription());
-        entity.setCreatedAt(this.string2LocalDate(member.getCreatedAt()));
+    public MemberEntity toEntity(Member member) {
+        MemberEntity entity = MemberEntity.builder()
+                .name(member.getName())
+                .facebookUrl(member.getFacebookUrl())
+                .instagramUrl(member.getInstagramUrl())
+                .linkedinUrl(member.getLinkedinUrl())
+                .image(member.getImage())
+                .description(member.getDescription())
+                .createdAt(this.toLocalDate(member.getCreatedAt()))
+                .build();
         return entity;
     }
 
-    public Member memberEntity2MemberModel(MemberEntity entity) {
-        Member member = new Member();
-        member.setId(entity.getId());
-        member.setName(entity.getName());
-        member.setFacebookUrl(entity.getFacebookUrl());
-        member.setInstagramUrl(entity.getInstagramUrl());
-        member.setLinkedinUrl(entity.getLinkedinUrl());
-        member.setImage(entity.getImage());
-        member.setDescription(entity.getDescription());
-        member.setCreatedAt(entity.getCreatedAt().toString());
+    public Member toModel(MemberEntity entity) {
+        Member member = Member.builder()
+                .id(entity.getId())
+                .name(entity.getName())
+                .facebookUrl(entity.getFacebookUrl())
+                .instagramUrl(entity.getInstagramUrl())
+                .linkedinUrl(entity.getLinkedinUrl())
+                .image(entity.getImage())
+                .description(entity.getDescription())
+                .createdAt(entity.getCreatedAt().toString())
+                .build();
         return member;
     }
 
-    private LocalDate string2LocalDate(String stringDate) {
+    private LocalDate toLocalDate(String stringDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
         LocalDate date = LocalDate.parse(stringDate, formatter);
         return date;
