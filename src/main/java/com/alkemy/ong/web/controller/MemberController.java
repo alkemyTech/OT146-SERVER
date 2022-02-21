@@ -1,8 +1,8 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.domain.model.Member;
-import com.alkemy.ong.domain.service.MemberService;
-import com.alkemy.ong.web.exception.FieldError;
+import com.alkemy.ong.domain.members.Member;
+import com.alkemy.ong.domain.members.MemberService;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @RestController
 @RequestMapping("/members")
 public class MemberController {
 
-    private MemberService memberService;
+    private final MemberService memberService;
 
     @Autowired
     public MemberController(MemberService memberService) {
@@ -25,51 +28,57 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<MemberDTO> save(@RequestBody MemberDTO dto) throws Exception {
-        if (dto.getName().isEmpty() || dto.getName() == null) {
-            throw new FieldError("name field cannot be empty");
-        }
-        Member memberSaved = this.memberService.save(this.memberDTO2MemberModel(dto));
-        MemberDTO resultDTO = this.memberModel2MemberDTO(memberSaved);
+    public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberDTO dto) throws Exception {
+        Member memberSaved = this.memberService.save(this.toModel(dto));
+        MemberDTO resultDTO = this.toDto(memberSaved);
         return ResponseEntity.status(HttpStatus.CREATED).body(resultDTO);
     }
 
     // =================================================================================================
-    public Member memberDTO2MemberModel(MemberDTO dto) {
-        Member memberDomain = new Member();
-        memberDomain.setName(dto.getName());
-        memberDomain.setFacebookUrl(dto.getFacebookUrl());
-        memberDomain.setInstagramUrl(dto.getInstagramUrl());
-        memberDomain.setLinkedinUrl(dto.getLinkedinUrl());
-        memberDomain.setImage(dto.getImage());
-        memberDomain.setDescription(dto.getDescription());
-        memberDomain.setCreatedAt(dto.getCreatedAt());
+    private Member toModel(MemberDTO dto) {
+        Member memberDomain = Member.builder()
+                .name(dto.getName())
+                .facebookUrl(dto.getFacebookUrl())
+                .instagramUrl(dto.getInstagramUrl())
+                .linkedinUrl(dto.getLinkedinUrl())
+                .image(dto.getImage())
+                .description(dto.getDescription())
+                .createdAt(dto.getCreatedAt())
+                .build();
         return memberDomain;
     }
 
-    public MemberDTO memberModel2MemberDTO(Member member) {
-        MemberDTO memberDTO = new MemberDTO();
-        memberDTO.setId(member.getId());
-        memberDTO.setName(member.getName());
-        memberDTO.setFacebookUrl(member.getFacebookUrl());
-        memberDTO.setInstagramUrl(member.getInstagramUrl());
-        memberDTO.setLinkedinUrl(member.getLinkedinUrl());
-        memberDTO.setImage(member.getImage());
-        memberDTO.setDescription(member.getDescription());
-        memberDTO.setCreatedAt(member.getCreatedAt());
+    private MemberDTO toDto(Member member) {
+        MemberDTO memberDTO = MemberDTO.builder()
+                .id(member.getId())
+                .name(member.getName())
+                .facebookUrl(member.getFacebookUrl())
+                .instagramUrl(member.getInstagramUrl())
+                .linkedinUrl(member.getLinkedinUrl())
+                .image(member.getImage())
+                .description(member.getDescription())
+                .createdAt(member.getCreatedAt())
+                .build();
         return memberDTO;
     }
 
-    // ======================================================================================================
     @Getter
     @Setter
+    @Builder
     public static class MemberDTO {
+
         private Long id;
+
+        @NotNull
         private String name;
+
         private String facebookUrl;
         private String instagramUrl;
         private String linkedinUrl;
+
+        @NotNull
         private String image;
+
         private String description;
         private String createdAt;
     }
