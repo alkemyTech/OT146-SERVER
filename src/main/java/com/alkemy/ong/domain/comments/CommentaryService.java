@@ -2,6 +2,8 @@ package com.alkemy.ong.domain.comments;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CommentaryService implements CommentaryGateway {
 
@@ -14,5 +16,10 @@ public class CommentaryService implements CommentaryGateway {
     @Override
     public void create(Commentary commentary) {
         gateway.create(commentary);
+    }
+
+    @Override
+    public List<Commentary> findAll() {
+        return gateway.findAll();
     }
 }
