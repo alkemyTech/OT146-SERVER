@@ -17,11 +17,11 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
 
     @Override
     public Testimonial create(Testimonial testimonial) {
-        TestimonialEntity entity = convertToEntity(testimonial);
-        return convertToModel(repository.save(entity));
+        TestimonialEntity entity = toEntity(testimonial);
+        return toModel(repository.save(entity));
     }
 
-    public Testimonial convertToModel(TestimonialEntity testimonialEntity){
+    public Testimonial toModel(TestimonialEntity testimonialEntity){
         return Testimonial.builder()
                 .id(testimonialEntity.getId())
                 .name(testimonialEntity.getName())
@@ -30,7 +30,7 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
                 .build();
     }
 
-    public TestimonialEntity convertToEntity(Testimonial testimonial){
+    public TestimonialEntity toEntity(Testimonial testimonial){
         return TestimonialEntity.builder()
                 .name(testimonial.getName())
                 .content(testimonial.getContent())

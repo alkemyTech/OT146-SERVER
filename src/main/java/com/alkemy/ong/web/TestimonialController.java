@@ -7,6 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+
 @RestController
 @RequestMapping("/testimonials")
 public class TestimonialController {
@@ -18,27 +23,13 @@ public class TestimonialController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<?> save(@RequestBody TestimonialDTO dto) {
-        try{
-            if (dto == null)
-                throw new Exception("not request content");
-            if(dto.name == null || dto.name.equals(""))
-                throw new Exception("name is invalid");
-            if(dto.content == null || dto.content.equals(""))
-                throw new Exception("content is invalid");
+    public ResponseEntity<?> save(@Valid @RequestBody  TestimonialDTO dto) {
+        Testimonial testimonial = testimonialService.save(toDomain(dto));
 
-            Testimonial testimonial = testimonialService.save(convertToDomain(dto));
-
-            TestimonialDTO testimonialOut = convertToDto(testimonial);
-
-            return ResponseEntity.status(HttpStatus.OK).body(testimonialOut);
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ErrorResponseBasic(e.getMessage()));
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(testimonial));
     }
 
-    private Testimonial convertToDomain(TestimonialDTO dto){
+    private Testimonial toDomain(TestimonialDTO dto){
         return Testimonial.builder()
                 .id(null)
                 .name(dto.getName())
@@ -48,7 +39,7 @@ public class TestimonialController {
     }
 
 
-    private TestimonialDTO convertToDto(Testimonial testimonial){
+    private TestimonialDTO toDto(Testimonial testimonial){
         return TestimonialDTO.builder()
                 .id(testimonial.getId())
                 .name(testimonial.getName())
@@ -61,8 +52,10 @@ public class TestimonialController {
     @Getter @Setter @AllArgsConstructor
     public static class TestimonialDTO {
         private Long id;
+        @NotNull @NotBlank @NotEmpty
         private String name;
         private String image;
+        @NotNull @NotBlank @NotEmpty
         private String content;
     }
 
