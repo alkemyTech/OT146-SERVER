@@ -58,11 +58,5 @@ public class TestimonialController {
         @NotNull @NotBlank @NotEmpty
         private String content;
     }
-
-    @Getter @Setter @AllArgsConstructor
-    public static class ErrorResponseBasic{
-        private String messaje;
-    }
-
 }
 
