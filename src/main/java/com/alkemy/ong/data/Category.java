@@ -28,7 +28,7 @@ public class Category {
     @Column(nullable = false)
     private Boolean deleted;
 
-    
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -84,6 +84,5 @@ public class Category {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
-    }    
-    
+    }
 }
