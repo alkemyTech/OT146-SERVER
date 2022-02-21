@@ -36,6 +36,7 @@ create table if not exists testimonials (
     deleted bit(1) not null default 0,
     primary key(id)
 );
+
 create table if not exists roles (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
@@ -63,3 +64,13 @@ create table if not exists news (
     updated_at TIMESTAMP NOT NULL,
     deleted bit(1) NOT NULL default 0
     --  FOREIGN KEY (category_id) REFERENCES Category(id)
+
+create table if not exists activities (
+    id int not null primary key AUTO_INCREMENT,
+    name  varchar (256)not null,
+    content  varchar(256) not null,
+    image  varchar(256) not null,
+    created_at TIMESTAMP not null,
+    updated_at TIMESTAMP ,
+    deleted  bit(1) not null default = 0
+);
