@@ -1,5 +1,3 @@
-
-
 create table if not exists members (
     id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name varchar(256) NOT NULL,
@@ -38,7 +36,6 @@ create table if not exists testimonials (
     deleted bit(1) not null default 0,
     primary key(id)
 );
-
 create table if not exists roles (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
@@ -56,7 +53,26 @@ create table if not exists category (
     updated_at date, 
     deleted bit(1) not null default 0
 );
+create table if not exists news (
+    id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(256) NOT NULL,
+    content VARCHAR(256) NOT NULL,
+    image VARCHAR(256) NOT NULL,
+    -- category_id INT NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    deleted bit(1) NOT NULL default 0
+    --  FOREIGN KEY (category_id) REFERENCES Category(id)
 
+create table if not exists activities (
+    id int not null primary key AUTO_INCREMENT,
+    name  varchar (256)not null,
+    content  varchar(256) not null,
+    image  varchar(256) not null,
+    created_at TIMESTAMP not null,
+    updated_at TIMESTAMP ,
+    deleted  bit(1) not null default = 0
+);
 CREATE TABLE IF NOT EXISTS commentaries (
    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    body VARCHAR(500) NOT NULL,
