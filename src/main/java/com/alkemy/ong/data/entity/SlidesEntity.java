@@ -2,8 +2,11 @@ package com.alkemy.ong.data.entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -22,6 +25,20 @@ public class SlidesEntity {
     @Column(nullable = false)
     private Integer order;
 
+    // TODO: relación cuando esté disponible el OrganizationEntity
+    @ManyToOne
     @Column(nullable = false)
-    private Long organizationId;
+    private OrganizationEntity organizationId;
+
+    @Column
+    private Boolean deleted = Boolean.FALSE;
+
+    @Column(nullable = false)
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @Column
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
 }

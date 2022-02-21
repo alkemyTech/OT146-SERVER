@@ -41,7 +41,16 @@ create table if not exists roles (
     name varchar(256) not null,
 	description varchar(256),
     created_at timestamp not null,
-    updated_at timestamp
+    updated_at timestamp,
+    deleted bit(1) not null default 0
+);
+create table if not exists category (
+    id bigint not null primary key AUTO_INCREMENT,
+    name varchar(256) not null,
+    description varchar(256),
+    image varchar(256),
+    created_at date,
+    updated_at date, 
     deleted bit(1) not null default 0
 );
 create table if not exists slides (
@@ -49,5 +58,7 @@ create table if not exists slides (
     image_url varchar(256) not null,
     text varchar(256),
     order int not null,
+    created_at timestamp not null,
+    updated_at timestamp
     organization_id bigint unsigned not null
 );
