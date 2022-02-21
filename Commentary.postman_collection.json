@@ -11,13 +11,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/commentary",
+					"raw": "localhost:8080/comments",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"commentary"
+						"comments"
 					]
 				}
 			},
@@ -38,13 +38,13 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/commentary",
+					"raw": "localhost:8080/comments",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"commentary"
+						"comments"
 					]
 				}
 			},
