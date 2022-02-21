@@ -21,8 +21,8 @@ CREATE TABLE IF NOT EXISTS users (
    password VARCHAR(255) NOT NULL,
    photo VARCHAR(255) NULL,
 --   role_id INT NOT NULL,
-   created_at TIMESTAMP NOT NULL,
-   updated_at TIMESTAMP NOT NULL,
+   created_at TIMESTAMP NULL,
+   updated_at TIMESTAMP NULL,
    deleted BIT(1) NOT NULL DEFAULT 0,
    PRIMARY KEY (id)
 --   FOREIGN KEY (role_id) REFERENCES Role(id)
