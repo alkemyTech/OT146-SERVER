@@ -1,4 +1,4 @@
-package com.alkemy.ong.web;
+package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.testimonial.Testimonial;
 import com.alkemy.ong.domain.testimonial.TestimonialService;
@@ -23,29 +23,27 @@ public class TestimonialController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<?> save(@Valid @RequestBody  TestimonialDTO dto) {
+    public ResponseEntity<TestimonialDTO> save(@Valid @RequestBody  TestimonialDTO dto) {
         Testimonial testimonial = testimonialService.save(toDomain(dto));
-
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(testimonial));
     }
 
     private Testimonial toDomain(TestimonialDTO dto){
         return Testimonial.builder()
-                .id(null)
-                .name(dto.getName())
-                .image(dto.getImage())
-                .content(dto.getContent())
-                .build();
+         .id(null)
+         .name(dto.getName())
+         .image(dto.getImage())
+         .content(dto.getContent())
+         .build();
     }
-
 
     private TestimonialDTO toDto(Testimonial testimonial){
         return TestimonialDTO.builder()
-                .id(testimonial.getId())
-                .name(testimonial.getName())
-                .image(testimonial.getImage())
-                .content(testimonial.getContent())
-                .build();
+         .id(testimonial.getId())
+         .name(testimonial.getName())
+         .image(testimonial.getImage())
+         .content(testimonial.getContent())
+         .build();
     }
 
     @Builder
