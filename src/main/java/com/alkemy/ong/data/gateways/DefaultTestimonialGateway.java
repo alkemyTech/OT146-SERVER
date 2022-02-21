@@ -2,8 +2,8 @@ package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.data.entity.TestimonialEntity;
 import com.alkemy.ong.data.repository.TestimonialRepository;
-import com.alkemy.ong.domain.gateways.TestimonialGateway;
-import com.alkemy.ong.domain.models.Testimonial;
+import com.alkemy.ong.domain.testimonial.TestimonialGateway;
+import com.alkemy.ong.domain.testimonial.Testimonial;
 import org.springframework.stereotype.Component;
 
 @Component

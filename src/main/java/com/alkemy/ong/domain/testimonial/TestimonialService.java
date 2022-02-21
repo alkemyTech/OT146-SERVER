@@ -1,8 +1,6 @@
-package com.alkemy.ong.domain.services;
+package com.alkemy.ong.domain.testimonial;
 
 
-import com.alkemy.ong.domain.gateways.TestimonialGateway;
-import com.alkemy.ong.domain.models.Testimonial;
 import org.springframework.stereotype.Service;
 
 @Service

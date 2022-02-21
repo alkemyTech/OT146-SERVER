@@ -1,7 +1,7 @@
 package com.alkemy.ong.web;
 
-import com.alkemy.ong.domain.models.Testimonial;
-import com.alkemy.ong.domain.services.TestimonialService;
+import com.alkemy.ong.domain.testimonial.Testimonial;
+import com.alkemy.ong.domain.testimonial.TestimonialService;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
