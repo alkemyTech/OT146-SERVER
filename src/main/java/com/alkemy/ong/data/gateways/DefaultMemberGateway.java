@@ -17,7 +17,6 @@ public class DefaultMemberGateway implements MemberGateway {
 
     private final MemberRepository memberRepository;
 
-    @Autowired
     public DefaultMemberGateway(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
