@@ -1,4 +1,4 @@
-package com.alkemy.ong.web;
+package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryService;
@@ -6,13 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -38,17 +39,14 @@ public class CommentaryController {
     public List<CommentaryDTO> findAllWithDetails() {
         List<Commentary> commentaries = commentaryService.findAll();
         return commentaries.stream()
-                .map(toDto())
+                .map(this::toDto)
                 .collect(toList());
     }
 
     @PostMapping()
-    public ResponseEntity<CommentaryDTO> create(@RequestBody CommentaryDTO dto) {
-        Commentary commentary = new Commentary();
-        BeanUtils.copyProperties(dto, commentary);
-        Commentary commentaryDomain = commentaryService.create(commentary);
-        CommentaryDTO commentaryDTO = getCommentaryDTO(commentaryDomain);
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentaryDTO);
+    public ResponseEntity<CommentaryDTO> create(@Valid @RequestBody CommentaryDTO dto) {
+        Commentary commentary = commentaryService.create(toDomain(dto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(commentary));
     }
 
     @Data
@@ -56,8 +54,11 @@ public class CommentaryController {
     @NoArgsConstructor
     @Builder
     private static class CommentaryDTO {
+        @NotNull
         private Long userId;
+        @NotBlank
         private String body;
+        @NotNull
         private Long newsId;
     }
 
@@ -68,18 +69,23 @@ public class CommentaryController {
         private String body;
     }
 
-    private Function<Commentary, CommentaryDTO> toDto() {
-        return model -> (new CommentaryDTO(model.getUserId(), model.getBody(), model.getNewsId()));
-    }
 
-    private CommentaryDTO getCommentaryDTO(Commentary commentaryDomain) {
+    private CommentaryDTO toDto(Commentary domain) {
         return CommentaryDTO.builder()
-                .userId(commentaryDomain.getUserId())
-                .body(commentaryDomain.getBody())
-                .newsId(commentaryDomain.getNewsId())
+                .userId(domain.getUserId())
+                .body(domain.getBody())
+                .newsId(domain.getNewsId())
                 .build();
     }
-    
+
+    private Commentary toDomain(CommentaryDTO dto) {
+        return Commentary.builder()
+                .userId(dto.getUserId())
+                .body(dto.getBody())
+                .newsId(dto.getNewsId())
+                .build();
+    }
+
 }
 
 

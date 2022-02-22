@@ -1,4 +1,4 @@
-package com.alkemy.ong.data.gateway;
+package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.data.entity.CommentaryEntity;
 import com.alkemy.ong.data.entity.NewsEntity;
@@ -8,12 +8,12 @@ import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
+import com.alkemy.ong.web.exceptions.BadRequestException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
 
@@ -35,39 +35,39 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
     public Commentary create(Commentary commentary) {
         UserEntity user = getUserEntity(commentary.getUserId());
         NewsEntity news = getNewsEntity(commentary.getNewsId());
-        CommentaryEntity entity = getCommentaryEntity(commentary, user, news);
-        commentaryRepository.save(entity);
-        return getCommentary(entity);
+        CommentaryEntity commentaryEntity = toEntity(commentary, user, news);
+        return toModel(commentaryRepository.save(commentaryEntity));
     }
 
     @Override
     public List<Commentary> findAll() {
-        List<CommentaryEntity> entities = commentaryRepository.findAll();
+        List<CommentaryEntity> entities = entitiesDescOrder();
         return entities.stream()
-                .map(toDomain())
+                .map(this::toModel)
                 .collect(toList());
     }
 
 
+    private List<CommentaryEntity> entitiesDescOrder() {
+        return commentaryRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
+    }
+
     private UserEntity getUserEntity(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(
-                        () -> new EntityNotFoundException("User with id: " + userId + " not found.")
+                        () -> new BadRequestException("User with id: " + userId + " not found.")
                 );
     }
 
     private NewsEntity getNewsEntity(Long newsId) {
         return newsRepository.findById(newsId)
                 .orElseThrow(
-                        () -> new EntityNotFoundException("News with id: " + newsId + " not found.")
+                        () -> new BadRequestException("News with id: " + newsId + " not found.")
                 );
     }
 
-    private Function<CommentaryEntity, Commentary> toDomain() {
-        return entity -> new Commentary(entity.getUserId().getId(), entity.getBody(), entity.getNewsId().getId());
-    }
 
-    private CommentaryEntity getCommentaryEntity(Commentary commentary, UserEntity user, NewsEntity news) {
+    private CommentaryEntity toEntity(Commentary commentary, UserEntity user, NewsEntity news) {
         return CommentaryEntity.builder()
                 .userId(user)
                 .body(commentary.getBody())
@@ -76,7 +76,7 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
                 .build();
     }
 
-    private Commentary getCommentary(CommentaryEntity entity) {
+    private Commentary toModel(CommentaryEntity entity) {
         return Commentary.builder()
                 .userId(entity.getUserId().getId())
                 .body(entity.getBody())
