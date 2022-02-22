@@ -35,7 +35,7 @@ public class SlidesController {
 
         List<SlidesDto> slides = slidesService.findAll()
                 .stream()
-                .map(slide -> SlidesDto.toDto(slide))
+                .map(slide -> toDto(slide))
                 .collect(Collectors.toList());
 
         for(SlidesDto slidesDto : slides){

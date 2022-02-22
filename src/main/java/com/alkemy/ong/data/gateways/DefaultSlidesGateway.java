@@ -46,16 +46,17 @@ public class DefaultSlidesGateway implements SlidesGateway {
     @Override
     public Slides create(Slides slides) {
         SlidesEntity slideEntity = toEntity(slides);
+        slideEntity.setCreatedAt(now());
         return toDomain(slidesRepository.save(slideEntity));
     }
 
     @Override
     public List<Slides> findAll() {
-        List<SlidesEntity> slidesEntityList = (List<SlidesEntity>) slidesRepository.findAll();
+        List<SlidesEntity> slidesEntityList = slidesRepository.findAll();
 
         return slidesEntityList
                 .stream()
                 .map(slide -> toDomain(slide))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 }
