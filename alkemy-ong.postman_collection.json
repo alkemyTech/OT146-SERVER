@@ -18,8 +18,54 @@
 					],
 					"port": "8080",
 					"path": [
-						"slides",
-						""
+						"slides"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "members",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/members",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"members"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "members",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test Member\",\r\n    \"facebookUrl\": \"www.facebok.com/testMember\",\r\n    \"instagramUrl\": \"www.instagram.com/testMember\",\r\n    \"linkedinUrl\": \"www.linkedin.com/testMember\",\r\n    \"image\": \"image.jpg\",\r\n    \"description\": \"Test Description for a new member\",\r\n    \"createdAt\": \"2022/02/20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/members",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"members"
 					]
 				}
 			},
