@@ -1,9 +1,9 @@
 create table if not exists members (
     id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name varchar(256) NOT NULL,
-    facebookUrl varchar(256),
-    instagramUrl varchar(256),
-    linkedinUrl varchar(256),
+    facebook_url varchar(256),
+    instagram_url varchar(256),
+    linkedin_url varchar(256),
     image varchar(256) NOT NULL,
     description varchar(256),
     created_at date,
@@ -55,9 +55,10 @@ create table if not exists slides (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     image_url varchar(256) not null,
     text varchar(256),
-    order int not null,
+    slide_order int not null, -- 'order' is a keyword in mySQL
     created_at timestamp not null,
     updated_at timestamp,
+    deleted bit(1) not null default 0,
     organization_id bigint unsigned not null
 );
 create table if not exists news (
