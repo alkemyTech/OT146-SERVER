@@ -1,7 +1,9 @@
 package com.alkemy.ong.data.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -9,6 +11,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "commentaries")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentaryEntity {
 
     @Id

@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface CommentaryGateway {
 
-    void create(Commentary commentary);
+    Commentary create(Commentary commentary);
 
     List<Commentary> findAll();
 

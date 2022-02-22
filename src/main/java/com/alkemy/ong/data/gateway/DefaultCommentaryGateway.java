@@ -13,7 +13,9 @@ import org.springframework.stereotype.Component;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.Function;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class DefaultCommentaryGateway implements CommentaryGateway {
@@ -30,30 +32,56 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
 
 
     @Override
-    public void create(Commentary commentary) {
-        UserEntity user = userRepository.findById(commentary.getUserId())
-                .orElseThrow(
-                        () -> new EntityNotFoundException("User with id: " + commentary.getUserId() + " not found.")
-                );
-        NewsEntity news = newsRepository.findById(commentary.getNewsId())
-                .orElseThrow(
-                        () -> new EntityNotFoundException("News with id: " + commentary.getNewsId() + " not found.")
-                );
-        CommentaryEntity entity = new CommentaryEntity();
-        entity.setUserId(user);
-        entity.setBody(commentary.getBody());
-        entity.setNewsId(news);
-        entity.setCreatedAt(LocalDateTime.now());
+    public Commentary create(Commentary commentary) {
+        UserEntity user = getUserEntity(commentary.getUserId());
+        NewsEntity news = getNewsEntity(commentary.getNewsId());
+        CommentaryEntity entity = getCommentaryEntity(commentary, user, news);
         commentaryRepository.save(entity);
-
+        return getCommentary(entity);
     }
 
     @Override
     public List<Commentary> findAll() {
         List<CommentaryEntity> entities = commentaryRepository.findAll();
         return entities.stream()
-                .map(entity -> new Commentary(entity.getUserId().getId(), entity.getBody(), entity.getNewsId().getId()))
-                .collect(Collectors.toList());
+                .map(toDomain())
+                .collect(toList());
+    }
+
+
+    private UserEntity getUserEntity(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("User with id: " + userId + " not found.")
+                );
+    }
+
+    private NewsEntity getNewsEntity(Long newsId) {
+        return newsRepository.findById(newsId)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("News with id: " + newsId + " not found.")
+                );
+    }
+
+    private Function<CommentaryEntity, Commentary> toDomain() {
+        return entity -> new Commentary(entity.getUserId().getId(), entity.getBody(), entity.getNewsId().getId());
+    }
+
+    private CommentaryEntity getCommentaryEntity(Commentary commentary, UserEntity user, NewsEntity news) {
+        return CommentaryEntity.builder()
+                .userId(user)
+                .body(commentary.getBody())
+                .newsId(news)
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
+
+    private Commentary getCommentary(CommentaryEntity entity) {
+        return Commentary.builder()
+                .userId(entity.getUserId().getId())
+                .body(entity.getBody())
+                .newsId(entity.getNewsId().getId())
+                .build();
     }
 
 }
