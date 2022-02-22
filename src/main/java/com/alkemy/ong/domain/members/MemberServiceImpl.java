@@ -1,6 +1,5 @@
 package com.alkemy.ong.domain.members;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +9,6 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberGateway memberGateway;
 
-    @Autowired
     public MemberServiceImpl(MemberGateway memberGateway) {
         this.memberGateway = memberGateway;
     }

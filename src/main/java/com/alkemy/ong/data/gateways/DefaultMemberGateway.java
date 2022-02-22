@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DefaultMemberGateway implements MemberGateway {
@@ -23,20 +23,17 @@ public class DefaultMemberGateway implements MemberGateway {
     }
 
     @Override
-    public Member create(Member model) {
-        MemberEntity entity = this.toEntity(model);
-        MemberEntity entitySaved = this.memberRepository.save(entity);
-        return this.toModel(entitySaved);
+    public Member create(Member member) {
+        return toModel(memberRepository.save(toEntity(member)));
     }
 
     @Override
     public List<Member> findAll() {
-        List<MemberEntity> entityList = this.memberRepository.findAll();
-        return this.toModelList(entityList);
+        List<MemberEntity> members = memberRepository.findAll();
+        return toModelList(members);
     }
 
-    //======================================================================================================
-    public MemberEntity toEntity(Member member) {
+    private MemberEntity toEntity(Member member) {
         return MemberEntity.builder()
                 .name(member.getName())
                 .facebookUrl(member.getFacebookUrl())
@@ -44,11 +41,11 @@ public class DefaultMemberGateway implements MemberGateway {
                 .linkedinUrl(member.getLinkedinUrl())
                 .image(member.getImage())
                 .description(member.getDescription())
-                .createdAt(this.toLocalDate(member.getCreatedAt()))
+                .createdAt(toLocalDate(member.getCreatedAt()))
                 .build();
     }
 
-    public Member toModel(MemberEntity entity) {
+    private Member toModel(MemberEntity entity) {
         return Member.builder()
                 .id(entity.getId())
                 .name(entity.getName())
@@ -66,11 +63,7 @@ public class DefaultMemberGateway implements MemberGateway {
         return LocalDate.parse(stringDate, formatter);
     }
 
-    public List<Member> toModelList(List<MemberEntity> entityList) {
-        List<Member> memberList = new ArrayList<>();
-        for (MemberEntity entity : entityList) {
-            memberList.add(this.toModel(entity));
-        }
-        return memberList;
+    private List<Member> toModelList(List<MemberEntity> members) {
+        return members.stream().map(this::toModel).collect(Collectors.toList());
     }
 }

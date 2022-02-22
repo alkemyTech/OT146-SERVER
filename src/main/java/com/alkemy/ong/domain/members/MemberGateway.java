@@ -4,6 +4,6 @@ import java.util.List;
 
 public interface MemberGateway {
 
-    Member create(Member model);
+    Member create(Member member);
     List<Member> findAll();
 }

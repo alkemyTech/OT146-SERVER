@@ -5,7 +5,6 @@ import com.alkemy.ong.domain.members.MemberService;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/members")
@@ -23,26 +23,24 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
 
     @PostMapping
     public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberDTO dto) {
-        Member memberSaved = this.memberService.save(this.toModel(dto));
-        MemberDTO resultDTO = this.toDto(memberSaved);
+        Member memberSaved = memberService.save(this.toModel(dto));
+        MemberDTO resultDTO = toDto(memberSaved);
         return ResponseEntity.status(HttpStatus.CREATED).body(resultDTO);
     }
 
     @GetMapping
     public ResponseEntity<List<MemberDTO>> getMembers() {
-        List<Member> memberList = this.memberService.getAllMembers();
-        List<MemberDTO> dtoList = this.toDtoList(memberList);
+        List<Member> memberList = memberService.getAllMembers();
+        List<MemberDTO> dtoList = toDtoList(memberList);
         return ResponseEntity.ok().body(dtoList);
     }
 
-    // =================================================================================================
     private Member toModel(MemberDTO dto) {
         Member memberDomain = Member.builder()
                 .name(dto.getName())
@@ -70,12 +68,8 @@ public class MemberController {
         return memberDTO;
     }
 
-    private List<MemberDTO> toDtoList(List<Member> memberList) {
-        List<MemberDTO> dtoList = new ArrayList<>();
-        for (Member member : memberList) {
-            dtoList.add(this.toDto(member));
-        }
-        return dtoList;
+    private List<MemberDTO> toDtoList(List<Member> members) {
+        return members.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Getter
