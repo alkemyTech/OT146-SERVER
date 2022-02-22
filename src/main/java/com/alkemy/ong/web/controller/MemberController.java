@@ -8,15 +8,14 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/members")
@@ -30,10 +29,17 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberDTO dto) throws Exception {
+    public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberDTO dto) {
         Member memberSaved = this.memberService.save(this.toModel(dto));
         MemberDTO resultDTO = this.toDto(memberSaved);
         return ResponseEntity.status(HttpStatus.CREATED).body(resultDTO);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<MemberDTO>> getMembers() {
+        List<Member> memberList = this.memberService.getAllMembers();
+        List<MemberDTO> dtoList = this.toDtoList(memberList);
+        return ResponseEntity.ok().body(dtoList);
     }
 
     // =================================================================================================
@@ -62,6 +68,14 @@ public class MemberController {
                 .createdAt(member.getCreatedAt())
                 .build();
         return memberDTO;
+    }
+
+    private List<MemberDTO> toDtoList(List<Member> memberList) {
+        List<MemberDTO> dtoList = new ArrayList<>();
+        for (Member member : memberList) {
+            dtoList.add(this.toDto(member));
+        }
+        return dtoList;
     }
 
     @Getter
