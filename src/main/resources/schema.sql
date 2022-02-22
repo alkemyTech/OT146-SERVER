@@ -60,9 +60,10 @@ create table if not exists slides (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     image_url varchar(256) not null,
     text varchar(256),
-    order int not null,
+    slide_order int not null, -- 'order' is a keyword in mySQL
     created_at timestamp not null,
     updated_at timestamp,
+    deleted bit(1) not null default 0,
     organization_id bigint unsigned not null
 );
 

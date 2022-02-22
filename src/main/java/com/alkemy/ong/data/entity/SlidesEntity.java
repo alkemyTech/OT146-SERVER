@@ -1,7 +1,7 @@
 package com.alkemy.ong.data.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -10,7 +10,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity(name = "slides")
+@Where(clause = "deleted = false")
 public class SlidesEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +27,12 @@ public class SlidesEntity {
     private String text;
 
     @Column(nullable = false)
-    private Integer order;
+    private Integer slideOrder;
 
     // TODO: relación cuando esté disponible el OrganizationEntity
-    @ManyToOne
-    @Column(nullable = false)
-    private OrganizationEntity organizationId;
+//    @ManyToOne
+//    @Column(nullable = false)
+//    private OrganizationEntity organizationId;
 
     @Column
     private Boolean deleted = Boolean.FALSE;

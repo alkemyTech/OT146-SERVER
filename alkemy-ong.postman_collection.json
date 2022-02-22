@@ -1,24 +1,24 @@
 {
 	"info": {
-		"_postman_id": "26012295-9f52-4898-a995-2366bbdf1e2c",
+		"_postman_id": "d52f7539-9227-48c0-9173-6174f31ea96e",
 		"name": "alkemy-ong",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Test",
+			"name": "Get All Slides Test",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/test",
+					"raw": "http://localhost:8080/slides/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"test"
+						"slides"
 					]
 				}
 			},
