@@ -9,11 +9,13 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class DefaultMemberGateway implements MemberGateway {
 
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Autowired
     public DefaultMemberGateway(MemberRepository memberRepository) {
@@ -27,9 +29,15 @@ public class DefaultMemberGateway implements MemberGateway {
         return this.toModel(entitySaved);
     }
 
+    @Override
+    public List<Member> findAll() {
+        List<MemberEntity> entityList = this.memberRepository.findAll();
+        return this.toModelList(entityList);
+    }
+
     //======================================================================================================
     public MemberEntity toEntity(Member member) {
-        MemberEntity entity = MemberEntity.builder()
+        return MemberEntity.builder()
                 .name(member.getName())
                 .facebookUrl(member.getFacebookUrl())
                 .instagramUrl(member.getInstagramUrl())
@@ -38,11 +46,10 @@ public class DefaultMemberGateway implements MemberGateway {
                 .description(member.getDescription())
                 .createdAt(this.toLocalDate(member.getCreatedAt()))
                 .build();
-        return entity;
     }
 
     public Member toModel(MemberEntity entity) {
-        Member member = Member.builder()
+        return Member.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .facebookUrl(entity.getFacebookUrl())
@@ -52,13 +59,18 @@ public class DefaultMemberGateway implements MemberGateway {
                 .description(entity.getDescription())
                 .createdAt(entity.getCreatedAt().toString())
                 .build();
-        return member;
     }
 
     private LocalDate toLocalDate(String stringDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        LocalDate date = LocalDate.parse(stringDate, formatter);
-        return date;
+        return LocalDate.parse(stringDate, formatter);
     }
 
+    public List<Member> toModelList(List<MemberEntity> entityList) {
+        List<Member> memberList = new ArrayList<>();
+        for (MemberEntity entity : entityList) {
+            memberList.add(this.toModel(entity));
+        }
+        return memberList;
+    }
 }
