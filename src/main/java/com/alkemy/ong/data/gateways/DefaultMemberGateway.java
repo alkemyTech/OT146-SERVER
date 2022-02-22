@@ -1,4 +1,4 @@
-package com.alkemy.ong.data.gateway;
+package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.repository.MemberRepository;

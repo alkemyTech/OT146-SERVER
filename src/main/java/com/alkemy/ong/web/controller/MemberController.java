@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 @RestController
@@ -70,6 +72,8 @@ public class MemberController {
         private Long id;
 
         @NotNull
+        @NotBlank
+        @NotEmpty
         private String name;
 
         private String facebookUrl;
@@ -77,6 +81,8 @@ public class MemberController {
         private String linkedinUrl;
 
         @NotNull
+        @NotBlank
+        @NotEmpty
         private String image;
 
         private String description;
