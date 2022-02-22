@@ -2,6 +2,7 @@ package com.alkemy.ong.web;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryService;
@@ -23,16 +24,23 @@ public class CategoryController {
 
     @GetMapping("/categories")
     public List<CategoryDto> findAll() {
-        List<Category> category = categoryService.findAll();
+        List<Category> categories = categoryService.findAll();
         
-        return category.stream().map(mapper).;
+        return categories.stream().map(category -> toDto(category)).collect(Collectors.toList());
+    }
+
+    private CategoryDto toDto(Category category) {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setName(category.getName());
+        
+        return categoryDto;
     }
     
 
 
 
 
-    public static class CategoryDto { 
+    private static class CategoryDto { 
 
         private Long id;
         private String name;
