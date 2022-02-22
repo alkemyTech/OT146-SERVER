@@ -4,13 +4,13 @@ import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.repository.MemberRepository;
 import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.members.MemberGateway;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @Component
 public class DefaultMemberGateway implements MemberGateway {
@@ -63,6 +63,6 @@ public class DefaultMemberGateway implements MemberGateway {
     }
 
     private List<Member> toModelList(List<MemberEntity> members) {
-        return members.stream().map(this::toModel).collect(Collectors.toList());
+        return members.stream().map(this::toModel).collect(toList());
     }
 }

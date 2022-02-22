@@ -13,9 +13,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 @RestController
 @RequestMapping("/members")
@@ -69,7 +69,7 @@ public class MemberController {
     }
 
     private List<MemberDTO> toDtoList(List<Member> members) {
-        return members.stream().map(this::toDto).collect(Collectors.toList());
+        return members.stream().map(this::toDto).collect(toList());
     }
 
     @Getter
