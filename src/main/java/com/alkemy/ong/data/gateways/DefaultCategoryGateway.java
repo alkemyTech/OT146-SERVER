@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultCategoryGateway implements CategoryGateway {
 
-    private CategoryRepository categoryRepo; 
+    private final CategoryRepository categoryRepo; 
 
     public DefaultCategoryGateway(CategoryRepository categoryRepo) {
         this.categoryRepo = categoryRepo;
@@ -32,16 +32,14 @@ public class DefaultCategoryGateway implements CategoryGateway {
     }
 
     private Category toModel(CategoryEntity categoryEntity) {
-        Category category = new Category();
-        category.setId(categoryEntity.getId());
-        category.setName(categoryEntity.getName());
-        category.setDescription(categoryEntity.getDescription());
-        category.setCreatedAt(categoryEntity.getCreatedAt());
-        category.setUpdatedAt(categoryEntity.getUpdatedAt());
-
+        Category category = Category.builder()
+        .id(categoryEntity.getId())
+        .name(categoryEntity.getName())
+        .description(categoryEntity.getDescription())
+        .createdAt(categoryEntity.getCreatedAt())
+        .updatedAt(categoryEntity.getUpdatedAt())
+        .build();
+        
         return category;
     }
-
-
-    
 }
