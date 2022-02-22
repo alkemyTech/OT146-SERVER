@@ -11,5 +11,7 @@ public class SlidesService {
         this.slidesGateways = slidesGateways;
     }
 
+    public Slides create(Slides slide){ return slidesGateways.create(slide); }
+
     public List<Slides> findAll(){ return slidesGateways.findAll();  }
 }
