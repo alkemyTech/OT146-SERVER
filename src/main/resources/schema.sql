@@ -94,8 +94,8 @@ CREATE TABLE IF NOT EXISTS organizations (
   address VARCHAR(45) NULL,
   phone INT UNSIGNED NULL,
   email VARCHAR(45) NOT NULL,
-  about TEXT NULL,
-  welcome TEXT NOT NULL,
+  about_us_text TEXT NULL,
+  welcome_text TEXT NOT NULL,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
   deleted BIT(1) NOT NULL DEFAULT 0
