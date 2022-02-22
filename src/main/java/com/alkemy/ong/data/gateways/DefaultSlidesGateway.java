@@ -19,7 +19,7 @@ public class DefaultSlidesGateway implements SlidesGateway {
         this.slidesRepository = slidesRepository;
     }
 
-    public Slides toDomain(SlidesEntity slidesEntity){
+    private Slides toDomain(SlidesEntity slidesEntity){
         return Slides.builder()
                 .id(slidesEntity.getId())
                 .imageUrl(slidesEntity.getImageUrl())
@@ -32,16 +32,13 @@ public class DefaultSlidesGateway implements SlidesGateway {
                 .build();
     }
 
-    public SlidesEntity toEntity(Slides slides){
+    private SlidesEntity toEntity(Slides slides){
         return SlidesEntity.builder()
                 .id(slides.getId())
                 .imageUrl(slides.getImageUrl())
                 .text(slides.getText())
                 .slideOrder(slides.getSlideOrder())
                 //.organizationId(slides.getOrganizationId())
-                .deleted(slides.getDeleted())
-                .createdAt(slides.getCreatedAt())
-                .updatedAt(slides.getUpdatedAt())
                 .build();
     }
 
