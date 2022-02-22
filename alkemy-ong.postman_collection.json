@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "717cd4cb-4404-4e51-8293-3985998e4427",
+		"_postman_id": "26012295-9f52-4898-a995-2366bbdf1e2c",
 		"name": "alkemy-ong",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -10,7 +10,64 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": null
+				"url": {
+					"raw": "http://localhost:8080/test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "members",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/members",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"members"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "members",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test Member\",\r\n    \"facebookUrl\": \"www.facebok.com/testMember\",\r\n    \"instagramUrl\": \"www.instagram.com/testMember\",\r\n    \"linkedinUrl\": \"www.linkedin.com/testMember\",\r\n    \"image\": \"image.jpg\",\r\n    \"description\": \"Test Description for a new member\",\r\n    \"createdAt\": \"2022/02/20\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/members",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"members"
+					]
+				}
 			},
 			"response": []
 		}
