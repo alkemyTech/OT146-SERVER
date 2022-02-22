@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "ListAll",
+			"name": "AllCommentaries",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -24,7 +24,26 @@
 			"response": []
 		},
 		{
-			"name": "Create",
+			"name": "CommentariesDetails",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/comments/details",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"comments",
+						"details"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateCommentary",
 			"request": {
 				"method": "POST",
 				"header": [],
