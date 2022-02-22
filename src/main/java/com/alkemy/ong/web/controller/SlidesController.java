@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.alkemy.ong.web.controller.SlidesController.SlidesDto.toDto;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/slides")
@@ -36,7 +37,7 @@ public class SlidesController {
         List<SlidesDto> slides = slidesService.findAll()
                 .stream()
                 .map(slide -> toDto(slide))
-                .collect(Collectors.toList());
+                .collect(toList());
 
         for(SlidesDto slidesDto : slides){
             SlidesResponse slidesModel = new SlidesResponse();
