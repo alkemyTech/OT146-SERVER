@@ -1,7 +1,5 @@
-package com.alkemy.ong.domain.slides.services;
+package com.alkemy.ong.domain.slides;
 
-import com.alkemy.ong.domain.slides.gateway.SlidesGateway;
-import com.alkemy.ong.domain.slides.model.Slides;
 import org.springframework.stereotype.Service;
 import java.util.List;
 

@@ -1,6 +1,4 @@
-package com.alkemy.ong.domain.slides.gateway;
-
-import com.alkemy.ong.domain.slides.model.Slides;
+package com.alkemy.ong.domain.slides;
 
 import java.util.List;
 

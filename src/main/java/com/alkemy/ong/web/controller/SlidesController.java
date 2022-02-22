@@ -1,8 +1,8 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.domain.slides.model.Slides;
-import com.alkemy.ong.domain.slides.model.response.SlidesResponse;
-import com.alkemy.ong.domain.slides.services.SlidesService;
+import com.alkemy.ong.domain.slides.Slides;
+import com.alkemy.ong.domain.slides.SlidesService;
+import com.alkemy.ong.domain.slides.response.SlidesResponse;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.alkemy.ong.web.controller.SlidesController.SlidesDto.toDto;
 
 @RestController
 @RequestMapping("/slides")

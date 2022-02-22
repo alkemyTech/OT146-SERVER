@@ -1,4 +1,4 @@
-package com.alkemy.ong.domain.slides.model.response;
+package com.alkemy.ong.domain.slides.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
