@@ -26,15 +26,11 @@ public class OrganizationController {
 
     @GetMapping("/public/{id}")
     public String showOrganization(@PathVariable long id) {
-        try {
-            OrganizationEntity organization = organizationGateway.findById(id);
+        OrganizationEntity organization = organizationGateway.findById(id);
             if (organization == null) {
                 return "The organization doesn't exist in the database";
             }
-            return organization.toString();
-        } catch (ConstraintViolationException cve) {
-            return cve.getMessage();
-        }
+        return organization.toString();
     }
 
     //   @PreAuthorize("hasRole('ADMIN')")
