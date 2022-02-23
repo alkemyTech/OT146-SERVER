@@ -4,16 +4,15 @@ import com.alkemy.ong.data.entity.OrganizationEntity;
 import com.alkemy.ong.data.repository.OrganizationRepository;
 import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.domain.organization.OrganizationGateway;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DefaultOrganizationGateway implements OrganizationGateway {
 
-    @Autowired
-    private OrganizationRepository organizationRepository;
+    private final OrganizationRepository organizationRepository;
 
     public DefaultOrganizationGateway(OrganizationRepository organizationRepository) {
 
@@ -21,12 +20,29 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
     }
 
     @Override
-    public Organization create(Organization organization) {
+    public List<Organization> findAll() {
+        List<OrganizationEntity> ong = organizationRepository.findAll();
+        return ong.stream().map(o -> toModel(o)).collect(Collectors.toList());
+    }
+
+    @Override
+    public Organization findById(long idOrganization) {
+        OrganizationEntity ong = organizationRepository.findById(idOrganization);
+        return toModel(ong);
+    }
+
+    @Override
+    public Organization save(Organization organization) {
         OrganizationEntity entity = toEntity(organization);
         return toModel(organizationRepository.save(entity));
     }
 
-    public Organization toModel(OrganizationEntity organizationEntity){
+    @Override
+    public void deleteById(long idOrganization) {
+
+    }
+
+    private Organization toModel(OrganizationEntity organizationEntity){
         return Organization.builder()
                 .idOrganization(organizationEntity.getIdOrganization())
                 .name(organizationEntity.getName())
@@ -34,39 +50,27 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
                 .address(organizationEntity.getAddress())
                 .phone(organizationEntity.getPhone())
                 .email(organizationEntity.getEmail())
+                .about_us_text(organizationEntity.getAbout_us_text())
+                .welcome_text(organizationEntity.getWelcome_text())
+                .createdAt(organizationEntity.getCreatedAt())
+                .updatedAt(organizationEntity.getUpdatedAt())
+                .deleted(organizationEntity.getDeleted())
                 .build();
     }
 
-    public OrganizationEntity toEntity(Organization organization) {
+    private OrganizationEntity toEntity(Organization organization) {
         return OrganizationEntity.builder()
                 .name(organization.getName())
                 .image(organization.getImage())
                 .address(organization.getAddress())
                 .phone(organization.getPhone())
                 .email(organization.getEmail())
+                .about_us_text(organization.getAbout_us_text())
+                .welcome_text(organization.getWelcome_text())
+                .createdAt(organization.getCreatedAt())
+                .updatedAt(organization.getUpdatedAt())
+                .deleted(organization.getDeleted())
                 .build();
     }
 
-
-    @Override
-    public List<OrganizationEntity> findAll() {
-
-        return (List<OrganizationEntity>) organizationRepository.findAll();
-    }
-
-    @Override
-    public OrganizationEntity findById(long idOrganization) {
-        return organizationRepository.findById(idOrganization).orElseThrow();
-    }
-
-    @Override
-    public OrganizationEntity save(OrganizationEntity organization) {
-        return organizationRepository.save(organization);
-    }
-
-    @Override
-    public void deleteById(long idOrganization) {
-
-        organizationRepository.deleteById(idOrganization);
-    }
 }

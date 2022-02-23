@@ -1,11 +1,11 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.data.entity.OrganizationEntity;
+import com.alkemy.ong.data.gateways.DefaultOrganizationGateway;
 import com.alkemy.ong.domain.organization.Organization;
-import com.alkemy.ong.domain.organization.OrganizationGateway;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -17,6 +17,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,52 +29,49 @@ import java.util.stream.Collectors;
 public class OrganizationController {
 
     @Autowired
-    private OrganizationGateway organizationGateway;
+    private DefaultOrganizationGateway organizationGateway;
 
     @GetMapping("/public/{id}")
     public String showOrganization(@PathVariable long id) {
-        OrganizationEntity organization = organizationGateway.findById(id);
-            if (organization == null) {
-                return "The organization doesn't exist in the database";
-            }
+        Organization organization = organizationGateway.findById(id);
         return organization.toString();
     }
 
     //   @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/public")
-    public ResponseEntity<?> create(@Valid @RequestBody OrganizationEntity organization, BindingResult result) {
-        OrganizationEntity newOrganization = null;
-        Map<String, Object> response = new HashMap<>();
+    public ResponseEntity<OrganizationDto> create(@Valid @RequestBody OrganizationDto organizationDto){
+        Organization newOng = null;
+        Organization ong = toDomain(organizationDto);
 
-        if (result.hasErrors()) {
-            List<String> errors = result.getFieldErrors().stream()
-                    .map(err -> err.getDefaultMessage())
-                    .collect(Collectors.toList());
-            response.put("errors", errors);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-
-            newOrganization = organizationGateway.save(organization);
-
-        } catch (DataAccessException dae) {
-            response.put("message", "Failure to save organization in database");
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        response.put("message", "Organization saved with success");
-        response.put("organization", newOrganization);
-        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+        newOng = organizationGateway.save(ong);
+        return new ResponseEntity<OrganizationDto>(toDto(ong), HttpStatus.CREATED);
     }
 
  //   @PreAuthorize("hasRole('ADMIN')")
-    @PutMapping("/public/{id}")
-    public ResponseEntity<?> update(@Valid @RequestBody OrganizationEntity organization, BindingResult result,
+      @PutMapping("/public/{id}")
+      public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organizationDto, @PathVariable long id) {
+          Organization updateOng = toDomain(organizationDto);
+          Organization ong = organizationGateway.findById(id);
+
+          ong.setName(updateOng.getName());
+          ong.setImage(updateOng.getImage());
+          ong.setAddress(updateOng.getAddress());
+          ong.setPhone(updateOng.getPhone());
+          ong.setEmail(updateOng.getEmail());
+          ong.setCreatedAt(updateOng.getCreatedAt());
+          ong.setUpdatedAt(updateOng.getUpdatedAt());
+
+
+          organizationGateway.save(ong);
+          return new ResponseEntity<OrganizationDto>(toDto(ong), HttpStatus.CREATED);
+      }
+
+    /*@PutMapping("/public/{id}")
+    public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organization, BindingResult result,
                                     @PathVariable long id){
 
-        OrganizationEntity ong = organizationGateway.findById(id);
-        OrganizationEntity updatedOng = null;
+        Organization ong = organizationGateway.findById(id);
+        Organization updatedOng = null;
 
         Map<String, Object> response = new HashMap<>();
 
@@ -82,38 +80,37 @@ public class OrganizationController {
                     .map(err -> err.getDefaultMessage())
                     .collect(Collectors.toList());
             response.put("errors", errors);
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<OrganizationDto>((OrganizationDto) response, HttpStatus.BAD_REQUEST);
         }
 
         if (ong == null){
             response.put("message", "The organization doesn't exist in the database");
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<OrganizationDto>((OrganizationDto) response, HttpStatus.BAD_REQUEST);
         }
 
         try {
-            ong.setName(organization.getName());
-            ong.setImage(organization.getImage());
-            ong.setAddress(organization.getAddress());
-            ong.setPhone(organization.getPhone());
-            ong.setEmail(organization.getEmail());
-            ong.setAboutUsText(organization.getAboutUsText());
-            ong.setWelcomeText(organization.getWelcomeText());
-            ong.setCreatedAt(organization.getCreatedAt());
-            ong.setUpdatedAt(organization.getUpdatedAt());
-            ong.setDeleted(organization.getDeleted());
 
-            updatedOng = organizationGateway.save(ong);
+            //ong.setAboutUsText(organization.getAboutUsText());
+            //ong.setWelcomeText(organization.getWelcomeText());
+            //ong.setCreatedAt(organization.getCreatedAt());
+            //ong.setUpdatedAt(organization.getUpdatedAt());
+            //ong.setDeleted(organization.getDeleted());
+
+           updatedOng = organizationGateway.save(ong);
 
         }catch (DataAccessException dae){
             response.put("message", "Failure to update organization in database");
-            return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<OrganizationDto>((OrganizationDto) response, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         response.put("message", "Organization saved with success");
-        response.put("organization", updatedOng);
-        return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
+        response.put("organization", toDomain(updatedOng));
+        Organization org = toDomain(updatedOng);
+        response.put("organization", org);
+        ResponseEntity<HashMap<String, Object>(response, HttpStatus.CREATED);
+        return new ResponseEntity<HashMap<String, Organization>>(response, HttpStatus.CREATED);
     }
-
+*/
     private Organization toDomain(OrganizationController.OrganizationDto dto){
         return Organization.builder()
                 .idOrganization(dto.getIdOrganization())
@@ -122,6 +119,11 @@ public class OrganizationController {
                 .address(dto.getAddress())
                 .phone(dto.getPhone())
                 .email(dto.getEmail())
+                .about_us_text(dto.getAbout_us_text())
+                .welcome_text(dto.getWelcome_text())
+                .createdAt(dto.getCreatedAt())
+                .updatedAt(dto.getUpdatedAt())
+                .deleted(dto.getDeleted())
                 .build();
     }
 
@@ -133,6 +135,11 @@ public class OrganizationController {
                 .address(organization.getAddress())
                 .phone(organization.getPhone())
                 .email(organization.getEmail())
+                .about_us_text(organization.getAbout_us_text())
+                .welcome_text(organization.getWelcome_text())
+                .createdAt(organization.getCreatedAt())
+                .updatedAt(organization.getUpdatedAt())
+                .deleted(organization.getDeleted())
                 .build();
     }
 
@@ -168,5 +175,23 @@ public class OrganizationController {
         @Email
         @Column(nullable = false)
         private String email;
+
+        @Column
+        private String about_us_text;
+
+        @Column(nullable = false)
+        private String welcome_text;
+
+        @DateTimeFormat(pattern = "yyyy-mm-dd")
+        @Column(nullable = false)
+        private LocalDateTime createdAt;
+
+        @DateTimeFormat(pattern = "yyyy-mm-dd")
+        @Column(nullable = false)
+        private LocalDateTime updatedAt;
+
+
+        @Column(nullable = false)
+        private Boolean deleted;
     }
 }

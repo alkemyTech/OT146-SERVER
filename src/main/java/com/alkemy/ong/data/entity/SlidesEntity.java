@@ -26,7 +26,7 @@ public class SlidesEntity {
     private Integer order;
 
     // TODO: relación cuando esté disponible el OrganizationEntity
-    @ManyToOne
+   // @ManyToOne
     @Column(nullable = false)
     private OrganizationEntity organizationId;
 

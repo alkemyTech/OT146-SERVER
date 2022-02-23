@@ -1,18 +1,23 @@
 package com.alkemy.ong.domain.organization;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class OrganizationService {
-    private OrganizationGateway organizationGateway;
+
+    @Autowired
+    private final OrganizationGateway organizationGateway;
 
     public OrganizationService(OrganizationGateway organizationGateway) {
 
         this.organizationGateway = organizationGateway;
     }
 
-    public Organization save(Organization organization){
+    public List<Organization> findAll() {
 
-        return organizationGateway.create(organization);
+        return organizationGateway.findAll();
     }
 }

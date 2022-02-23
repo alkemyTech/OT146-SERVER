@@ -1,7 +1,9 @@
 package com.alkemy.ong.data.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "organizations")
 public class OrganizationEntity implements Serializable {
 
@@ -35,10 +39,10 @@ public class OrganizationEntity implements Serializable {
     private String email;
 
     @Column
-    private String aboutUsText;
+    private String about_us_text;
 
     @Column(nullable = false)
-    private String welcomeText;
+    private String welcome_text;
 
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     @Column(nullable = false)
