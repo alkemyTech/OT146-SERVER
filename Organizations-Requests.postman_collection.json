@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "9ecbf7dc-c627-437b-9823-9bbed5dd83f0",
+		"name": "Organizations Requests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Public data of the Organization",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"bbbbbbbbbbb\",\r\n    \"image\": \"bbbbbbbbbbbbbbbbbbbbbbbb\",\r\n    \"phone\": 2147455555,\r\n    \"address\": \"kjhugyftghjknn\",\r\n    \"email\": \"bbbb@bbbbbbbbbbb\",\r\n    \"welcome\": \"dsjfnjksadfn ajdfuejjj jjjjaujjj jaj j\",\r\n    \"createdAt\": \"2022-02-20T00:00:00\",\r\n    \"updatedAt\": \"2022-02-20T00:00:00\",\r\n    \"deleted\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/organization/public/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"organization",
+						"public",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update of public data of Organization",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"aaaaa\",\r\n    \"image\": \"aaaaaaaaaaaaaaaaaaaaaa\",\r\n    \"phone\": 2147483647,\r\n    \"address\": \"JFDBFIJHPBWijhvfbihjsbv\",\r\n    \"email\": \"aaa@aaaaaaaa\",\r\n    \"welcome\": \"qwertyuioplmjhd cvbnmñsgpqewobknaovnowJKNVGOWJKSNVBOJSNBV ohnvoasnbvojabsvojnbsroj\",\r\n    \"createdAt\": \"2022-02-19T00:00:00\",\r\n    \"updatedAt\": \"2022-02-20T00:00:00\",\r\n    \"deleted\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/organization/public/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"organization",
+						"public",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"value": "",
+			"type": "string"
+		}
+	]
+}
