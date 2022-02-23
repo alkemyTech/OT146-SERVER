@@ -21,6 +21,15 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
         return toModel(repository.save(entity));
     }
 
+    @Override
+    public Testimonial update( Long id, Testimonial testimonial) {
+        TestimonialEntity testimonialEntity = repository.findById(id).get();
+        testimonialEntity.setContent(testimonial.getContent());
+        testimonialEntity.setImage(testimonial.getImage());
+        testimonialEntity.setName(testimonial.getName());
+        return toModel(repository.save(testimonialEntity));
+    }
+
     public Testimonial toModel(TestimonialEntity testimonialEntity){
         return Testimonial.builder()
                 .id(testimonialEntity.getId())
