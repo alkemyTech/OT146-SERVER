@@ -34,7 +34,7 @@ public class DefaultCategoryGateway implements CategoryGateway {
     @Override
     public Category findById(Long id) {
         
-        return toModel(categoryRepo.findById(id).orElse(null));
+        return toModel(categoryRepo.findById(id).orElseThrow()); 
     }
 
     private Category toModel(CategoryEntity categoryEntity) {
@@ -48,7 +48,4 @@ public class DefaultCategoryGateway implements CategoryGateway {
         
         return category;
     }
-
-
-   
 }

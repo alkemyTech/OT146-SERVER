@@ -3,13 +3,11 @@ package com.alkemy.ong.web.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryService;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,11 +43,7 @@ public class CategoryController {
        
         CategoryDto categoryDto = toDto(categoryService.findById(id));
    
-        if(categoryDto == null) {
-            return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.NOT_FOUND );
-        }
-        return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);   
-        
+        return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);          
     }
 
     private CategoryDto toDto(Category category) {
