@@ -1,56 +1,55 @@
 {
 	"info": {
-		"_postman_id": "d52f7539-9227-48c0-9173-6174f31ea96e",
-		"name": "alkemy-ong",
+		"_postman_id": "6c5c1201-4990-460d-b130-2bc2bde9f986",
+		"name": "Commentary",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Get All Slides Test",
+			"name": "AllCommentaries",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/slides/",
-					"protocol": "http",
+					"raw": "localhost:8080/comments",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"slides"
+						"comments"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "members",
+			"name": "CommentariesDetails",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/members",
-					"protocol": "http",
+					"raw": "localhost:8080/comments/details",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"members"
+						"comments",
+						"details"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "members",
+			"name": "CreateCommentary",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Test Member\",\r\n    \"facebookUrl\": \"www.facebok.com/testMember\",\r\n    \"instagramUrl\": \"www.instagram.com/testMember\",\r\n    \"linkedinUrl\": \"www.linkedin.com/testMember\",\r\n    \"image\": \"image.jpg\",\r\n    \"description\": \"Test Description for a new member\",\r\n    \"createdAt\": \"2022/02/20\"\r\n}",
+					"raw": "{\n    \"userId\": 1,\n    \"body\": \"Este es el comentario del usuario 1 en la noticia 1\",\n    \"newsId\": 1\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -58,14 +57,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/members",
-					"protocol": "http",
+					"raw": "localhost:8080/comments",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"members"
+						"comments"
 					]
 				}
 			},
