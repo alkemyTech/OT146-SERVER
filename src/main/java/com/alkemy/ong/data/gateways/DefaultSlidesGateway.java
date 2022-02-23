@@ -43,6 +43,11 @@ public class DefaultSlidesGateway implements SlidesGateway {
     }
 
     @Override
+    public void delete(Long id) {
+        slidesRepository.deleteById(id);
+    }
+
+    @Override
     public List<Slides> findAll() {
         List<SlidesEntity> slidesEntityList = slidesRepository.findAll();
 

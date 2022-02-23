@@ -48,6 +48,12 @@ public class SlidesController {
         return new ResponseEntity<>(returnValue, HttpStatus.OK);
     }
 
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteSlide(@PathVariable Long id){
+        slidesService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor
