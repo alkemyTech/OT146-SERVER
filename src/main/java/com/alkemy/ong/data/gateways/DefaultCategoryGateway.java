@@ -31,6 +31,12 @@ public class DefaultCategoryGateway implements CategoryGateway {
                             .collect(Collectors.toList());
     }
 
+    @Override
+    public Category findById(Long id) {
+        
+        return toModel(categoryRepo.findById(id).orElse(null));
+    }
+
     private Category toModel(CategoryEntity categoryEntity) {
         Category category = Category.builder()
         .id(categoryEntity.getId())
@@ -42,4 +48,7 @@ public class DefaultCategoryGateway implements CategoryGateway {
         
         return category;
     }
+
+
+   
 }
