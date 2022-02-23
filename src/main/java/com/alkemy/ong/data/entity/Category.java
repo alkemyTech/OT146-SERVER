@@ -1,4 +1,4 @@
-package com.alkemy.ong.data;
+package com.alkemy.ong.data.entity;
 
 import java.time.LocalDateTime;
 
