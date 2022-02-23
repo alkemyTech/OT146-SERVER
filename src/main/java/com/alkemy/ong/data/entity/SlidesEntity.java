@@ -30,15 +30,14 @@ public class SlidesEntity {
     private Integer slideOrder;
 
     // TODO: relación cuando esté disponible el OrganizationEntity
-<<<<<<< HEAD
+
    // @ManyToOne
     @Column(nullable = false)
     private OrganizationEntity organizationId;
-=======
+
 //    @ManyToOne
 //    @Column(nullable = false)
 //    private OrganizationEntity organizationId;
->>>>>>> main
 
     @Column
     private Boolean deleted = Boolean.FALSE;

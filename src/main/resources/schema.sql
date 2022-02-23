@@ -94,9 +94,7 @@ CREATE TABLE IF NOT EXISTS organizations (
   updated_at TIMESTAMP NOT NULL,
   deleted BIT(1) NOT NULL DEFAULT 0
 );
-<<<<<<< HEAD
 
-=======
 CREATE TABLE IF NOT EXISTS commentaries (
    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    body VARCHAR(500) NOT NULL,
@@ -107,4 +105,3 @@ CREATE TABLE IF NOT EXISTS commentaries (
    FOREIGN KEY (user_id) REFERENCES users(id),
    FOREIGN KEY (news_id) REFERENCES news(id)
 );
->>>>>>> main

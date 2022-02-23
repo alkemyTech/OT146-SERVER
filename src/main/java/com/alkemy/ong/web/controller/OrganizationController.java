@@ -1,14 +1,12 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.data.gateways.DefaultOrganizationGateway;
 import com.alkemy.ong.domain.organization.Organization;
+import com.alkemy.ong.domain.organization.OrganizationGateway;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Column;
@@ -18,10 +16,6 @@ import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
@@ -29,7 +23,7 @@ import java.util.stream.Collectors;
 public class OrganizationController {
 
     @Autowired
-    private DefaultOrganizationGateway organizationGateway;
+    private OrganizationGateway organizationGateway;
 
     @GetMapping("/public/{id}")
     public String showOrganization(@PathVariable long id) {
@@ -52,6 +46,7 @@ public class OrganizationController {
       public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organizationDto, @PathVariable long id) {
           Organization updateOng = toDomain(organizationDto);
           Organization ong = organizationGateway.findById(id);
+          Organization org = null;
 
           ong.setName(updateOng.getName());
           ong.setImage(updateOng.getImage());
@@ -60,10 +55,14 @@ public class OrganizationController {
           ong.setEmail(updateOng.getEmail());
           ong.setCreatedAt(updateOng.getCreatedAt());
           ong.setUpdatedAt(updateOng.getUpdatedAt());
+          ong.setAbout_us_text(updateOng.getAbout_us_text());
+          ong.setWelcome_text(updateOng.getWelcome_text());
+          ong.setCreatedAt(updateOng.getCreatedAt());
+          ong.setUpdatedAt(updateOng.getUpdatedAt());
+          ong.setDeleted(updateOng.getDeleted());
 
-
-          organizationGateway.save(ong);
-          return new ResponseEntity<OrganizationDto>(toDto(ong), HttpStatus.CREATED);
+          org = organizationGateway.save(ong);
+          return new ResponseEntity<OrganizationDto>(toDto(org), HttpStatus.CREATED);
       }
 
     /*@PutMapping("/public/{id}")
