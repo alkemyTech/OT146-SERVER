@@ -10,7 +10,6 @@ create table if not exists members (
     updated_at date,
     deleted bit(1) NOT NULL default 0
 );
-
 CREATE TABLE IF NOT EXISTS users (
    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    first_name VARCHAR(255) NOT NULL,
@@ -19,13 +18,12 @@ CREATE TABLE IF NOT EXISTS users (
    password VARCHAR(255) NOT NULL,
    photo VARCHAR(255) NULL,
 --   role_id INT NOT NULL,
-   created_at TIMESTAMP NOT NULL,
-   updated_at TIMESTAMP NOT NULL,
+   created_at TIMESTAMP NULL,
+   updated_at TIMESTAMP NULL,
    deleted BIT(1) NOT NULL DEFAULT 0,
    PRIMARY KEY (id)
 --   FOREIGN KEY (role_id) REFERENCES Role(id)
 );
-
 create table if not exists testimonials (
     id bigint unsigned not null AUTO_INCREMENT,
     name varchar(256) not null,
@@ -36,7 +34,6 @@ create table if not exists testimonials (
     deleted bit(1) not null default 0,
     primary key(id)
 );
-
 create table if not exists roles (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
@@ -45,7 +42,6 @@ create table if not exists roles (
     updated_at timestamp,
     deleted bit(1) not null default 0
 );
-
 create table if not exists category (
     id bigint not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
@@ -55,7 +51,6 @@ create table if not exists category (
     updated_at date, 
     deleted bit(1) not null default 0
 );
-
 create table if not exists slides (
     id bigint unsigned not null primary key AUTO_INCREMENT,
     image_url varchar(256) not null,
@@ -66,7 +61,6 @@ create table if not exists slides (
     deleted bit(1) not null default 0,
     organization_id bigint unsigned not null
 );
-
 create table if not exists news (
     id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(256) NOT NULL,
@@ -78,7 +72,6 @@ create table if not exists news (
     deleted bit(1) NOT NULL default 0
     --  FOREIGN KEY (category_id) REFERENCES Category(id)
 );
-
 create table if not exists activities (
     id int not null primary key AUTO_INCREMENT,
     name  varchar (256)not null,
@@ -87,4 +80,14 @@ create table if not exists activities (
     created_at TIMESTAMP not null,
     updated_at TIMESTAMP ,
     deleted  bit(1) not null default = 0
+);
+CREATE TABLE IF NOT EXISTS commentaries (
+   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+   body VARCHAR(500) NOT NULL,
+   user_id BIGINT UNSIGNED NOT NULL,
+   news_id BIGINT UNSIGNED NOT NULL,
+   created_at TIMESTAMP NULL,
+   PRIMARY KEY (id),
+   FOREIGN KEY (user_id) REFERENCES users(id),
+   FOREIGN KEY (news_id) REFERENCES news(id)
 );
