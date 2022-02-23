@@ -1,4 +1,5 @@
 package com.alkemy.ong.data.entity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -7,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
+@Builder
 @Getter
 @Setter
 @Entity
@@ -35,4 +37,7 @@ public class ActivityEntity  {
         private LocalDateTime updatedAt;
 
         private boolean deleted = Boolean.FALSE;
+
+
+
 }
