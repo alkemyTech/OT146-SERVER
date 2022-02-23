@@ -4,7 +4,10 @@ import com.alkemy.ong.data.entity.TestimonialEntity;
 import com.alkemy.ong.data.repository.TestimonialRepository;
 import com.alkemy.ong.domain.testimonial.TestimonialGateway;
 import com.alkemy.ong.domain.testimonial.Testimonial;
+import com.alkemy.ong.web.exceptions.BadRequestException;
 import org.springframework.stereotype.Component;
+
+import java.util.NoSuchElementException;
 
 @Component
 public class DefaultTestimonialGateway implements TestimonialGateway {
@@ -23,11 +26,15 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
 
     @Override
     public Testimonial update( Long id, Testimonial testimonial) {
-        TestimonialEntity testimonialEntity = repository.findById(id).get();
-        testimonialEntity.setContent(testimonial.getContent());
-        testimonialEntity.setImage(testimonial.getImage());
-        testimonialEntity.setName(testimonial.getName());
-        return toModel(repository.save(testimonialEntity));
+        try {
+            TestimonialEntity testimonialEntity = repository.findById(id).get();
+            testimonialEntity.setContent(testimonial.getContent());
+            testimonialEntity.setImage(testimonial.getImage());
+            testimonialEntity.setName(testimonial.getName());
+            return toModel(repository.save(testimonialEntity));
+        }catch (NoSuchElementException e){
+            throw new BadRequestException("non-existent testimony to update");
+        }
     }
 
     public Testimonial toModel(TestimonialEntity testimonialEntity){
