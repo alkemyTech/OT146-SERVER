@@ -1,9 +1,8 @@
 package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.organization.Organization;
-import com.alkemy.ong.domain.organization.OrganizationGateway;
+import com.alkemy.ong.domain.organization.OrganizationService;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,94 +21,25 @@ import java.time.LocalDateTime;
 @RequestMapping("/organization")
 public class OrganizationController {
 
-    @Autowired
-    private OrganizationGateway organizationGateway;
+    private OrganizationService organizationService;
+
+    public OrganizationController(OrganizationService organizationService){
+        this.organizationService = organizationService;
+    }
 
     @GetMapping("/public/{id}")
-    public String showOrganization(@PathVariable long id) {
-        Organization organization = organizationGateway.findById(id);
-        return organization.toString();
+    public OrganizationSimpleDto showOrganization(@PathVariable long id) {
+        Organization organization = organizationService.findById(id);
+        return toSimpleDto(organization);
     }
 
     //   @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/public")
-    public ResponseEntity<OrganizationDto> create(@Valid @RequestBody OrganizationDto organizationDto){
-        Organization newOng = null;
-        Organization ong = toDomain(organizationDto);
+    @PutMapping("/public/{id}")
+    public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organizationDto, @PathVariable long id){
 
-        newOng = organizationGateway.save(ong);
-        return new ResponseEntity<OrganizationDto>(toDto(ong), HttpStatus.CREATED);
+        return new ResponseEntity<OrganizationDto>(toDto(organizationService.update(toDomain(organizationDto))), HttpStatus.CREATED);
     }
 
- //   @PreAuthorize("hasRole('ADMIN')")
-      @PutMapping("/public/{id}")
-      public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organizationDto, @PathVariable long id) {
-          Organization updateOng = toDomain(organizationDto);
-          Organization ong = organizationGateway.findById(id);
-          Organization org = null;
-
-          ong.setName(updateOng.getName());
-          ong.setImage(updateOng.getImage());
-          ong.setAddress(updateOng.getAddress());
-          ong.setPhone(updateOng.getPhone());
-          ong.setEmail(updateOng.getEmail());
-          ong.setCreatedAt(updateOng.getCreatedAt());
-          ong.setUpdatedAt(updateOng.getUpdatedAt());
-          ong.setAbout_us_text(updateOng.getAbout_us_text());
-          ong.setWelcome_text(updateOng.getWelcome_text());
-          ong.setCreatedAt(updateOng.getCreatedAt());
-          ong.setUpdatedAt(updateOng.getUpdatedAt());
-          ong.setDeleted(updateOng.getDeleted());
-
-          org = organizationGateway.save(ong);
-          return new ResponseEntity<OrganizationDto>(toDto(org), HttpStatus.CREATED);
-      }
-
-    /*@PutMapping("/public/{id}")
-    public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organization, BindingResult result,
-                                    @PathVariable long id){
-
-        Organization ong = organizationGateway.findById(id);
-        Organization updatedOng = null;
-
-        Map<String, Object> response = new HashMap<>();
-
-        if (result.hasErrors()) {
-            List<String> errors = result.getFieldErrors().stream()
-                    .map(err -> err.getDefaultMessage())
-                    .collect(Collectors.toList());
-            response.put("errors", errors);
-            return new ResponseEntity<OrganizationDto>((OrganizationDto) response, HttpStatus.BAD_REQUEST);
-        }
-
-        if (ong == null){
-            response.put("message", "The organization doesn't exist in the database");
-            return new ResponseEntity<OrganizationDto>((OrganizationDto) response, HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-
-            //ong.setAboutUsText(organization.getAboutUsText());
-            //ong.setWelcomeText(organization.getWelcomeText());
-            //ong.setCreatedAt(organization.getCreatedAt());
-            //ong.setUpdatedAt(organization.getUpdatedAt());
-            //ong.setDeleted(organization.getDeleted());
-
-           updatedOng = organizationGateway.save(ong);
-
-        }catch (DataAccessException dae){
-            response.put("message", "Failure to update organization in database");
-            return new ResponseEntity<OrganizationDto>((OrganizationDto) response, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
-        response.put("message", "Organization saved with success");
-        response.put("organization", toDomain(updatedOng));
-        Organization org = toDomain(updatedOng);
-        response.put("organization", org);
-        ResponseEntity<HashMap<String, Object>(response, HttpStatus.CREATED);
-        return new ResponseEntity<HashMap<String, Organization>>(response, HttpStatus.CREATED);
-    }
-*/
     private Organization toDomain(OrganizationController.OrganizationDto dto){
         return Organization.builder()
                 .idOrganization(dto.getIdOrganization())
@@ -142,6 +72,14 @@ public class OrganizationController {
                 .build();
     }
 
+    private OrganizationController.OrganizationSimpleDto toSimpleDto(Organization organization){
+        return OrganizationSimpleDto.builder()
+                .name(organization.getName())
+                .image(organization.getImage())
+                .address(organization.getAddress())
+                .phone(organization.getPhone())
+                .build();
+    }
 
     @Builder
     @Data
@@ -192,5 +130,38 @@ public class OrganizationController {
 
         @Column(nullable = false)
         private Boolean deleted;
+    }
+
+    @Builder
+    @Data
+    @AllArgsConstructor
+    public static class OrganizationSimpleDto {
+        @Id
+        @GeneratedValue(strategy= GenerationType.IDENTITY)
+        private long idOrganization;
+
+        @NotBlank(message="The name can´t be empty")
+        @Size(min = 3, max = 45, message = "Name length must be between 3 and 45 characters")
+        @Column(nullable = false)
+        private String name;
+
+        @NotBlank(message="The image can´t be empty")
+        @Size(min = 10, max = 256, message = "Image length must be between 10 and 256 characters")
+        @Column(nullable = false)
+        private String image;
+
+        @Size(max = 45, message = "The maximum image length should be 45 characters")
+        @Column
+        private String address;
+
+        //@DecimalMax(9999999999999)
+        @Column
+        private Integer phone;
+
+        @NotBlank(message="The email can´t be empty")
+        @Size(min = 10, max = 45, message = "Email length must be between 10 and 45 characters")
+        @Email
+        @Column(nullable = false)
+        private String email;
     }
 }
