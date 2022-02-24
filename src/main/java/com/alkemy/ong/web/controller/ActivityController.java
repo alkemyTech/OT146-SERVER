@@ -36,7 +36,7 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(activity));
     }
 
-    private Activity toDomain(ActivityDTO dto) {
+    private Activity toDomain( ActivityDTO dto) {
         return Activity.builder()
                 .id(dto.getId())
                 .name(dto.getName())

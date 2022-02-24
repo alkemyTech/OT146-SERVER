@@ -6,6 +6,8 @@ import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.activities.ActivityGateway;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class DefaultActivityGateway implements ActivityGateway {
 
@@ -18,6 +20,7 @@ public class DefaultActivityGateway implements ActivityGateway {
 
         public Activity create(Activity activity) {
             ActivityEntity entity = toEntity(activity);
+            entity.setCreatedAt(LocalDateTime.now());
             return toModel(repository.save(entity));     //se retorna en modelo pero se guarda en Entity
         }
 
