@@ -49,8 +49,7 @@ public class DefaultMemberGateway implements MemberGateway {
         entity.setLinkedinUrl(member.getLinkedinUrl());
         entity.setImage(member.getImage());
         entity.setDescription(member.getDescription());
-        LocalDate updateDate = LocalDate.now();
-        entity.setUpdatedAt(updateDate);
+        entity.setUpdatedAt(LocalDate.now());
         return entity;
     }
 
