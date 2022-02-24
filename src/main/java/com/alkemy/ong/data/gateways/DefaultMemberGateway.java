@@ -4,7 +4,6 @@ import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.repository.MemberRepository;
 import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.members.MemberGateway;
-import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -39,11 +38,11 @@ public class DefaultMemberGateway implements MemberGateway {
     public Member update(long id, Member member) {
         Optional<MemberEntity> entity = memberRepository.findById(id);
         entity.orElseThrow(() -> new ResourceNotFoundException("Member not found"));
-        MemberEntity entityUpdate = refreshValues(entity.get(), member);
+        MemberEntity entityUpdate = updateEntity(entity.get(), member);
         return toModel(memberRepository.save(entityUpdate));
     }
 
-    private MemberEntity refreshValues(MemberEntity entity, Member member) {
+    private MemberEntity updateEntity(MemberEntity entity, Member member) {
         entity.setName(member.getName());
         entity.setFacebookUrl(member.getFacebookUrl());
         entity.setInstagramUrl(member.getInstagramUrl());
