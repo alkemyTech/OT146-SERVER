@@ -39,7 +39,7 @@ public class CategoryController {
     }
 
     @GetMapping("/categories/{id}")
-    public ResponseEntity<?> show(@PathVariable Long id) {
+    public ResponseEntity<CategoryDto> show(@PathVariable Long id) {
        
         CategoryDto categoryDto = toDto(categoryService.findById(id));
    

@@ -2,14 +2,16 @@ package com.alkemy.ong.data.gateways;
 
 
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.stream.*;
 
 import com.alkemy.ong.data.entity.CategoryEntity;
 import com.alkemy.ong.data.repository.CategoryRepository;
 import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryGateway;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 
-
+import org.hibernate.cfg.annotations.IdBagBinder;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,8 +35,8 @@ public class DefaultCategoryGateway implements CategoryGateway {
 
     @Override
     public Category findById(Long id) {
-        
-        return toModel(categoryRepo.findById(id).orElseThrow()); 
+    
+        return toModel(categoryRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("id: " + id + " not found"))); 
     }
 
     private Category toModel(CategoryEntity categoryEntity) {
