@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     })
 
     @ResponseBody
-    public ErrorResponse notFind(HttpServletRequest request, Exception e) {
+    public ErrorResponse notFound(HttpServletRequest request, Exception e) {
         return new ErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
     } 
 
