@@ -2,6 +2,7 @@ package com.alkemy.ong.web.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -10,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @org.springframework.web.bind.annotation.ExceptionHandler({
+    @ExceptionHandler({
             BadRequestException.class,
             org.springframework.web.HttpRequestMethodNotSupportedException.class,
             org.springframework.web.bind.MethodArgumentNotValidException.class,
@@ -29,9 +30,9 @@ public class GlobalExceptionHandler {
         ResourceNotFoundException.class
     })
 
-
     @ResponseBody
     public ErrorResponse notFound(HttpServletRequest request, Exception e) {
         return new ErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
     } 
+
 }
