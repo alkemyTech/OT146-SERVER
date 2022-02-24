@@ -5,6 +5,7 @@ import com.alkemy.ong.data.repository.MemberRepository;
 import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.members.MemberGateway;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -37,7 +38,7 @@ public class DefaultMemberGateway implements MemberGateway {
     @Override
     public Member update(long id, Member member) {
         Optional<MemberEntity> entity = memberRepository.findById(id);
-        entity.orElseThrow(() -> new BadRequestException("Member not found"));
+        entity.orElseThrow(() -> new ResourceNotFoundException("Member not found"));
         MemberEntity entityUpdate = refreshValues(entity.get(), member);
         return toModel(memberRepository.save(entityUpdate));
     }
