@@ -4,11 +4,11 @@ import com.alkemy.ong.data.entity.SlidesEntity;
 import com.alkemy.ong.data.repository.SlidesRepository;
 import com.alkemy.ong.domain.slides.SlidesGateway;
 import com.alkemy.ong.domain.slides.Slides;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -40,6 +40,18 @@ public class DefaultSlidesGateway implements SlidesGateway {
                 .slideOrder(slides.getSlideOrder())
                 //.organizationId(slides.getOrganizationId())
                 .build();
+    }
+
+    @Override
+    public void delete(Long id) {
+
+        SlidesEntity slideToDelete = slidesRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find slide with id: " + id));
+
+        slideToDelete.setDeleted(true);
+
+        slidesRepository.save(slideToDelete);
     }
 
     @Override
