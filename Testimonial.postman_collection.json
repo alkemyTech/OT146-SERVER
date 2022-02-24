@@ -1,0 +1,64 @@
+{
+	"info": {
+		"_postman_id": "5ad68009-3ee2-4517-85de-4710e25a3074",
+		"name": "Testimonial",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "add testimonial",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\":\"cafeteria sanmartin\",\r\n   \"image\":\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg7_ZAYg3BVs6VLRWuVchC10Oqk9Auz7TjBCFATtkDGLG4C043iuMWTmppplK-vvelM9Y&usqp=CAU\",\r\n   \"content\":\"hola mundo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/testimonials",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"testimonials"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edite testimonial",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"name\":\"cafeteria sanmartin\",\r\n   \"image\":\"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg7_ZAYg3BVs6VLRWuVchC10Oqk9Auz7TjBCFATtkDGLG4C043iuMWTmppplK-vvelM9Y&usqp=CAU\",\r\n   \"content\":\"hola mundo\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/testimonials/11",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"testimonials",
+						"11"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

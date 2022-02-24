@@ -22,10 +22,16 @@ public class TestimonialController {
         this.testimonialService = testimonialService;
     }
 
-    @PostMapping(value = "")
+    @PostMapping
     public ResponseEntity<TestimonialDTO> save(@Valid @RequestBody  TestimonialDTO dto) {
         Testimonial testimonial = testimonialService.save(toDomain(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(testimonial));
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<TestimonialDTO> update(@PathVariable Long id, @Valid @RequestBody  TestimonialDTO dto) {
+        Testimonial testimonial = testimonialService.update(id, toDomain(dto));
+        return ResponseEntity.status(HttpStatus.OK).body(toDto(testimonial));
     }
 
     private Testimonial toDomain(TestimonialDTO dto){
