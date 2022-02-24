@@ -18,10 +18,12 @@ public class DefaultActivityGateway implements ActivityGateway {
 
         public Activity create(Activity activity) {
             ActivityEntity entity = toEntity(activity);
-            return toModel(repository.save(entity));
+            return toModel(repository.save(entity));     //se retorna en modelo pero se guarda en Entity
         }
 
-        public Activity toModel(ActivityEntity activityEntity){
+
+        //metodos de conversion
+        private Activity toModel(ActivityEntity activityEntity){
             return Activity.builder()
                     .id(activityEntity.getId())
                     .name(activityEntity.getName())
@@ -29,8 +31,8 @@ public class DefaultActivityGateway implements ActivityGateway {
                     .image(activityEntity.getImage())
                     .build();
         }
-
-        public ActivityEntity toEntity(Activity activity){
+    //metodos de conversion
+        private ActivityEntity toEntity(Activity activity){
             return ActivityEntity.builder()
                     .name(activity.getName())
                     .content(activity.getContent())
