@@ -37,9 +37,7 @@ public class DefaultMemberGateway implements MemberGateway {
     @Override
     public Member update(long id, Member member) {
         Optional<MemberEntity> entity = memberRepository.findById(id);
-        if (!entity.isPresent()) {
-            throw new BadRequestException("Member not Found");
-        }
+        entity.orElseThrow(() -> new BadRequestException("Member not found"));
         MemberEntity entityUpdate = refreshValues(entity.get(), member);
         return toModel(memberRepository.save(entityUpdate));
     }
