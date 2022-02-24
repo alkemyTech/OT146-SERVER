@@ -4,6 +4,7 @@ import com.alkemy.ong.data.entity.TestimonialEntity;
 import com.alkemy.ong.data.repository.TestimonialRepository;
 import com.alkemy.ong.domain.testimonial.TestimonialGateway;
 import com.alkemy.ong.domain.testimonial.Testimonial;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -19,6 +20,16 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
     public Testimonial create(Testimonial testimonial) {
         TestimonialEntity entity = toEntity(testimonial);
         return toModel(repository.save(entity));
+    }
+
+    @Override
+    public Testimonial update( Long id, Testimonial testimonial) {
+            TestimonialEntity testimonialEntity = repository.findById(id).orElseThrow(
+                    () -> new ResourceNotFoundException("non-existent testimony to update"));
+            testimonialEntity.setContent(testimonial.getContent());
+            testimonialEntity.setImage(testimonial.getImage());
+            testimonialEntity.setName(testimonial.getName());
+            return toModel(repository.save(testimonialEntity));
     }
 
     public Testimonial toModel(TestimonialEntity testimonialEntity){
