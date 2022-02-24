@@ -9,6 +9,7 @@ import com.alkemy.ong.web.exceptions.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Component
 public class DefaultTestimonialGateway implements TestimonialGateway {
@@ -27,15 +28,12 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
 
     @Override
     public Testimonial update( Long id, Testimonial testimonial) {
-        try {
-            TestimonialEntity testimonialEntity = repository.findById(id).get();
+            TestimonialEntity testimonialEntity = repository.findById(id).orElseThrow(
+                    () -> new NotFoundException("non-existent testimony to update"));
             testimonialEntity.setContent(testimonial.getContent());
             testimonialEntity.setImage(testimonial.getImage());
             testimonialEntity.setName(testimonial.getName());
             return toModel(repository.save(testimonialEntity));
-        }catch (NoSuchElementException e){
-            throw new NotFoundException("non-existent testimony to update");
-        }
     }
 
     public Testimonial toModel(TestimonialEntity testimonialEntity){
