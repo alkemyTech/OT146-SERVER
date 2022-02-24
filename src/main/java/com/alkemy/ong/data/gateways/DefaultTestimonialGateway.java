@@ -5,6 +5,7 @@ import com.alkemy.ong.data.repository.TestimonialRepository;
 import com.alkemy.ong.domain.testimonial.TestimonialGateway;
 import com.alkemy.ong.domain.testimonial.Testimonial;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.exceptions.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
@@ -33,7 +34,7 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
             testimonialEntity.setName(testimonial.getName());
             return toModel(repository.save(testimonialEntity));
         }catch (NoSuchElementException e){
-            throw new BadRequestException("non-existent testimony to update");
+            throw new NotFoundException("non-existent testimony to update");
         }
     }
 
