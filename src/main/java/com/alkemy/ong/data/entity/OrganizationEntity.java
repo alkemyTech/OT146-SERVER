@@ -9,6 +9,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Builder
 @Entity
@@ -55,6 +57,10 @@ public class OrganizationEntity implements Serializable {
 
     @Column(nullable = false)
     private Boolean deleted;
+
+    @Column
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "organization", orphanRemoval = true, cascade = CascadeType.ALL)
+    private Set<SlidesEntity> slides = new HashSet<>();
 
     @Override
     public String toString() {
