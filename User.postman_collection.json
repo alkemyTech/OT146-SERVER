@@ -29,14 +29,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/users/actives",
+					"raw": "localhost:8080/users?deleted=false",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"users",
-						"actives"
+						"users"
+					],
+					"query": [
+						{
+							"key": "deleted",
+							"value": "false"
+						}
 					]
 				}
 			},
@@ -48,14 +53,19 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:8080/users/deleted",
+					"raw": "localhost:8080/users?deleted=true",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"users",
-						"deleted"
+						"users"
+					],
+					"query": [
+						{
+							"key": "deleted",
+							"value": "true"
+						}
 					]
 				}
 			},

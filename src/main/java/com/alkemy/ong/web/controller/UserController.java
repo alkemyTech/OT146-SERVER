@@ -3,19 +3,22 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
+import com.alkemy.ong.web.exceptions.BadRequestException;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/users")
 //TODO: @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class UserController {
 
@@ -26,30 +29,9 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> findAll() {
-        List<User> users = userService.findAll();
-        List<UserDTO> dtos = users.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-
-    @GetMapping("/actives")
-    public ResponseEntity<List<UserDTO>> showActives() {
-        List<User> actives = userService.showActives();
-        List<UserDTO> dtos = actives.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-
-    @GetMapping("/deleted")
-    public ResponseEntity<List<UserDTO>> showDeleted() {
-        List<User> deleted = userService.showDeleted();
-        List<UserDTO> dtos = deleted.stream()
-                .map(this::toDto)
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
+    public ResponseEntity<List<UserDTO>> findUsers(@RequestParam(name = "deleted", required = false) String isDeleted) {
+        List<User> users = isDeleted == null ? userService.findAll() : userService.findByDeleted(stringToBoolean(isDeleted));
+        return ResponseEntity.ok(toListDto(users));
     }
 
     @Data
@@ -72,6 +54,22 @@ public class UserController {
             dto.setPhoto("-----");
         }
         return dto;
+    }
+
+    private boolean stringToBoolean(String isDeleted) {
+        if (isDeleted.equalsIgnoreCase("true")) {
+            return true;
+        } else if (isDeleted.equalsIgnoreCase("false")) {
+            return false;
+        } else {
+            throw new BadRequestException("Parameter must be 'true' or 'false'");
+        }
+    }
+
+    private List<UserDTO> toListDto(List<User> users) {
+        return users.stream()
+                .map(this::toDto)
+                .collect(toList());
     }
 
 }

@@ -10,13 +10,6 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    @Query(nativeQuery = true,
-    value = "SELECT * FROM users u WHERE u.deleted = 0")
-    List<UserEntity> showActives();
-
-    @Query(nativeQuery = true,
-            value = "SELECT * FROM users u WHERE u.deleted = 1")
-    List<UserEntity> showDeleted();
-
+    List<UserEntity> findByDeleted(boolean isDeleted);
 
 }

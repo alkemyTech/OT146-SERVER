@@ -19,12 +19,9 @@ public class UserService implements UserGateway {
     }
 
     @Override
-    public List<User> showActives() {
-        return userGateway.showActives();
+    public List<User> findByDeleted(boolean isDeleted) {
+        return userGateway.findByDeleted(isDeleted);
     }
 
-    @Override
-    public List<User> showDeleted() {
-        return userGateway.showDeleted();
-    }
+
 }

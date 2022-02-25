@@ -7,7 +7,8 @@ import com.alkemy.ong.domain.users.UserGateway;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class DefaultUserGateway implements UserGateway {
@@ -23,24 +24,18 @@ public class DefaultUserGateway implements UserGateway {
         List<UserEntity> entities = userRepository.findAll();
         return entities.stream()
                 .map(this::toModel)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
-    @Override
-    public List<User> showActives() {
-        List<UserEntity> actives = userRepository.showActives();
-        return actives.stream()
-                .map(this::toModel)
-                .collect(Collectors.toList());
-    }
 
     @Override
-    public List<User> showDeleted() {
-        List<UserEntity> deleted = userRepository.showDeleted();
-        return deleted.stream()
+    public List<User> findByDeleted(boolean isDeleted) {
+        List<UserEntity> entities = userRepository.findByDeleted(isDeleted);
+        return entities.stream()
                 .map(this::toModel)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
+
 
     private User toModel(UserEntity entity) {
         return User.builder()
