@@ -4,8 +4,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -14,5 +13,6 @@ public class News {
     private String name;
     private String content;
     private String image;
-    private String createdAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -19,9 +19,9 @@ public class NewsService implements NewsGateway {
         return newGateway.create(news);
     }
 
-    @Override
-    public List<News> findAll() {
-        return newGateway.findAll();
-    }
+//    @Override
+//    public List<News> findAll() {
+//        return newGateway.findAll();
+//    }
 
 }

@@ -28,18 +28,17 @@ public class DefaultNewsGateway implements NewsGateway {
         return toModel(newsRepository.save(toEntity(news)));
     }
 
-    @Override
-    public List<News> findAll() {
-        List<NewsEntity> news = newsRepository.findAll();
-        return toModelList(news);
-    }
+//    @Override
+//    public List<News> findAll() {
+//        List<NewsEntity> news = newsRepository.findAll();
+//        return toModelList(news);
+//    }
 
     private NewsEntity toEntity(News news) {
         return NewsEntity.builder()
                 .name(news.getName())
                 .content(news.getContent())
                 .image(news.getImage())
-                .createdAt(toLocalDate(news.getCreatedAt()))
                 .build();
     }
 
@@ -49,18 +48,13 @@ public class DefaultNewsGateway implements NewsGateway {
                 .name(entity.getName())
                 .content(entity.getContent())
                 .image(entity.getImage())
-                .createdAt(entity.getCreatedAt().toString())
+                .createdAt(entity.getCreatedAt())
                 .build();
     }
 
-    private LocalDate toLocalDate(String stringDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        return LocalDate.parse(stringDate, formatter);
-    }
-
-    private List<News> toModelList(List<NewsEntity> news) {
-        return news.stream().map(this::toModel).collect(toList());
-    }
+//    private List<News> toModelList(List<NewsEntity> news) {
+//        return news.stream().map(this::toModel).collect(toList());
+//    }
 
 
 

@@ -6,6 +6,4 @@ public interface NewsGateway {
 
     News create (News news);
 
-    List<News> findAll();
-
 }
