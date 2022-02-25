@@ -48,7 +48,7 @@ create table if not exists category (
     description varchar(256),
     image varchar(256),
     created_at date,
-    updated_at date, 
+    updated_at date,
     deleted bit(1) not null default 0
 );
 create table if not exists slides (
@@ -79,8 +79,23 @@ create table if not exists activities (
     image  varchar(256) not null,
     created_at TIMESTAMP not null,
     updated_at TIMESTAMP ,
-    deleted  bit(1) not null default = 0
+    deleted  bit(1) not null
 );
+
+CREATE TABLE IF NOT EXISTS organizations (
+  id_organization BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(45) NOT NULL,
+  image VARCHAR(256) NOT NULL,
+  address VARCHAR(45) NULL,
+  phone INT UNSIGNED NULL,
+  email VARCHAR(45) NOT NULL,
+  about_us_text TEXT NULL,
+  welcome_text TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL,
+  updated_at TIMESTAMP NOT NULL,
+  deleted BIT(1) NOT NULL DEFAULT 0
+);
+
 CREATE TABLE IF NOT EXISTS commentaries (
    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    body VARCHAR(500) NOT NULL,

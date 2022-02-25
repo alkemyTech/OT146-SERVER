@@ -13,5 +13,7 @@ public class SlidesService {
 
     public Slides create(Slides slide){ return slidesGateways.create(slide); }
 
+    public void delete(Long id){ slidesGateways.delete(id); }
+
     public List<Slides> findAll(){ return slidesGateways.findAll();  }
 }

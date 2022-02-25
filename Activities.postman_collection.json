@@ -1,0 +1,37 @@
+{
+	"info": {
+		"_postman_id": "35ea065a-8b46-4b35-87b5-14649fdfac8e",
+		"name": "ONG_ALKEMY",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "activities",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"name\":\"actividad1\",\r\n\"image\":\"http://URL_Image\",\r\n\"content\":\"A very specific description of the activity 1\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/activities",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"activities"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
