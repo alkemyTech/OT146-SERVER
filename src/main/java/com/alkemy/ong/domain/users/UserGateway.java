@@ -6,4 +6,8 @@ public interface UserGateway {
 
     List<User> findAll();
 
+    List<User> showActives();
+
+    List<User> showDeleted();
+
 }

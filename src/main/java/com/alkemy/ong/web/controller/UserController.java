@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("users")
+//TODO: @PreAuthorize
 public class UserController {
 
     private final UserService userService;
@@ -33,6 +34,24 @@ public class UserController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/actives")
+    public ResponseEntity<List<UserDTO>> showActives() {
+        List<User> actives = userService.showActives();
+        List<UserDTO> dtos = actives.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/deleted")
+    public ResponseEntity<List<UserDTO>> showDeleted() {
+        List<User> deleted = userService.showDeleted();
+        List<UserDTO> dtos = deleted.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
     @Data
     private static class UserDTO {
         private Long id;
@@ -41,14 +60,17 @@ public class UserController {
         private String email;
         private String photo;
         private Long roleId;
+        private String roleName;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
-        private boolean deleted;
     }
 
     private UserDTO toDto(User user) {
         UserDTO dto = new UserDTO();
         BeanUtils.copyProperties(user, dto);
+        if (dto.getPhoto() == null || dto.getPhoto().isEmpty()) {
+            dto.setPhoto("-----");
+        }
         return dto;
     }
 

@@ -26,6 +26,22 @@ public class DefaultUserGateway implements UserGateway {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<User> showActives() {
+        List<UserEntity> actives = userRepository.showActives();
+        return actives.stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> showDeleted() {
+        List<UserEntity> deleted = userRepository.showDeleted();
+        return deleted.stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
+    }
+
     private User toModel(UserEntity entity) {
         return User.builder()
                 .id(entity.getId())
@@ -34,9 +50,9 @@ public class DefaultUserGateway implements UserGateway {
                 .email(entity.getEmail())
                 .photo(entity.getPhoto())
                 .roleId(entity.getRole().getId())
+                .roleName(entity.getRole().getName())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
-                .deleted(entity.isDeleted())
                 .build();
     }
 }

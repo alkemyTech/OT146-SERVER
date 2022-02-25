@@ -10,7 +10,10 @@ create table if not exists members (
     updated_at date,
     deleted bit(1) NOT NULL default 0
 );
-create table if not exists roles (
+DROP TABLE commentaries;
+DROP TABLE users;
+DROP TABLE roles;
+create table roles (
     id bigint not null primary key AUTO_INCREMENT,
     name varchar(256) not null,
 	description varchar(256),
@@ -18,7 +21,7 @@ create table if not exists roles (
     updated_at timestamp,
     deleted bit(1) not null default 0
 );
-CREATE TABLE IF NOT EXISTS users (
+CREATE TABLE users (
    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    first_name VARCHAR(255) NOT NULL,
    last_name VARCHAR(255) NOT NULL,
@@ -31,6 +34,8 @@ CREATE TABLE IF NOT EXISTS users (
    deleted BIT(1) NOT NULL DEFAULT 0,
    PRIMARY KEY (id),
    FOREIGN KEY (role_id) REFERENCES roles(id)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE
 );
 create table if not exists testimonials (
     id bigint unsigned not null AUTO_INCREMENT,
@@ -103,6 +108,10 @@ CREATE TABLE IF NOT EXISTS commentaries (
    news_id BIGINT UNSIGNED NOT NULL,
    created_at TIMESTAMP NULL,
    PRIMARY KEY (id),
-   FOREIGN KEY (user_id) REFERENCES users(id),
+   FOREIGN KEY (user_id) REFERENCES users(id)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE,
    FOREIGN KEY (news_id) REFERENCES news(id)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE
 );

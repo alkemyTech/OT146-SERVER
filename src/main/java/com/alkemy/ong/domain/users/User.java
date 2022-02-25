@@ -25,9 +25,10 @@ public class User {
 
     private Long roleId;
 
+    private String roleName;
+
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    private boolean deleted;
 }

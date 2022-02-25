@@ -17,4 +17,14 @@ public class UserService implements UserGateway {
     public List<User> findAll() {
         return userGateway.findAll();
     }
+
+    @Override
+    public List<User> showActives() {
+        return userGateway.showActives();
+    }
+
+    @Override
+    public List<User> showDeleted() {
+        return userGateway.showDeleted();
+    }
 }
