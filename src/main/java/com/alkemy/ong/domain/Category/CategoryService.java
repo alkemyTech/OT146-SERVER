@@ -17,5 +17,13 @@ public class CategoryService  {
         
         return categoryGateway.findAll();
     }
+
+    public Category findById(Long id) {
+        return categoryGateway.findById(id);
+    }
+
+    public Category create(Category category) {
+        return categoryGateway.create(category);
+    } 
     
 }

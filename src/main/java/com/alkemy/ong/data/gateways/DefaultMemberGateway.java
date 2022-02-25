@@ -4,11 +4,13 @@ import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.repository.MemberRepository;
 import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.members.MemberGateway;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.*;
 
@@ -30,6 +32,25 @@ public class DefaultMemberGateway implements MemberGateway {
     public List<Member> findAll() {
         List<MemberEntity> members = memberRepository.findAll();
         return toModelList(members);
+    }
+
+    @Override
+    public Member update(long id, Member member) {
+        Optional<MemberEntity> entity = memberRepository.findById(id);
+        entity.orElseThrow(() -> new ResourceNotFoundException("Member not found"));
+        MemberEntity entityUpdate = updateEntity(entity.get(), member);
+        return toModel(memberRepository.save(entityUpdate));
+    }
+
+    private MemberEntity updateEntity(MemberEntity entity, Member member) {
+        entity.setName(member.getName());
+        entity.setFacebookUrl(member.getFacebookUrl());
+        entity.setInstagramUrl(member.getInstagramUrl());
+        entity.setLinkedinUrl(member.getLinkedinUrl());
+        entity.setImage(member.getImage());
+        entity.setDescription(member.getDescription());
+        entity.setUpdatedAt(LocalDate.now());
+        return entity;
     }
 
     private MemberEntity toEntity(Member member) {

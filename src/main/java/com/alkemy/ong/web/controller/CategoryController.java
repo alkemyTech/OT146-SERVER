@@ -1,12 +1,20 @@
-package com.alkemy.ong.web;
+package com.alkemy.ong.web.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,6 +41,20 @@ public class CategoryController {
         return categories.stream().map(category -> toDto(category)).collect(Collectors.toList());
     }
 
+    @GetMapping("/categories/{id}")
+    public ResponseEntity<CategoryDto> show(@PathVariable Long id) {
+       
+        CategoryDto categoryDto = toDto(categoryService.findById(id));
+   
+        return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);          
+    }
+
+    @PostMapping("/categories")
+    public ResponseEntity<CategoryDto> create(@Valid @RequestBody CategoryDto categoryDto) {
+        Category category = categoryService.create(toCategory(categoryDto));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDto(category));
+    }
+
     private CategoryDto toDto(Category category) {
         CategoryDto categoryDto = CategoryDto.builder()
         .id(category.getId())
@@ -40,6 +62,18 @@ public class CategoryController {
         .build();
     
         return categoryDto;
+    }
+
+    private Category toCategory(CategoryDto categoryDto) {
+        Category category = Category.builder()
+        .name(categoryDto.getName())
+        .description(categoryDto.getDescription())
+        .deleted(categoryDto.getDeleted())
+        .createdAt(categoryDto.getCreatedAt())
+        .updatedAt(categoryDto.getUpdatedAt())
+        .build();
+
+        return category;
     }
 
     @Getter
@@ -52,6 +86,7 @@ public class CategoryController {
         private Long id;
         private String name;
         private String description;
+        private Boolean deleted;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     } 

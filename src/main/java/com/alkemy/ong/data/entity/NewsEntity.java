@@ -1,9 +1,7 @@
 package com.alkemy.ong.data.entity;
 
 import com.alkemy.ong.domain.Category.Category;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +10,8 @@ import java.time.LocalDateTime;
 @Table(name = "news")
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class NewsEntity {
 
