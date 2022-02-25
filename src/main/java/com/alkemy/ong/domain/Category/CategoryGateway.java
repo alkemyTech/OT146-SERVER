@@ -6,4 +6,5 @@ public interface CategoryGateway {
     
     List<Category> findAll();
     Category findById(Long id);
+    Category create(Category category);
 }
