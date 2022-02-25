@@ -19,4 +19,7 @@ public class TestimonialService {
         return testimonialGateway.update(id, testimonial);
     }
 
+    public void delete(Long id) {
+        testimonialGateway.delete(id);
+    }
 }
