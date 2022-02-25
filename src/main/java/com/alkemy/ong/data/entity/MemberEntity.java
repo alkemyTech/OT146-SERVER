@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@SQLDelete(sql = "UPDATE member SET deleted = true WHERE id=?")
+@SQLDelete(sql = "UPDATE members SET deleted = true WHERE id=?")
 @Where(clause = "deleted=false")
 public class MemberEntity {
 

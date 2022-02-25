@@ -48,6 +48,11 @@ public class MemberController {
         return ResponseEntity.ok().body(resultDTO);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@Valid @PathVariable long id) {
+        memberService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     private Member toModel(MemberDTO dto) {
         Member memberDomain = Member.builder()
