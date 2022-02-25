@@ -44,6 +44,18 @@ public class DefaultCategoryGateway implements CategoryGateway {
         return toModel(categoryRepo.save(ce));
     }
 
+    @Override
+    public Category update(Long id, Category category) {
+
+        CategoryEntity ce = categoryRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("id: " + id + " not found"));
+        ce.setName(category.getName());
+        ce.setDescription(category.getDescription());
+        ce.setDeleted(category.getDeleted());
+        ce.setCreatedAt(category.getCreatedAt());
+        ce.setUpdatedAt(category.getUpdatedAt());
+        return toModel(categoryRepo.save(ce));
+    }
+
     private Category toModel(CategoryEntity categoryEntity) {
         Category category = Category.builder()
         .id(categoryEntity.getId())
@@ -68,5 +80,8 @@ public class DefaultCategoryGateway implements CategoryGateway {
 
         return categoryEntity;
     }
+
+
+   
 
 }
