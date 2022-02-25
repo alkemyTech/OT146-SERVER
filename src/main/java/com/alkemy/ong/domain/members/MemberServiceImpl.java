@@ -15,12 +15,17 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Member save(Member member) {
-        return this.memberGateway.create(member);
+        return memberGateway.create(member);
     }
 
     @Override
     public List<Member> getAllMembers() {
-        return this.memberGateway.findAll();
+        return memberGateway.findAll();
+    }
+
+    @Override
+    public Member update(long id, Member member) {
+        return memberGateway.update(id, member);
     }
 
 }

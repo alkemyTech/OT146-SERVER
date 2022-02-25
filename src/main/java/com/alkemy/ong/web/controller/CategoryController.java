@@ -1,12 +1,17 @@
-package com.alkemy.ong.web;
+package com.alkemy.ong.web.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryService;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +36,14 @@ public class CategoryController {
         List<Category> categories = categoryService.findAll();
         
         return categories.stream().map(category -> toDto(category)).collect(Collectors.toList());
+    }
+
+    @GetMapping("/categories/{id}")
+    public ResponseEntity<CategoryDto> show(@PathVariable Long id) {
+       
+        CategoryDto categoryDto = toDto(categoryService.findById(id));
+   
+        return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);          
     }
 
     private CategoryDto toDto(Category category) {

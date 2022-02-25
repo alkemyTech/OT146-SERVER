@@ -26,9 +26,13 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @org.springframework.web.bind.annotation.ExceptionHandler({
+        ResourceNotFoundException.class
+    })
+
     @ResponseBody
-    public ErrorResponse notFound(HttpServletRequest request, Exception e){
+    public ErrorResponse notFound(HttpServletRequest request, Exception e) {
         return new ErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
-    }
+    } 
+
 }
