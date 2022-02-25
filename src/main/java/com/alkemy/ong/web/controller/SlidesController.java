@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class SlidesController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SlidesResponse>> getSlides(){
+    public ResponseEntity<List<SlidesResponse>> getBriefSlides(){
         List<SlidesResponse> returnValue = new ArrayList<>();
 
         List<SlidesDto> slides = slidesService.findAll()
@@ -75,6 +77,9 @@ public class SlidesController {
         private Integer slideOrder;
         //private OrganizationEntity organizationId;
         private Boolean deleted;
+        @NotNull
+        private LocalDateTime createdAt;
+        private LocalDateTime updatedAt;
 
         public static SlidesDto toDto(Slides slides){
             return SlidesDto.builder()
@@ -84,6 +89,8 @@ public class SlidesController {
                     .slideOrder(slides.getSlideOrder())
                     .deleted(slides.getDeleted())
                     //.organizationId(slides.getOrganizationId())
+                    .createdAt(slides.getCreatedAt())
+                    .updatedAt(slides.getUpdatedAt())
                     .build();
         }
     }
