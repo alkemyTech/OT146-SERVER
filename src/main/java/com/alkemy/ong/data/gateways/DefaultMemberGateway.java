@@ -42,6 +42,15 @@ public class DefaultMemberGateway implements MemberGateway {
         return toModel(memberRepository.save(entityUpdate));
     }
 
+    @Override
+    public void delete(long id) {
+        Optional<MemberEntity> entity = memberRepository.findById(id);
+        entity.orElseThrow(() -> new ResourceNotFoundException("Member not found"));
+        entity.get().setUpdatedAt(LocalDate.now());
+        memberRepository.save(entity.get());
+        memberRepository.deleteById(id);
+    }
+
     private MemberEntity updateEntity(MemberEntity entity, Member member) {
         entity.setName(member.getName());
         entity.setFacebookUrl(member.getFacebookUrl());
