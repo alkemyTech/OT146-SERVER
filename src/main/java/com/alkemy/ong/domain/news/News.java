@@ -1,19 +1,18 @@
 package com.alkemy.ong.domain.news;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import javax.persistence.Column;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class newdto {
+@Builder
+public class News {
     private Long id;
     private String name;
     private String content;
     private String image;
+    private String createdAt;
 }

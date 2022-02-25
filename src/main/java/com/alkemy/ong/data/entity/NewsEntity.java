@@ -1,5 +1,7 @@
 package com.alkemy.ong.data.entity;
 
+import com.alkemy.ong.domain.Category.Category;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +12,8 @@ import java.time.LocalDateTime;
 @Table(name = "news")
 @Setter
 @Getter
-public class News {
+@Builder
+public class NewsEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +31,9 @@ public class News {
 
     private boolean deleted;
 
-/*  @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="categories_id")
-    private Category categories;*/
+    private Category categories;
 
 
 

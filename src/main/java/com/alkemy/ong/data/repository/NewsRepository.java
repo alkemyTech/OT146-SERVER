@@ -1,7 +1,9 @@
 package com.alkemy.ong.data.repository;
 
-import com.alkemy.ong.data.entity.News;
+import com.alkemy.ong.data.entity.NewsEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface NewsRepository extends JpaRepository<News,Long> {
+@Repository
+public interface NewsRepository extends JpaRepository<NewsEntity,Long> {
 }

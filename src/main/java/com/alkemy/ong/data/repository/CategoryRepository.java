@@ -1,8 +1,11 @@
 package com.alkemy.ong.data.repository;
 
-import com.alkemy.ong.data.entity.Category;
+
+import com.alkemy.ong.data.entity.CategoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CategoryRepository extends JpaRepository<Category, Long> {
-    
+import java.util.List;
+
+public interface CategoryRepository extends JpaRepository<CategoryEntity, Long> {
+    List<CategoryEntity> findAll();
 }
