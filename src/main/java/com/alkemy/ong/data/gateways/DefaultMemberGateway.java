@@ -44,10 +44,9 @@ public class DefaultMemberGateway implements MemberGateway {
 
     @Override
     public void delete(long id) {
-        Optional<MemberEntity> entity = memberRepository.findById(id);
-        entity.orElseThrow(() -> new ResourceNotFoundException("Member not found"));
-        entity.get().setUpdatedAt(LocalDate.now());
-        memberRepository.save(entity.get());
+        MemberEntity entity = memberRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Member not found"));
+        entity.setUpdatedAt(LocalDate.now());
+        memberRepository.save(entity);
         memberRepository.deleteById(id);
     }
 
