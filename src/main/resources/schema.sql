@@ -10,6 +10,14 @@ create table if not exists members (
     updated_at date,
     deleted bit(1) NOT NULL default 0
 );
+create table if not exists roles (
+    id bigint not null primary key AUTO_INCREMENT,
+    name varchar(256) not null,
+	description varchar(256),
+    created_at timestamp not null,
+    updated_at timestamp,
+    deleted bit(1) not null default 0
+);
 CREATE TABLE IF NOT EXISTS users (
    id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
    first_name VARCHAR(255) NOT NULL,
@@ -17,12 +25,12 @@ CREATE TABLE IF NOT EXISTS users (
    email VARCHAR(255) NOT NULL UNIQUE,
    password VARCHAR(255) NOT NULL,
    photo VARCHAR(255) NULL,
---   role_id INT NOT NULL,
+   role_id BIGINT NOT NULL,
    created_at TIMESTAMP NULL,
    updated_at TIMESTAMP NULL,
    deleted BIT(1) NOT NULL DEFAULT 0,
-   PRIMARY KEY (id)
---   FOREIGN KEY (role_id) REFERENCES Role(id)
+   PRIMARY KEY (id),
+   FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 create table if not exists testimonials (
     id bigint unsigned not null AUTO_INCREMENT,
@@ -33,14 +41,6 @@ create table if not exists testimonials (
     updated_at timestamp null on update current_timestamp,
     deleted bit(1) not null default 0,
     primary key(id)
-);
-create table if not exists roles (
-    id bigint unsigned not null primary key AUTO_INCREMENT,
-    name varchar(256) not null,
-	description varchar(256),
-    created_at timestamp not null,
-    updated_at timestamp,
-    deleted bit(1) not null default 0
 );
 create table if not exists category (
     id bigint not null primary key AUTO_INCREMENT,
