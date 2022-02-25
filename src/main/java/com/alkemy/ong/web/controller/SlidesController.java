@@ -45,6 +45,14 @@ public class SlidesController {
         return new ResponseEntity<>(returnValue, HttpStatus.OK);
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<SlidesDto> getDetailsById(@PathVariable Long id){
+
+        SlidesDto slide = toDto(slidesService.findById(id));
+
+        return new ResponseEntity<>(slide, HttpStatus.OK);
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteSlide(@PathVariable Long id){
         slidesService.delete(id);

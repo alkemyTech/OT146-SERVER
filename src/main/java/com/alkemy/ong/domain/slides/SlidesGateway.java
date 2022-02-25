@@ -5,4 +5,5 @@ import java.util.List;
 public interface SlidesGateway {
     void delete(Long id);
     List<Slides> findAll();
+    Slides findById(Long id);
 }
