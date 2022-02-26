@@ -71,4 +71,13 @@ public class DefaultSlidesGateway implements SlidesGateway {
                 .map(slide -> toDomain(slide))
                 .collect(toList());
     }
+
+    @Override
+    public Slides findById(Long id) {
+        SlidesEntity slideToFind = slidesRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find slide with id: " + id));
+
+        return toDomain(slideToFind);
+    }
 }

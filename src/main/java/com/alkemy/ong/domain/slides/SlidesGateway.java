@@ -6,4 +6,5 @@ public interface SlidesGateway {
     Slides create(Slides slides);
     void delete(Long id);
     List<Slides> findAll();
+    Slides findById(Long id);
 }
