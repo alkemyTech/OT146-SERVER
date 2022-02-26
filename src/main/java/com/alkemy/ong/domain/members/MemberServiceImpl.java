@@ -28,4 +28,9 @@ public class MemberServiceImpl implements MemberService {
         return memberGateway.update(id, member);
     }
 
+    @Override
+    public void delete(long id) {
+        memberGateway.delete(id);
+    }
+
 }
