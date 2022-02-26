@@ -3,7 +3,6 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
-import com.alkemy.ong.web.exceptions.BadRequestException;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +28,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> findUsers(@RequestParam(name = "deleted", required = false) String isDeleted) {
-        List<User> users = isDeleted == null ? userService.findAll() : userService.findByDeleted(stringToBoolean(isDeleted));
+    public ResponseEntity<List<UserDTO>> findUsers(@RequestParam(name = "deleted", required = false) Boolean isDeleted) {
+        List<User> users = isDeleted == null ? userService.findAll() : userService.findByDeleted(isDeleted);
         return ResponseEntity.ok(toListDto(users));
     }
 
@@ -56,15 +55,6 @@ public class UserController {
         return dto;
     }
 
-    private boolean stringToBoolean(String isDeleted) {
-        if (isDeleted.equalsIgnoreCase("true")) {
-            return true;
-        } else if (isDeleted.equalsIgnoreCase("false")) {
-            return false;
-        } else {
-            throw new BadRequestException("Parameter must be 'true' or 'false'");
-        }
-    }
 
     private List<UserDTO> toListDto(List<User> users) {
         return users.stream()
