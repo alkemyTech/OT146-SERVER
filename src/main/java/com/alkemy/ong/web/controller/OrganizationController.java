@@ -53,6 +53,9 @@ public class OrganizationController {
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())
                 .deleted(dto.getDeleted())
+                .facebookLink(dto.getFacebookLink())
+                .instagramLink(dto.getInstagramLink())
+                .linkedinLink((dto.getLinkedinLink()))
                 .build();
     }
 
@@ -69,6 +72,9 @@ public class OrganizationController {
                 .createdAt(organization.getCreatedAt())
                 .updatedAt(organization.getUpdatedAt())
                 .deleted(organization.getDeleted())
+                .facebookLink(organization.getFacebookLink())
+                .instagramLink(organization.getInstagramLink())
+                .linkedinLink(organization.getLinkedinLink())
                 .build();
     }
 
@@ -78,6 +84,9 @@ public class OrganizationController {
                 .image(organization.getImage())
                 .address(organization.getAddress())
                 .phone(organization.getPhone())
+                .facebookLink(organization.getFacebookLink())
+                .instagramLink(organization.getInstagramLink())
+                .linkedinLink(organization.getLinkedinLink())
                 .build();
     }
 
@@ -130,6 +139,15 @@ public class OrganizationController {
 
         @Column(nullable = false)
         private Boolean deleted;
+
+        @Column
+        private String facebookLink;
+
+        @Column
+        private String instagramLink;
+
+        @Column
+        private String linkedinLink;
     }
 
     @Builder
@@ -153,5 +171,14 @@ public class OrganizationController {
         //@DecimalMax(9999999999999)
         @Column
         private Integer phone;
+
+        @Column
+        private String facebookLink;
+
+        @Column
+        private String instagramLink;
+
+        @Column
+        private String linkedinLink;
     }
 }
