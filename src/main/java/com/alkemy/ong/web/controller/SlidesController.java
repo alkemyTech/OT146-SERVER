@@ -1,5 +1,7 @@
 package com.alkemy.ong.web.controller;
 
+import com.alkemy.ong.data.entity.OrganizationEntity;
+import com.alkemy.ong.data.entity.SlidesEntity;
 import com.alkemy.ong.domain.slides.Slides;
 import com.alkemy.ong.domain.slides.SlidesService;
 import com.alkemy.ong.domain.slides.response.SlidesResponse;
@@ -9,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -17,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.alkemy.ong.web.controller.SlidesController.SlidesDto.toDomain;
 import static com.alkemy.ong.web.controller.SlidesController.SlidesDto.toDto;
 import static java.util.stream.Collectors.toList;
 
@@ -49,10 +53,15 @@ public class SlidesController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<SlidesDto> getDetailsById(@PathVariable Long id){
-
         SlidesDto slide = toDto(slidesService.findById(id));
 
         return new ResponseEntity<>(slide, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<SlidesDto> createSlide(@Valid @RequestBody SlidesDto slideBody){
+        SlidesDto slideDto = toDto(slidesService.create(toDomain(slideBody)));
+        return new ResponseEntity<>(slideDto, HttpStatus.CREATED);
     }
 
     @DeleteMapping(path = "/{id}")
@@ -67,17 +76,16 @@ public class SlidesController {
     @NoArgsConstructor
     @Builder
     public static class SlidesDto implements Serializable {
-        @NotEmpty
         private Long id;
         @NotBlank
         private String imageUrl;
         @NotBlank
         private String text;
-        @NotEmpty
-        private Integer slideOrder;
-        //private OrganizationEntity organizationId;
-        private Boolean deleted;
         @NotNull
+        private Integer slideOrder;
+        @NotNull
+        private Long organizationId;
+        private Boolean deleted;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
 
@@ -88,9 +96,21 @@ public class SlidesController {
                     .text(slides.getText())
                     .slideOrder(slides.getSlideOrder())
                     .deleted(slides.getDeleted())
-                    //.organizationId(slides.getOrganizationId())
+                    .organizationId(slides.getOrganizationId())
                     .createdAt(slides.getCreatedAt())
                     .updatedAt(slides.getUpdatedAt())
+                    .build();
+        }
+        public static Slides toDomain(SlidesDto slidesDto){
+            return Slides.builder()
+                    .id(slidesDto.getId())
+                    .imageUrl(slidesDto.getImageUrl())
+                    .text(slidesDto.getText())
+                    .slideOrder(slidesDto.getSlideOrder())
+                    .organizationId(slidesDto.getOrganizationId())
+                    .deleted(slidesDto.getDeleted())
+                    .createdAt(slidesDto.getCreatedAt())
+                    .updatedAt(slidesDto.getUpdatedAt())
                     .build();
         }
     }

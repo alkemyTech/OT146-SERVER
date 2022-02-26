@@ -18,4 +18,5 @@ public class SlidesService {
     public List<Slides> findAll(){ return slidesGateways.findAll();  }
 
     public Slides findById(Long id){ return slidesGateways.findById(id); }
+
 }
