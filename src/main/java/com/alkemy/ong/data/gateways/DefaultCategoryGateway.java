@@ -8,7 +8,7 @@ import com.alkemy.ong.data.entity.CategoryEntity;
 import com.alkemy.ong.data.repository.CategoryRepository;
 import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryGateway;
-
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 
 import org.springframework.stereotype.Component;
 
@@ -31,15 +31,42 @@ public class DefaultCategoryGateway implements CategoryGateway {
                             .collect(Collectors.toList());
     }
 
+    @Override
+    public Category findById(Long id) {
+    
+        return toModel(categoryRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("id: " + id + " not found"))); 
+    }
+
+    
+    @Override
+    public Category create(Category category) {
+        CategoryEntity ce = toEntity(category);
+        return toModel(categoryRepo.save(ce));
+    }
+
     private Category toModel(CategoryEntity categoryEntity) {
         Category category = Category.builder()
         .id(categoryEntity.getId())
         .name(categoryEntity.getName())
         .description(categoryEntity.getDescription())
+        .deleted(categoryEntity.getDeleted())
         .createdAt(categoryEntity.getCreatedAt())
         .updatedAt(categoryEntity.getUpdatedAt())
         .build();
         
         return category;
     }
+
+    private CategoryEntity toEntity(Category category) {
+        CategoryEntity categoryEntity = CategoryEntity.builder()
+        .name(category.getName())
+        .description(category.getDescription())
+        .deleted(category.getDeleted())
+        .createdAt(category.getCreatedAt())
+        .updatedAt(category.getUpdatedAt())
+        .build();
+
+        return categoryEntity;
+    }
+
 }

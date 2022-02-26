@@ -14,4 +14,12 @@ public class TestimonialService {
     public Testimonial save(Testimonial testimonial){
         return testimonialGateway.create(testimonial);
     }
+
+    public Testimonial update(Long id, Testimonial testimonial){
+        return testimonialGateway.update(id, testimonial);
+    }
+
+    public void delete(Long id) {
+        testimonialGateway.delete(id);
+    }
 }

@@ -80,6 +80,7 @@ create table if not exists activities (
     created_at TIMESTAMP not null,
     updated_at TIMESTAMP ,
     deleted  bit(1) not null
+);
 
 CREATE TABLE IF NOT EXISTS organizations (
   id_organization BIGINT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,

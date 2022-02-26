@@ -29,7 +29,7 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberDTO dto) {
-        Member memberSaved = memberService.save(this.toModel(dto));
+        Member memberSaved = memberService.save(toModel(dto));
         MemberDTO resultDTO = toDto(memberSaved);
         return ResponseEntity.status(HttpStatus.CREATED).body(resultDTO);
     }
@@ -39,6 +39,19 @@ public class MemberController {
         List<Member> memberList = memberService.getAllMembers();
         List<MemberDTO> dtoList = toDtoList(memberList);
         return ResponseEntity.ok().body(dtoList);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<MemberDTO> update(@Valid @PathVariable long id, @Valid @RequestBody MemberDTO dto) {
+        Member member = memberService.update(id,toModel(dto));
+        MemberDTO resultDTO = toDto(member);
+        return ResponseEntity.ok().body(resultDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@Valid @PathVariable long id) {
+        memberService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     private Member toModel(MemberDTO dto) {
