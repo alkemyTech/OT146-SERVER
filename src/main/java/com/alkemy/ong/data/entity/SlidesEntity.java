@@ -31,7 +31,7 @@ public class SlidesEntity {
     private Integer slideOrder;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "organizations.organization_id", nullable = false)
+    @JoinColumn(name = "organizationId", nullable = false)
     private OrganizationEntity organization;
 
     @Column
