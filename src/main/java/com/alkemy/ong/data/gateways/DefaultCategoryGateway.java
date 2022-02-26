@@ -36,8 +36,7 @@ public class DefaultCategoryGateway implements CategoryGateway {
     
         return toModel(categoryRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("id: " + id + " not found"))); 
     }
-
-    
+ 
     @Override
     public Category create(Category category) {
         CategoryEntity ce = toEntity(category);
@@ -51,8 +50,6 @@ public class DefaultCategoryGateway implements CategoryGateway {
         ce.setName(category.getName());
         ce.setDescription(category.getDescription());
         ce.setDeleted(category.getDeleted());
-        ce.setCreatedAt(category.getCreatedAt());
-        ce.setUpdatedAt(category.getUpdatedAt());
         return toModel(categoryRepo.save(ce));
     }
 
@@ -80,8 +77,5 @@ public class DefaultCategoryGateway implements CategoryGateway {
 
         return categoryEntity;
     }
-
-
-   
 
 }
