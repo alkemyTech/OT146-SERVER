@@ -136,10 +136,6 @@ public class OrganizationController {
     @Data
     @AllArgsConstructor
     public static class OrganizationSimpleDto {
-        @Id
-        @GeneratedValue(strategy= GenerationType.IDENTITY)
-        private long idOrganization;
-
         @NotBlank(message="The name can´t be empty")
         @Size(min = 3, max = 45, message = "Name length must be between 3 and 45 characters")
         @Column(nullable = false)
@@ -157,11 +153,5 @@ public class OrganizationController {
         //@DecimalMax(9999999999999)
         @Column
         private Integer phone;
-
-        @NotBlank(message="The email can´t be empty")
-        @Size(min = 10, max = 45, message = "Email length must be between 10 and 45 characters")
-        @Email
-        @Column(nullable = false)
-        private String email;
     }
 }
