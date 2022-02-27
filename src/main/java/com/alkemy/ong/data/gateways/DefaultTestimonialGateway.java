@@ -29,12 +29,20 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
 
     @Override
     public Testimonial update( Long id, Testimonial testimonial) {
-            TestimonialEntity testimonialEntity = repository.findById(id).orElseThrow(
-                    () -> new ResourceNotFoundException("non-existent testimony to update"));
-            testimonialEntity.setContent(testimonial.getContent());
-            testimonialEntity.setImage(testimonial.getImage());
-            testimonialEntity.setName(testimonial.getName());
-            return toModel(repository.save(testimonialEntity));
+        TestimonialEntity testimonialEntity = repository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("non-existent testimony to update"));
+        testimonialEntity.setContent(testimonial.getContent());
+        testimonialEntity.setImage(testimonial.getImage());
+        testimonialEntity.setName(testimonial.getName());
+        return toModel(repository.save(testimonialEntity));
+    }
+
+    @Override
+    public void delete(Long id){
+        TestimonialEntity testimonialEntity = repository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("non-existent testimony to delete"));
+        testimonialEntity.setDeleted(true);
+        repository.save(testimonialEntity);
     }
 
     @Override
@@ -46,7 +54,7 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
                 .collect(Collectors.toList());
     }
 
-    public Testimonial toModel(TestimonialEntity testimonialEntity){
+    private Testimonial toModel(TestimonialEntity testimonialEntity){
         return Testimonial.builder()
                 .id(testimonialEntity.getId())
                 .name(testimonialEntity.getName())
@@ -55,7 +63,7 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
                 .build();
     }
 
-    public TestimonialEntity toEntity(Testimonial testimonial){
+    private TestimonialEntity toEntity(Testimonial testimonial){
         return TestimonialEntity.builder()
                 .name(testimonial.getName())
                 .content(testimonial.getContent())

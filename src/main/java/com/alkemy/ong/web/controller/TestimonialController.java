@@ -37,6 +37,12 @@ public class TestimonialController {
         return ResponseEntity.status(HttpStatus.OK).body(toDto(testimonial));
     }
 
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity delete(@PathVariable Long id) {
+        testimonialService.delete(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 
     @GetMapping(params = {"page"})
     ResponseEntity<Page> lisAllByPage(@RequestParam(name = "page") Integer page){
@@ -82,6 +88,7 @@ public class TestimonialController {
         @NotNull @NotBlank @NotEmpty
         private String content;
     }
+
     @Builder
     @Getter @Setter
     public static class Page{
