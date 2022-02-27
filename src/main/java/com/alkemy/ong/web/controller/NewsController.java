@@ -8,7 +8,10 @@ import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -26,6 +29,24 @@ public class NewsController {
         News news = newsService.create(toDomain(newDTO));
         return ResponseEntity.ok(toDTO(news));
     }
+
+
+    @GetMapping
+    public ResponseEntity<List<NewsDTO>> getNews(){
+        List<News> newsList = newsService.findAll();
+        List<NewsDTO> dtoList = toDtoList(newsList);
+        return ResponseEntity.ok().body(dtoList);
+    }
+
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<NewsDTO> showId(@PathVariable Long id){
+        News news = newsService.findById(id);
+        NewsDTO newsDTO = toDTO(news);
+        return ResponseEntity.ok().body(newsDTO);
+    }
+
 
     private News toDomain(NewsDTO newDTO) {
         return News.builder()
@@ -45,6 +66,10 @@ public class NewsController {
                 .createdAt(news.getCreatedAt())
                 .updatedAt(news.getUpdatedAt())
                 .build();
+    }
+
+    private List<NewsDTO> toDtoList(List<News> news) {
+        return news.stream().map(this::toDTO).collect(Collectors.toList());
     }
 
     @Data

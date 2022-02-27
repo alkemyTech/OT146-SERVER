@@ -5,10 +5,9 @@ import com.alkemy.ong.data.entity.NewsEntity;
 import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsGateway;
+import com.alkemy.ong.web.exceptions.BadRequestException;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -28,11 +27,18 @@ public class DefaultNewsGateway implements NewsGateway {
         return toModel(newsRepository.save(toEntity(news)));
     }
 
-//    @Override
-//    public List<News> findAll() {
-//        List<NewsEntity> news = newsRepository.findAll();
-//        return toModelList(news);
-//    }
+    @Override
+    public News findById(Long id) {
+        NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new BadRequestException("mensaje"));
+        return toModel(news);
+    }
+
+    @Override
+    public List<News> findAll() {
+        List<NewsEntity> news = newsRepository.findAll();
+        return toModelList(news);
+    }
+
 
     private NewsEntity toEntity(News news) {
         return NewsEntity.builder()
@@ -52,10 +58,8 @@ public class DefaultNewsGateway implements NewsGateway {
                 .build();
     }
 
-//    private List<News> toModelList(List<NewsEntity> news) {
-//        return news.stream().map(this::toModel).collect(toList());
-//    }
-
-
+    private List<News> toModelList(List<NewsEntity> news) {
+        return news.stream().map(this::toModel).collect(toList());
+    }
 
 }
