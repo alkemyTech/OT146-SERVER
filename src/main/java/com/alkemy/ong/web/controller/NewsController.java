@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @RestController
 @RequestMapping("/news")
 public class NewsController {
@@ -30,7 +29,6 @@ public class NewsController {
         return ResponseEntity.ok(toDTO(news));
     }
 
-
     @GetMapping
     public ResponseEntity<List<NewsDTO>> getNews(){
         List<News> newsList = newsService.findAll();
@@ -38,15 +36,12 @@ public class NewsController {
         return ResponseEntity.ok().body(dtoList);
     }
 
-
-
     @GetMapping("/{id}")
     public ResponseEntity<NewsDTO> showId(@PathVariable Long id){
         News news = newsService.findById(id);
         NewsDTO newsDTO = toDTO(news);
         return ResponseEntity.ok().body(newsDTO);
     }
-
 
     private News toDomain(NewsDTO newDTO) {
         return News.builder()

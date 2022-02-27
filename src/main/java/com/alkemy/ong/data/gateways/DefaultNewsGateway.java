@@ -6,6 +6,7 @@ import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsGateway;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class DefaultNewsGateway implements NewsGateway {
 
     @Override
     public News findById(Long id) {
-        NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new BadRequestException("mensaje"));
+        NewsEntity news = newsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("News not found"));
         return toModel(news);
     }
 
