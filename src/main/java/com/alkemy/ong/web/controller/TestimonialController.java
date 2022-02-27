@@ -3,6 +3,7 @@ package com.alkemy.ong.web.controller;
 import com.alkemy.ong.domain.testimonial.Testimonial;
 import com.alkemy.ong.domain.testimonial.TestimonialService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.utils.PageResponse;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,16 +46,16 @@ public class TestimonialController {
 
 
     @GetMapping(params = {"page"})
-    ResponseEntity<Page> lisAllByPage(@RequestParam(name = "page") Integer page){
+    ResponseEntity<PageResponse> lisAllByPage(@RequestParam(name = "page") Integer page){
         if(page < 0)
             throw new BadRequestException("Page index must not be less than zero");
         List<TestimonialDTO> testimonialDTOS = testimonialService.listByPage(page)
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
-        Page pageResponse = Page.builder()
+        PageResponse pageResponse = PageResponse.builder()
                 .content(testimonialDTOS)
-                .nextPage("/testimonials?page=" + (page +1))
+                .nextPage((testimonialDTOS.size() < 10)? "" : "/testimonials?page=" + (page +1))
                 .previousPage((page > 0)? ("/testimonials?page=" + (page -1)) : "")
                 .build();
         return ResponseEntity.status(HttpStatus.OK).body(pageResponse);
@@ -89,12 +90,6 @@ public class TestimonialController {
         private String content;
     }
 
-    @Builder
-    @Getter @Setter
-    public static class Page{
-        private List<TestimonialDTO> content;
-        private String nextPage;
-        private String previousPage;
-    }
+
 }
 
