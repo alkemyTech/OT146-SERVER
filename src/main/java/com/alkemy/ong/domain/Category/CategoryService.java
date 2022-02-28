@@ -29,5 +29,9 @@ public class CategoryService  {
     public Category update(Long id, Category category) {
         return categoryGateway.update(id, category);
     }
+
+    public void delete(Long id) {
+        categoryGateway.delete(id);
+    }
     
 }
