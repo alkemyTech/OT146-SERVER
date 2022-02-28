@@ -30,7 +30,9 @@ public class UserEntity {
 
     private String photo;
 
-// TODO: Implement relationship USER-ROLE
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "role_id")
+    private RolesEntity role;
 
     @Column(name = "created_at")
     @CreatedDate

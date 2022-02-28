@@ -5,5 +5,6 @@ import java.util.List;
 public interface NewsGateway {
 
     News create (News news);
-
+    News findById(Long id);
+    List<News> findAll();
 }
