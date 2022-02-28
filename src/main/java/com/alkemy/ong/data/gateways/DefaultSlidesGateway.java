@@ -51,6 +51,7 @@ public class DefaultSlidesGateway implements SlidesGateway {
 
     @Override
     public Slides create(Slides slides) {
+        // TODO: almacenar imagenes en Bucket Amazon S3
 
         OrganizationEntity organization = organizationRepository
                 .findById(slides.getOrganizationId())
