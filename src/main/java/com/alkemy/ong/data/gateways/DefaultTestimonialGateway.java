@@ -5,7 +5,12 @@ import com.alkemy.ong.data.repository.TestimonialRepository;
 import com.alkemy.ong.domain.testimonial.TestimonialGateway;
 import com.alkemy.ong.domain.testimonial.Testimonial;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class DefaultTestimonialGateway implements TestimonialGateway {
@@ -32,12 +37,21 @@ public class DefaultTestimonialGateway implements TestimonialGateway {
         return toModel(repository.save(testimonialEntity));
     }
 
-
+    @Override
     public void delete(Long id){
         TestimonialEntity testimonialEntity = repository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("non-existent testimony to delete"));
         testimonialEntity.setDeleted(true);
         repository.save(testimonialEntity);
+    }
+
+    @Override
+    public List<Testimonial> listByPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return repository.findByDeleted(false, pageable)
+                .stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
     }
 
     private Testimonial toModel(TestimonialEntity testimonialEntity){
