@@ -1,7 +1,5 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.data.entity.OrganizationEntity;
-import com.alkemy.ong.data.entity.SlidesEntity;
 import com.alkemy.ong.domain.slides.Slides;
 import com.alkemy.ong.domain.slides.SlidesService;
 import com.alkemy.ong.domain.slides.response.SlidesResponse;
@@ -13,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -53,6 +50,7 @@ public class SlidesController {
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<SlidesDto> getDetailsById(@PathVariable Long id){
+        
         SlidesDto slide = toDto(slidesService.findById(id));
 
         return new ResponseEntity<>(slide, HttpStatus.OK);
