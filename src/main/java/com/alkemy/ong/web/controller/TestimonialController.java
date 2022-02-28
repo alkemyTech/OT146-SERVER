@@ -53,7 +53,8 @@ public class TestimonialController {
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
-        PageResponse pageResponse = PageResponse.builder()
+
+        PageResponse<TestimonialDTO> pageResponse = PageResponse.<TestimonialDTO>builder()
                 .content(testimonialDTOS)
                 .nextPage((testimonialDTOS.size() < 10)? "" : "/testimonials?page=" + (page +1))
                 .previousPage((page > 0)? ("/testimonials?page=" + (page -1)) : "")

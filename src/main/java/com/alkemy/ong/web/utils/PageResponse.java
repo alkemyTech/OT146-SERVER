@@ -10,8 +10,8 @@ import java.util.List;
 @Builder
 @Getter
 @Setter
-public class PageResponse{
-    private List<TestimonialController.TestimonialDTO> content;
+public class PageResponse<O extends Object>{
+    private List<O> content;
     private String nextPage;
     private String previousPage;
 }
