@@ -1,17 +1,21 @@
 package com.alkemy.ong.web.utils;
 
-import com.alkemy.ong.web.controller.TestimonialController;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-@Builder
 @Getter
 @Setter
-public class PageResponse<O extends Object>{
-    private List<O> content;
+public class PageResponse<T extends Object>{
+    private List<T> content;
     private String nextPage;
     private String previousPage;
+
+    public PageResponse(List<T> content, String url, int page, int size){
+        this.content = content;
+        this.nextPage = (content.size() < size)? "" : url+"?page=" + (page +1);
+        this.previousPage = ((page > 0)? (url+"?page=" + (page -1)) : "");
+    }
+
 }

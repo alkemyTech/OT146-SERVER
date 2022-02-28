@@ -17,8 +17,8 @@ public class TestimonialService {
         return testimonialGateway.create(testimonial);
     }
 
-    public List<Testimonial> listByPage(int i){
-        return testimonialGateway.listByPage(i, 10);
+    public List<Testimonial> listByPage(int i, int size){
+        return testimonialGateway.listByPage(i, size);
     }
 
     public Testimonial update(Long id, Testimonial testimonial){

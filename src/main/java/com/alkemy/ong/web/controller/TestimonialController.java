@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/testimonials")
 public class TestimonialController {
 
+    private final int PAGE_SIZE = 10;
+
     private final TestimonialService testimonialService;
 
     public TestimonialController(TestimonialService testimonialService) {
@@ -46,19 +48,15 @@ public class TestimonialController {
 
 
     @GetMapping(params = {"page"})
-    ResponseEntity<PageResponse> lisAllByPage(@RequestParam(name = "page") Integer page){
+    ResponseEntity<PageResponse<TestimonialDTO>> lisAllByPage(@RequestParam(name = "page") Integer page){
         if(page < 0)
             throw new BadRequestException("Page index must not be less than zero");
-        List<TestimonialDTO> testimonialDTOS = testimonialService.listByPage(page)
+        List<TestimonialDTO> testimonialDTOS = testimonialService.listByPage(page, PAGE_SIZE)
                 .stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
 
-        PageResponse<TestimonialDTO> pageResponse = PageResponse.<TestimonialDTO>builder()
-                .content(testimonialDTOS)
-                .nextPage((testimonialDTOS.size() < 10)? "" : "/testimonials?page=" + (page +1))
-                .previousPage((page > 0)? ("/testimonials?page=" + (page -1)) : "")
-                .build();
+        PageResponse<TestimonialDTO> pageResponse = new PageResponse<>(testimonialDTOS, "/testimonials", page, PAGE_SIZE);
         return ResponseEntity.status(HttpStatus.OK).body(pageResponse);
     }
 
