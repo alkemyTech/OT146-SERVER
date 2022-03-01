@@ -63,8 +63,8 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.OK).body(toDto(category));
     }
 
-    @DeleteMapping("/categories/{id")
-    public ResponseEntity<?> delete(@PathVariable Long id) {
+    @DeleteMapping("/categories/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) { 
         categoryService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
