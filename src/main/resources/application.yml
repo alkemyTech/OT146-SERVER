@@ -6,3 +6,9 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
     continue-on-error: true
+
+amazonProperties:
+  endpointUrl:
+  accessKey:
+  secretKey:
+  bucketName:
