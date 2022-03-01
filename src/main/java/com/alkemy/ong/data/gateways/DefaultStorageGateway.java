@@ -5,6 +5,7 @@ import com.alkemy.ong.domain.storage.StorageGateway;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -24,8 +25,8 @@ import java.io.IOException;
 public class DefaultStorageGateway implements StorageGateway {
     private AmazonS3 s3client;
 
-    @Value("${amazonProperties.endpointUrl}")
-    private String endpointUrl;
+    //@Value("${amazonProperties.endpointUrl}")
+    //private String endpointUrl;
 
     @Value("${amazonProperties.bucketName}")
     private String bucketName;
@@ -42,6 +43,7 @@ public class DefaultStorageGateway implements StorageGateway {
         this.s3client = AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion(Regions.US_EAST_1)
                 .build();
     }
 
@@ -70,7 +72,7 @@ public class DefaultStorageGateway implements StorageGateway {
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
-            fileUrl = endpointUrl + "/" + bucketName + "/" + fileName;
+            fileUrl = generateFileUrl(fileName);
             uploadFileTos3bucket(fileName, file);
             file.delete();
             image = new Image(fileName, fileUrl);
@@ -79,10 +81,15 @@ public class DefaultStorageGateway implements StorageGateway {
         }
         return image;
     }
+    
+    private String generateFileUrl(String fileName) {
+        return "https://s3." + s3client.getRegionName() + ".amazonaws.com/" + bucketName + "/" + fileName;
+    }
 
     @Override
     public Image update(Image image, MultipartFile file) {
-        return null;
+        this.delete(image);
+        return this.save(file);
     }
 
     @Override

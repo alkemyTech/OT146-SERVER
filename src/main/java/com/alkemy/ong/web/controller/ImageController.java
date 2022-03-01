@@ -8,14 +8,9 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Controller
 @RequestMapping("/image")
@@ -27,15 +22,25 @@ public class ImageController {
     }
 
     @PostMapping()
-    public ResponseEntity<FileInfoResponse> save(@RequestBody MultipartFile multipartFile){
+    public ResponseEntity<FileInfoResponse> save(@RequestParam("file") MultipartFile multipartFile){
         Image image = storageService.save(multipartFile);
         return ResponseEntity.ok().body(toFileInfoResponse(image));
+    }
+
+    @DeleteMapping()
+    private void delete(@RequestParam("url") String urlFile){
+        storageService.delete(urlFile);
+    }
+
+    @PutMapping()
+    private void update(@RequestParam("url") String urlFile, @RequestParam("file") MultipartFile file){
+        storageService.update(urlFile,file);
     }
 
     private FileInfoResponse toFileInfoResponse(Image image){
         return FileInfoResponse.builder()
                 .name(image.getFullName())
-                .type(image.getFullName().split(".")[-1])
+                .type(image.getFullName().substring(image.getFullName().lastIndexOf(".")).replace(".", ""))
                 .url(image.getUrl())
                 .build();
     }
