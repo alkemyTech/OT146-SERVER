@@ -4,9 +4,13 @@ import com.alkemy.ong.data.entity.ActivityEntity;
 import com.alkemy.ong.data.repository.ActivityRepository;
 import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.activities.ActivityGateway;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Component
 public class DefaultActivityGateway implements ActivityGateway {
@@ -24,8 +28,31 @@ public class DefaultActivityGateway implements ActivityGateway {
             return toModel(repository.save(entity));     //se retorna en modelo pero se guarda en Entity
         }
 
+    @Override
+    public List<Activity> findAll() {
+        List<ActivityEntity> actEntity = repository.findAll();
+        return toModelList(actEntity);
+    }
 
-        //metodos de conversion
+
+    @Override
+    public Activity findById(Long id) {
+        ActivityEntity  actEntity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Activity with such ID"));
+        return toModel(actEntity);
+    }
+
+    @Override
+    public Activity update(Long id, Activity activity) {
+        ActivityEntity  actEntity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no Activity with such ID"));
+        actEntity.setName(activity.getName());
+        actEntity.setImage(activity.getImage());
+        actEntity.setContent(activity.getContent());
+        repository.save(actEntity);         //guardo la nueva entidad
+        return toModel(actEntity);
+    }
+
+
+    //metodos de conversion
         private Activity toModel(ActivityEntity activityEntity){
             return Activity.builder()
                     .id(activityEntity.getId())
@@ -41,6 +68,11 @@ public class DefaultActivityGateway implements ActivityGateway {
                     .content(activity.getContent())
                     .image(activity.getImage())
                     .build();
+        }
+
+    private List<Activity> toModelList(List<ActivityEntity> activities)
+        {
+            return activities.stream().map(this::toModel).collect(toList());
         }
     }
 
