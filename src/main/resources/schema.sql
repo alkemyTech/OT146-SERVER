@@ -116,11 +116,11 @@ CREATE TABLE IF NOT EXISTS commentaries (
    ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS contacts (
-   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+create table if not exists contacts (
+   id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
    name VARCHAR(256) NOT NULL,
    phone INT UNSIGNED NULL,
    email VARCHAR(255) NOT NULL,
-   message varchar(256) not null,
+   message varchar(256) NOT NULL,
    deleted bit(1) NOT NULL default 0
 );
