@@ -40,6 +40,7 @@ public class DefaultStorageGateway implements StorageGateway {
         this.s3client = AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .withRegion("us-east-2")
                 .build();
     }
 
