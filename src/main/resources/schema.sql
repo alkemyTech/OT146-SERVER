@@ -106,3 +106,12 @@ CREATE TABLE IF NOT EXISTS commentaries (
    FOREIGN KEY (user_id) REFERENCES users(id),
    FOREIGN KEY (news_id) REFERENCES news(id)
 );
+
+CREATE TABLE IF NOT EXISTS contacts (
+   id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+   name VARCHAR(256) NOT NULL,
+   phone INT UNSIGNED NULL,
+   email VARCHAR(255) NOT NULL,
+   message varchar(256) not null,
+   deleted bit(1) NOT NULL default 0
+);
