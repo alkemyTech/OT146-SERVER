@@ -30,10 +30,6 @@ public class UserController {
         return ResponseEntity.ok(toListDto(users));
     }
 
-    @PostMapping("/auth/login")
-    public ResponseEntity<UserDTO> login(){
-        return null;
-    }
 
     @Data
     private static class UserDTO {

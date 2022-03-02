@@ -33,4 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         authorities.add(role);
         return new User(userEntity.getEmail(), userEntity.getPassword(), authorities);
     }
+
+
 }
