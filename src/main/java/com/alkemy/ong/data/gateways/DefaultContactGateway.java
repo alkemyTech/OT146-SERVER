@@ -4,5 +4,5 @@ import com.alkemy.ong.data.repository.ContactRepository;
 
 public class DefaultContactGateway {
 
-    
+
 }
