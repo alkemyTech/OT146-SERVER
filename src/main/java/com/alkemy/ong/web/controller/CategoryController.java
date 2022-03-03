@@ -8,6 +8,8 @@ import javax.validation.Valid;
 
 import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryService;
+import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.utils.PageResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Builder;
@@ -31,6 +34,7 @@ import lombok.NoArgsConstructor;
 public class CategoryController {
 
     private final CategoryService categoryService;
+    private final int PAGE_SIZE = 10;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -41,6 +45,16 @@ public class CategoryController {
         List<Category> categories = categoryService.findAll();
         
         return categories.stream().map(category -> toDto(category)).collect(Collectors.toList());
+    }
+
+    @GetMapping(params = {"page"})
+    ResponseEntity<PageResponse<CategoryDto>> lisAllByPage(@RequestParam(name = "page") Integer page) {
+        if(page < 0)
+            throw new BadRequestException("Page not found");
+        List<CategoryDto> catDto = categoryService.findAllByPage(page, PAGE_SIZE).stream().map(category -> toDto(category)).collect(Collectors.toList());
+
+        PageResponse<CategoryDto> pr= new PageResponse<>(catDto, "/categories", page, PAGE_SIZE);
+        return ResponseEntity.status(HttpStatus.OK).body(pr);
     }
 
     @GetMapping("/categories/{id}")
