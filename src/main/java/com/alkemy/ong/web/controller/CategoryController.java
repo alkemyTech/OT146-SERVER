@@ -10,6 +10,7 @@ import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.utils.PageResponse;
+import com.alkemy.ong.web.utils.PageUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,6 @@ import lombok.NoArgsConstructor;
 public class CategoryController {
 
     private final CategoryService categoryService;
-    private final int PAGE_SIZE = 10;
 
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
@@ -48,12 +48,12 @@ public class CategoryController {
     }
 
     @GetMapping(params = {"page"})
-    ResponseEntity<PageResponse<CategoryDto>> lisAllByPage(@RequestParam(name = "page") Integer page) {
+    ResponseEntity<PageResponse<CategoryDto>> findAllByPage(@RequestParam(name = "page") Integer page) {
         if(page < 0)
             throw new BadRequestException("Page not found");
-        List<CategoryDto> catDto = categoryService.findAllByPage(page, PAGE_SIZE).stream().map(category -> toDto(category)).collect(Collectors.toList());
+        List<CategoryDto> catDto = categoryService.findAllByPage(page, PageUtils.PAGE_SIZE).stream().map(category -> toDto(category)).collect(Collectors.toList());
 
-        PageResponse<CategoryDto> pr= new PageResponse<>(catDto, "/categories", page, PAGE_SIZE);
+        PageResponse<CategoryDto> pr= new PageResponse<>(catDto, "/categories/page", page, PageUtils.PAGE_SIZE);
         return ResponseEntity.status(HttpStatus.OK).body(pr);
     }
 
