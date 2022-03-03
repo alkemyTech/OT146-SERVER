@@ -93,6 +93,9 @@ CREATE TABLE IF NOT EXISTS organizations (
   email VARCHAR(45) NOT NULL,
   about_us_text TEXT NULL,
   welcome_text TEXT NOT NULL,
+  facebook_link VARCHAR(256) NULL,
+  instagram_link VARCHAR(256) NULL,
+  linkedin_link VARCHAR(256) NULL,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
   deleted BIT(1) NOT NULL DEFAULT 0
@@ -111,4 +114,15 @@ CREATE TABLE IF NOT EXISTS commentaries (
    FOREIGN KEY (news_id) REFERENCES news(id)
    ON DELETE CASCADE
    ON UPDATE CASCADE
+);
+
+create table if not exists contacts (
+   id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   name VARCHAR(256) NOT NULL,
+   phone INT UNSIGNED NULL,
+   email VARCHAR(255) NOT NULL,
+   message varchar(256) NOT NULL,
+   created_at TIMESTAMP NOT NULL,
+   updated_at TIMESTAMP NOT NULL,
+   deleted BIT(1) NOT NULL DEFAULT 0
 );

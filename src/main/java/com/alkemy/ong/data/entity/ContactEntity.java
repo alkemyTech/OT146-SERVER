@@ -1,22 +1,22 @@
 package com.alkemy.ong.data.entity;
 
-import com.alkemy.ong.domain.Category.Category;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "news")
+@Table(name = "contacts")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewsEntity {
+public class ContactEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,18 +24,17 @@ public class NewsEntity {
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
-    private String content;
+    private String phone;
     @Column(nullable = false)
-    private String image;
+    private String email;
+    @Column(nullable = false)
+    private String message;
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    @Column(nullable = false)
     private boolean deleted;
-
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name="categories_id")
-//    private Category categories;
 }

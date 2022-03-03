@@ -61,6 +61,13 @@ public class OrganizationEntity implements Serializable {
     @Column
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "organizationEntity", orphanRemoval = true)
     private Set<SlidesEntity> slides = new HashSet<>();
+    private String facebookLink;
+
+    @Column
+    private String instagramLink;
+
+    @Column
+    private String linkedinLink;
 
     @Override
     public String toString() {

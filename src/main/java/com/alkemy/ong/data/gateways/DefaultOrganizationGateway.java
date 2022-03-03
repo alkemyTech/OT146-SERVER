@@ -40,12 +40,12 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
     }
 
     @PutMapping("/public/{id}")
-    public Organization update(Organization organization){
+    public Organization update(Organization organization) {
         OrganizationEntity ongEntity = organizationRepository.findById(organization.getIdOrganization()).orElseThrow(() -> new BadRequestException("mensaje"));
         return toModel(organizationRepository.save(newUpdate(ongEntity, organization)));
     }
 
-    private OrganizationEntity newUpdate(OrganizationEntity organizationEntity, Organization organization){
+    private OrganizationEntity newUpdate(OrganizationEntity organizationEntity, Organization organization) {
         organizationEntity.setName(organization.getName());
         organizationEntity.setImage(organization.getImage());
         organizationEntity.setAddress(organization.getAddress());
@@ -71,6 +71,9 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
                 .createdAt(organizationEntity.getCreatedAt())
                 .updatedAt(organizationEntity.getUpdatedAt())
                 .deleted(organizationEntity.getDeleted())
+                .facebookLink(organizationEntity.getFacebookLink())
+                .instagramLink(organizationEntity.getInstagramLink())
+                .linkedinLink(organizationEntity.getLinkedinLink())
                 .build();
     }
 
@@ -86,15 +89,9 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
                 .createdAt(organization.getCreatedAt())
                 .updatedAt(organization.getUpdatedAt())
                 .deleted(organization.getDeleted())
-                .build();
-    }
-
-    private OrganizationController.OrganizationDto toSimpleDto(OrganizationEntity organization){
-        return OrganizationController.OrganizationDto.builder()
-                .name(organization.getName())
-                .image(organization.getImage())
-                .address(organization.getAddress())
-                .phone(organization.getPhone())
+                .facebookLink(organization.getFacebookLink())
+                .instagramLink(organization.getInstagramLink())
+                .linkedinLink(organization.getLinkedinLink())
                 .build();
     }
 }
