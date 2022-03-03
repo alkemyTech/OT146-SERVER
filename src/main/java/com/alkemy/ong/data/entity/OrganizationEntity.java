@@ -56,6 +56,15 @@ public class OrganizationEntity implements Serializable {
     @Column(nullable = false)
     private Boolean deleted;
 
+    @Column
+    private String facebookLink;
+
+    @Column
+    private String instagramLink;
+
+    @Column
+    private String linkedinLink;
+
     @Override
     public String toString() {
         return  "Name: " + name + "\n" +

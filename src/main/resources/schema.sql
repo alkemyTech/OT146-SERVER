@@ -93,6 +93,9 @@ CREATE TABLE IF NOT EXISTS organizations (
   email VARCHAR(45) NOT NULL,
   about_us_text TEXT NULL,
   welcome_text TEXT NOT NULL,
+  facebook_link VARCHAR(256) NULL,
+  instagram_link VARCHAR(256) NULL,
+  linkedin_link VARCHAR(256) NULL,
   created_at TIMESTAMP NOT NULL,
   updated_at TIMESTAMP NOT NULL,
   deleted BIT(1) NOT NULL DEFAULT 0

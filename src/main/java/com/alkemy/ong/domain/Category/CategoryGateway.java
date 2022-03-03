@@ -8,4 +8,5 @@ public interface CategoryGateway {
     Category findById(Long id);
     Category create(Category category);
     Category update(Long id, Category category);
+    void delete(Long id);
 }
