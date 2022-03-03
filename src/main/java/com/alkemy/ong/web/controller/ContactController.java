@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +28,7 @@ public class ContactController {
     }
 
     @PostMapping
-    public ResponseEntity<ContactDTO> create(@RequestBody ContactDTO contactDTO){
+    public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO){
         Contact contact = contactService.create(toDomain(contactDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }
@@ -37,7 +41,7 @@ public class ContactController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ContactDTO> showId(@PathVariable Long id){
+    public ResponseEntity<ContactDTO> findById(@PathVariable Long id){
         Contact contact = contactService.findById(id);
         ContactController.ContactDTO contactDTO = toDTO(contact);
         return ResponseEntity.ok().body(contactDTO);
@@ -72,8 +76,14 @@ public class ContactController {
     @Builder
     public static class ContactDTO{
         private Long id;
+
+        @NotNull
+        @NotEmpty
         private String name;
         private String phone;
+
+        @NotNull
+        @NotEmpty
         private String email;
         private String message;
         private LocalDateTime createdAt;
