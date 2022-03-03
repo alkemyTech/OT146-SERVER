@@ -1,5 +1,6 @@
 package com.alkemy.ong.web.controller;
 
+import com.alkemy.ong.data.entity.ActivityEntity;
 import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.activities.ActivityService;
 import lombok.AllArgsConstructor;
@@ -8,15 +9,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/activities")
@@ -36,7 +36,34 @@ public class ActivityController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(activity));
     }
 
-    private Activity toDomain( ActivityDTO dto) {
+        @GetMapping
+        public ResponseEntity<List<ActivityDTO>> getActivities(){
+            List<Activity> activitiesList = activityService.getActivities();
+            List<ActivityDTO> dtoList = toDtoList(activitiesList);
+            return ResponseEntity.ok().body(dtoList);
+        }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ActivityDTO> showId(@PathVariable Long id){
+        Activity activities  = activityService.findById(id);
+        ActivityController.ActivityDTO activitiesDTO = toDto(activities);
+        return ResponseEntity.ok().body(activitiesDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ActivityDTO> updateActivity(@PathVariable Long id , @Valid @RequestBody ActivityDTO dto){
+
+    Activity activity = activityService.findById(id); //ver error
+    activity.setName(dto.getName());
+    activity.setImage(dto.getImage());
+    activity.setContent(dto.getContent());
+    activity = activityService.update(id,activity);
+    return  ResponseEntity.ok().body(toDto(activity));
+
+    }
+
+
+    private Activity toDomain(ActivityDTO dto) {
         return Activity.builder()
                 .id(dto.getId())
                 .name(dto.getName())
@@ -52,6 +79,10 @@ public class ActivityController {
                 .image(activity.getImage())
                 .content(activity.getContent())
                 .build();
+    }
+
+    private List<ActivityDTO> toDtoList(List<Activity> activities) {
+        return activities.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Builder
