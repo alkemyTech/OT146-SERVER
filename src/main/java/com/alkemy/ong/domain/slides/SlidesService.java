@@ -11,7 +11,7 @@ public class SlidesService {
         this.slidesGateways = slidesGateways;
     }
 
-    public Slides create(Slides slide){ return slidesGateways.create(slide); }
+    public Slides create(SimpleSlide slide){ return slidesGateways.create(slide); }
 
     public void delete(Long id){ slidesGateways.delete(id); }
 

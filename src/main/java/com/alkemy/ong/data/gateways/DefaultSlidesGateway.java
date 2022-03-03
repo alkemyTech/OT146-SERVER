@@ -5,6 +5,8 @@ import com.alkemy.ong.data.entity.SlidesEntity;
 import com.alkemy.ong.data.repository.OrganizationRepository;
 import com.alkemy.ong.data.repository.SlidesRepository;
 import com.alkemy.ong.domain.organization.Organization;
+import com.alkemy.ong.domain.organization.OrganizationService;
+import com.alkemy.ong.domain.slides.SimpleSlide;
 import com.alkemy.ong.domain.slides.SlidesGateway;
 import com.alkemy.ong.domain.slides.Slides;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static java.time.LocalDateTime.now;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -32,32 +33,42 @@ public class DefaultSlidesGateway implements SlidesGateway {
                 .imageUrl(slidesEntity.getImageUrl())
                 .text(slidesEntity.getText())
                 .slideOrder(slidesEntity.getSlideOrder())
-                .organizationId(slidesEntity.getOrganization().getIdOrganization())
+                .organization(DefaultOrganizationGateway.toModel(slidesEntity.getOrganizationEntity()))
                 .deleted(slidesEntity.getDeleted())
                 .createdAt(slidesEntity.getCreatedAt())
                 .updatedAt(slidesEntity.getUpdatedAt())
                 .build();
     }
 
-    private SlidesEntity toEntity(Slides slides, OrganizationEntity organization){
+    private SlidesEntity toEntity(Slides slides){
         return SlidesEntity.builder()
                 .id(slides.getId())
                 .imageUrl(slides.getImageUrl())
                 .text(slides.getText())
                 .slideOrder(slides.getSlideOrder())
-                .organization(organization)
+                .organizationEntity(DefaultOrganizationGateway.toEntity(slides.getOrganization()))
+                .build();
+    }
+
+    private SlidesEntity simpleToEntity(SimpleSlide slides, OrganizationEntity organization){
+        return SlidesEntity.builder()
+                .id(slides.getId())
+                .imageUrl(slides.getImageUrl())
+                .text(slides.getText())
+                .slideOrder(slides.getSlideOrder())
+                .organizationEntity(organization)
                 .build();
     }
 
     @Override
-    public Slides create(Slides slides) {
+    public Slides create(SimpleSlide slides) {
         // TODO: almacenar imagenes en Bucket Amazon S3
 
         OrganizationEntity organization = organizationRepository
                 .findById(slides.getOrganizationId())
-                .orElseThrow(() -> new ResourceNotFoundException("Cannot found organization with id: " + slides.getOrganizationId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find organization with id: " + slides.getOrganizationId()));
 
-        SlidesEntity slideEntity = toEntity(slides, organization);
+        SlidesEntity slideEntity = simpleToEntity(slides, organization);
         slideEntity.setDeleted(false);
 
         return toDomain(slidesRepository.save(slideEntity));

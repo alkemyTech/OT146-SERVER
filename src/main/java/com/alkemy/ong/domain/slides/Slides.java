@@ -1,6 +1,6 @@
 package com.alkemy.ong.domain.slides;
 
-import com.alkemy.ong.data.entity.OrganizationEntity;
+import com.alkemy.ong.domain.organization.Organization;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ public class Slides {
     private String imageUrl;
     private String text;
     private Integer slideOrder;
-    private Long organizationId;
+    private Organization organization;
     private Boolean deleted;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
