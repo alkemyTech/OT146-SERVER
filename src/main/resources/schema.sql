@@ -115,3 +115,14 @@ CREATE TABLE IF NOT EXISTS commentaries (
    ON DELETE CASCADE
    ON UPDATE CASCADE
 );
+
+create table if not exists contacts (
+   id bigint unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
+   name VARCHAR(256) NOT NULL,
+   phone INT UNSIGNED NULL,
+   email VARCHAR(255) NOT NULL,
+   message varchar(256) NOT NULL,
+   created_at TIMESTAMP NOT NULL,
+   updated_at TIMESTAMP NOT NULL,
+   deleted BIT(1) NOT NULL DEFAULT 0
+);
