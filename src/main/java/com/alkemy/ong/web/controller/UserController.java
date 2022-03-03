@@ -6,6 +6,7 @@ import com.alkemy.ong.domain.users.UserService;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/users")
-//TODO: @PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class UserController {
 
     private final UserService userService;
