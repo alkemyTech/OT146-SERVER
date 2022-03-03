@@ -1,9 +1,9 @@
 package com.alkemy.ong.data.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.Where;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "slides")
+@Entity
+@Table(name = "slides")
 @Where(clause = "deleted = false")
 public class SlidesEntity {
     @Id
@@ -29,25 +30,19 @@ public class SlidesEntity {
     @Column(nullable = false)
     private Integer slideOrder;
 
-    // TODO: relación cuando esté disponible el OrganizationEntity
-
-   // @ManyToOne
-    @Column(nullable = false)
-    private OrganizationEntity organizationId;
-
-//    @ManyToOne
-//    @Column(nullable = false)
-//    private OrganizationEntity organizationId;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "organizationId", nullable = false)
+    private OrganizationEntity organizationEntity;
 
     @Column
     private Boolean deleted = Boolean.FALSE;
 
     @Column(nullable = false)
-    @CreatedDate
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
 }
