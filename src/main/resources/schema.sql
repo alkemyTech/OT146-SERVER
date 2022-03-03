@@ -122,5 +122,7 @@ create table if not exists contacts (
    phone INT UNSIGNED NULL,
    email VARCHAR(255) NOT NULL,
    message varchar(256) NOT NULL,
-   deleted bit(1) NOT NULL default 0
+   created_at TIMESTAMP NOT NULL,
+   updated_at TIMESTAMP NOT NULL,
+   deleted BIT(1) NOT NULL DEFAULT 0
 );

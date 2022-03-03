@@ -4,6 +4,7 @@ import com.alkemy.ong.data.entity.ContactEntity;
 import com.alkemy.ong.data.repository.ContactRepository;
 import com.alkemy.ong.domain.contacts.Contact;
 import com.alkemy.ong.domain.contacts.ContactGateway;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -30,6 +31,13 @@ public class DefaultContactGateway implements ContactGateway {
         return toModelList(contactEntityList);
     }
 
+    @Override
+    public Contact findById(Long id) {
+        ContactEntity contact = contactRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Contact not found"));
+        return toModel(contact);
+    }
+
+
     private ContactEntity toEntity(Contact contact) {
         return ContactEntity.builder()
                 .name(contact.getName())
@@ -45,6 +53,7 @@ public class DefaultContactGateway implements ContactGateway {
                 .name(contactEntity.getName())
                 .email(contactEntity.getEmail())
                 .message(contactEntity.getMessage())
+                .createdAt(contactEntity.getCreatedAt())
                 .build();
     }
 
