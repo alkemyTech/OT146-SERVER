@@ -48,7 +48,7 @@ public class DefaultActivityGateway implements ActivityGateway {
         actEntity.setImage(activity.getImage());
         actEntity.setContent(activity.getContent());
         actEntity.setUpdatedAt(LocalDateTime.now());
-        repository.save(actEntity);         
+        repository.save(actEntity);
         return toModel(actEntity);
     }
 
