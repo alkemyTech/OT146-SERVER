@@ -30,9 +30,9 @@ public class SlidesEntity {
     @Column(nullable = false)
     private Integer slideOrder;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "organizationId", nullable = false)
-    private OrganizationEntity organization;
+    private OrganizationEntity organizationEntity;
 
     @Column
     private Boolean deleted = Boolean.FALSE;

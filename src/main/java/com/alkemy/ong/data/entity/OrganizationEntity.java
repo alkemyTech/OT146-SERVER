@@ -59,7 +59,7 @@ public class OrganizationEntity implements Serializable {
     private Boolean deleted;
 
     @Column
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "organization", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "organizationEntity", orphanRemoval = true)
     private Set<SlidesEntity> slides = new HashSet<>();
 
     @Override
