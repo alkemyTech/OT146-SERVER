@@ -26,7 +26,7 @@ public class ContactController {
     @PostMapping
     public ResponseEntity<ContactDTO> create(@RequestBody ContactDTO contactDTO){
         Contact contact = contactService.create(toDomain(contactDTO));
-        return ResponseEntity.ok((toDTO(contact)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }
 
     @GetMapping
@@ -43,7 +43,7 @@ public class ContactController {
         return ResponseEntity.ok().body(contactDTO);
     }
 
-    public Contact toDomain(ContactDTO contactDTO){
+    private Contact toDomain(ContactDTO contactDTO){
         return Contact.builder()
                 .id(contactDTO.getId())
                 .name(contactDTO.getName())
@@ -53,7 +53,7 @@ public class ContactController {
                 .build();
     }
 
-    public ContactDTO toDTO(Contact contact){
+    private ContactDTO toDTO(Contact contact){
         return ContactDTO.builder()
                 .id(contact.getId())
                 .name(contact.getName())
