@@ -2,6 +2,9 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.members.MemberService;
+import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.utils.PageResponse;
+import com.alkemy.ong.web.utils.PageUtils;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,16 +37,31 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resultDTO);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<MemberDTO>> getMembers() {
         List<Member> memberList = memberService.getAllMembers();
         List<MemberDTO> dtoList = toDtoList(memberList);
         return ResponseEntity.ok().body(dtoList);
     }
 
+    @GetMapping(params = {"page"})
+    public ResponseEntity<PageResponse<MemberDTO>> getMembersByPage(@RequestParam(name = "page") Integer page) {
+        if (page < 0) {
+            throw new BadRequestException("Page index not found");
+        }
+
+        List<MemberDTO> memberDTOS = memberService.getMembersByPage(page, PageUtils.PAGE_SIZE)
+                .stream()
+                .map(this::toDto)
+                .collect(toList());
+
+        PageResponse<MemberDTO> pageResponse = new PageResponse<>(memberDTOS, "/members", page, PageUtils.PAGE_SIZE);
+        return ResponseEntity.status(HttpStatus.OK).body(pageResponse);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<MemberDTO> update(@Valid @PathVariable long id, @Valid @RequestBody MemberDTO dto) {
-        Member member = memberService.update(id,toModel(dto));
+        Member member = memberService.update(id, toModel(dto));
         MemberDTO resultDTO = toDto(member);
         return ResponseEntity.ok().body(resultDTO);
     }

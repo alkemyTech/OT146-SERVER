@@ -7,4 +7,5 @@ public interface MemberService {
     List<Member> getAllMembers();
     Member update(long id, Member member);
     void delete(long id);
+    List<Member> getMembersByPage(int page, int pageSize);
 }

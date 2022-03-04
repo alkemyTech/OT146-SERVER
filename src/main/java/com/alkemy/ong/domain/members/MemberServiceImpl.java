@@ -33,4 +33,9 @@ public class MemberServiceImpl implements MemberService {
         memberGateway.delete(id);
     }
 
+    @Override
+    public List<Member> getMembersByPage(int page, int pageSize) {
+        return memberGateway.listByPage(page, pageSize);
+    }
+
 }
