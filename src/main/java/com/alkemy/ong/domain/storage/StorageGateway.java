@@ -1,5 +1,9 @@
 package com.alkemy.ong.domain.storage;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public interface StorageGateway {
-    // TODO: updateFile / deleteFile...
+
+    public Image save(MultipartFile multipartFile);
+
 }
