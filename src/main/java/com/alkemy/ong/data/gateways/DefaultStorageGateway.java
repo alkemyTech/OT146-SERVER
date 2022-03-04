@@ -2,6 +2,8 @@ package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.domain.storage.Image;
 import com.alkemy.ong.domain.storage.StorageGateway;
+import com.alkemy.ong.web.exceptions.ServiceUnavailable;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -76,8 +78,8 @@ public class DefaultStorageGateway implements StorageGateway {
             uploadFileTos3bucket(fileName, file);
             file.delete();
             image = new Image(fileName, fileUrl);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (AmazonServiceException | IOException e) {
+            throw new ServiceUnavailable("s3 amazon ot available for save File");
         }
         return image;
     }
@@ -86,15 +88,4 @@ public class DefaultStorageGateway implements StorageGateway {
         return "https://s3." + s3client.getRegionName() + ".amazonaws.com/" + bucketName + "/" + fileName;
     }
 
-    @Override
-    public Image update(Image image, MultipartFile file) {
-        this.delete(image);
-        return this.save(file);
-    }
-
-    @Override
-    public void delete(Image image) {
-        String fileName = image.getFullName();
-        s3client.deleteObject(new DeleteObjectRequest(bucketName + "/", fileName));
-    }
 }

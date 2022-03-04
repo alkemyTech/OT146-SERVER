@@ -27,16 +27,6 @@ public class ImageController {
         return ResponseEntity.ok().body(toFileInfoResponse(image));
     }
 
-    @DeleteMapping()
-    private void delete(@RequestParam("url") String urlFile){
-        storageService.delete(urlFile);
-    }
-
-    @PutMapping()
-    private void update(@RequestParam("url") String urlFile, @RequestParam("file") MultipartFile file){
-        storageService.update(urlFile,file);
-    }
-
     private FileInfoResponse toFileInfoResponse(Image image){
         return FileInfoResponse.builder()
                 .name(image.getFullName())
