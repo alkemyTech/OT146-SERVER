@@ -21,11 +21,11 @@ public class User {
 
     private String email;
 
+    private String password;
+
     private String photo;
 
     private Long roleId;
-
-    private String roleName;
 
     private LocalDateTime createdAt;
 
