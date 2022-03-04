@@ -9,6 +9,8 @@ import com.alkemy.ong.data.repository.CategoryRepository;
 import com.alkemy.ong.domain.Category.Category;
 import com.alkemy.ong.domain.Category.CategoryGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import org.springframework.stereotype.Component;
 
@@ -32,6 +34,15 @@ public class DefaultCategoryGateway implements CategoryGateway {
     }
 
     @Override
+    public List<Category> findAllByPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return categoryRepo.findByDeleted(false, pageable)
+                .stream()
+                .map(entity -> toModel(entity))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public Category findById(Long id) {
     
         return toModel(categoryRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("id: " + id + " not found"))); 
@@ -51,6 +62,13 @@ public class DefaultCategoryGateway implements CategoryGateway {
         ce.setDescription(category.getDescription());
         ce.setDeleted(category.getDeleted());
         return toModel(categoryRepo.save(ce));
+    }
+
+    @Override
+    public void delete(Long id) {
+        CategoryEntity ce = categoryRepo.findById(id).orElseThrow(()-> new ResourceNotFoundException("id: " + id + " not found")); 
+        ce.setDeleted(true);
+        categoryRepo.save(ce);
     }
 
     private Category toModel(CategoryEntity categoryEntity) {

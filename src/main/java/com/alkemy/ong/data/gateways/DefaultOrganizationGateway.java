@@ -6,6 +6,7 @@ import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.domain.organization.OrganizationGateway;
 import com.alkemy.ong.web.controller.OrganizationController;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
 
     @Override
     public Organization findById(long idOrganization) {
-        OrganizationEntity ong = organizationRepository.findById(idOrganization).orElseThrow(() -> new BadRequestException("mensaje"));
+        OrganizationEntity ong = organizationRepository.findById(idOrganization).orElseThrow(() -> new ResourceNotFoundException("Organization not found"));
         return toModel(ong);
     }
 
@@ -57,8 +58,7 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
         organizationEntity.setDeleted(organization.getDeleted());
         return organizationEntity;
     }
-
-    private Organization toModel(OrganizationEntity organizationEntity) {
+    public static Organization toModel(OrganizationEntity organizationEntity){
         return Organization.builder()
                 .idOrganization(organizationEntity.getIdOrganization())
                 .name(organizationEntity.getName())
@@ -77,7 +77,7 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
                 .build();
     }
 
-    private OrganizationEntity toEntity(Organization organization) {
+    public static OrganizationEntity toEntity(Organization organization) {
         return OrganizationEntity.builder()
                 .name(organization.getName())
                 .image(organization.getImage())

@@ -8,4 +8,6 @@ public interface UserGateway {
 
     List<User> findByDeleted(boolean isDeleted);
 
+    User findByEmail(String email);
+
 }

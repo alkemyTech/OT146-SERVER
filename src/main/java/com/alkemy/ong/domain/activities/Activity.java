@@ -1,7 +1,7 @@
 package com.alkemy.ong.domain.activities;
 
 import lombok.*;
-
+@Data
 @Getter
 @Setter
 @AllArgsConstructor

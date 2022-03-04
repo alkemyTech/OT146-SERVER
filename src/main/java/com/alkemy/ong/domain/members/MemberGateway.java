@@ -8,4 +8,5 @@ public interface MemberGateway {
     List<Member> findAll();
     Member update(long id, Member member);
     void delete(long id);
+    List<Member> listByPage(int page, int pageSize);
 }

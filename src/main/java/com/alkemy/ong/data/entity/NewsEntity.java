@@ -33,14 +33,9 @@ public class NewsEntity {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
     private boolean deleted;
 
 //    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name="categories_id")
 //    private Category categories;
-
-
-
-
 }

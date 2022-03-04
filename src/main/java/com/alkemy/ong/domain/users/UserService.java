@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements UserGateway {
+public class UserService {
 
     private final UserGateway userGateway;
 
@@ -13,14 +13,19 @@ public class UserService implements UserGateway {
         this.userGateway = userGateway;
     }
 
-    @Override
+
     public List<User> findAll() {
         return userGateway.findAll();
     }
 
-    @Override
+
     public List<User> findByDeleted(boolean isDeleted) {
         return userGateway.findByDeleted(isDeleted);
+    }
+
+
+    public User findByEmail(String email) {
+        return userGateway.findByEmail(email);
     }
 
 
