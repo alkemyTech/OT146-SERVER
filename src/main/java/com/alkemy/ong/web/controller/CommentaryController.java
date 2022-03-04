@@ -49,11 +49,24 @@ public class CommentaryController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(commentary));
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id){
+
+        /*Añadir condicional una vez añadido token de seguridad
+        if(commentaryDTO.getUserId() != loggedUserId || loggedUserRole != admin) {
+            return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.findById(commentaryDTO.getId())), HttpStatus.FORBIDDEN);
+        }*/
+
+        return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.update(toDomain(commentaryDTO))), HttpStatus.CREATED);
+    }
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
     private static class CommentaryDTO {
+        @NotNull
+        private Long id;
         @NotNull
         private Long userId;
         @NotBlank
@@ -72,6 +85,7 @@ public class CommentaryController {
 
     private CommentaryDTO toDto(Commentary domain) {
         return CommentaryDTO.builder()
+                .id(domain.getId())
                 .userId(domain.getUserId())
                 .body(domain.getBody())
                 .newsId(domain.getNewsId())
@@ -80,6 +94,7 @@ public class CommentaryController {
 
     private Commentary toDomain(CommentaryDTO dto) {
         return Commentary.builder()
+                .id(dto.getId())
                 .userId(dto.getUserId())
                 .body(dto.getBody())
                 .newsId(dto.getNewsId())

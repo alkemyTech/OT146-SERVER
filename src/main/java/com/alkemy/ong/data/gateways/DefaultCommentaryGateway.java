@@ -2,15 +2,19 @@ package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.data.entity.CommentaryEntity;
 import com.alkemy.ong.data.entity.NewsEntity;
+import com.alkemy.ong.data.entity.OrganizationEntity;
 import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.CommentaryRepository;
 import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
+import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,6 +51,23 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
                 .collect(toList());
     }
 
+    @Override
+    public Commentary findById(Long id) {
+        CommentaryEntity comm= commentaryRepository.findById(id).orElseThrow(() -> new BadRequestException("mensaje"));
+        return toModel(comm);
+    }
+
+    @PutMapping("/{id}")
+    public Commentary update(Commentary commentary) {
+        CommentaryEntity commEntity = commentaryRepository.findById(commentary.getId()).orElseThrow(() -> new ResourceNotFoundException("message"));
+
+        return toModel(commentaryRepository.save(newUpdate(commEntity, commentary)));
+    }
+
+    private CommentaryEntity newUpdate(CommentaryEntity commentaryEntity, Commentary commentary) {
+        commentaryEntity.setBody(commentary.getBody());
+        return commentaryEntity;
+    }
 
     private List<CommentaryEntity> entitiesDescOrder() {
         return commentaryRepository.findAll(Sort.by(Sort.Direction.DESC,"createdAt"));
@@ -73,6 +94,7 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
                 .body(commentary.getBody())
                 .newsId(news)
                 .createdAt(LocalDateTime.now())
+                .id(commentary.getUserId())
                 .build();
     }
 
@@ -81,6 +103,7 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
                 .userId(entity.getUserId().getId())
                 .body(entity.getBody())
                 .newsId(entity.getNewsId().getId())
+                .id(entity.getId())
                 .build();
     }
 

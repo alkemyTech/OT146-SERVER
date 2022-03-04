@@ -22,4 +22,14 @@ public class CommentaryService implements CommentaryGateway {
     public List<Commentary> findAll() {
         return gateway.findAll();
     }
+
+    @Override
+    public Commentary findById(Long id) {
+        return gateway.findById(id);
+    }
+
+    @Override
+    public Commentary update(Commentary commentary) {
+        return gateway.update(commentary);
+    }
 }

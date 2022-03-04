@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Commentary {
 
+    private Long id;
     private Long userId;
     private String body;
     private Long newsId;
