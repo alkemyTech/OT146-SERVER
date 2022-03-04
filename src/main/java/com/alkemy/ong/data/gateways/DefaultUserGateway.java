@@ -4,7 +4,7 @@ import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserGateway;
-import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class DefaultUserGateway implements UserGateway {
     public User findByEmail(String email) {
         UserEntity entity = userRepository.findByEmail(email)
                 .orElseThrow(
-                        () -> new BadRequestException("User not found")
+                        () -> new ResourceNotFoundException("User not found")
                 );
         return toModel(entity);
     }
