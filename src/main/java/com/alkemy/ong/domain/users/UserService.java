@@ -3,6 +3,7 @@ package com.alkemy.ong.domain.users;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserGateway {
@@ -21,6 +22,11 @@ public class UserService implements UserGateway {
     @Override
     public List<User> findByDeleted(boolean isDeleted) {
         return userGateway.findByDeleted(isDeleted);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userGateway.findByEmail(email);
     }
 
 
