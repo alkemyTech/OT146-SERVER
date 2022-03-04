@@ -4,6 +4,7 @@ import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserGateway;
+import com.alkemy.ong.web.exceptions.BadRequestException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -36,6 +37,15 @@ public class DefaultUserGateway implements UserGateway {
                 .collect(toList());
     }
 
+    @Override
+    public User findByEmail(String email) {
+        UserEntity entity = userRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new BadRequestException("User not found")
+                );
+        return toModel(entity);
+    }
+
 
     private User toModel(UserEntity entity) {
         return User.builder()
@@ -43,9 +53,9 @@ public class DefaultUserGateway implements UserGateway {
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
                 .email(entity.getEmail())
+                .password(entity.getPassword())
                 .photo(entity.getPhoto())
                 .roleId(entity.getRole().getId())
-                .roleName(entity.getRole().getName())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
