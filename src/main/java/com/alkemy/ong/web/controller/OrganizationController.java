@@ -40,7 +40,7 @@ public class OrganizationController {
         return new ResponseEntity<OrganizationDto>(toDto(organizationService.update(toDomain(organizationDto))), HttpStatus.CREATED);
     }
 
-    private Organization toDomain(OrganizationController.OrganizationDto dto){
+    public static Organization toDomain(OrganizationController.OrganizationDto dto){
         return Organization.builder()
                 .idOrganization(dto.getIdOrganization())
                 .name(dto.getName())
@@ -59,7 +59,7 @@ public class OrganizationController {
                 .build();
     }
 
-    private OrganizationController.OrganizationDto toDto(Organization organization){
+    public static OrganizationController.OrganizationDto toDto(Organization organization){
         return OrganizationDto.builder()
                 .idOrganization(organization.getIdOrganization())
                 .name(organization.getName())
