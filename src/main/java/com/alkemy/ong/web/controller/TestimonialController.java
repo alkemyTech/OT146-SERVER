@@ -4,8 +4,7 @@ import com.alkemy.ong.domain.testimonial.Testimonial;
 import com.alkemy.ong.domain.testimonial.TestimonialService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.utils.PageResponse;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -86,11 +85,24 @@ public class TestimonialController {
 
     @Builder
     @Getter @Setter @AllArgsConstructor
+    @ApiModel
     public static class TestimonialDTO {
+        @ApiModelProperty( name = "id")
         private Long id;
+
+        @ApiModelProperty( name = "name",
+                value = "Name of the Testimonial",
+                required = true)
         @NotNull @NotBlank @NotEmpty
         private String name;
+
+        @ApiModelProperty( name = "image",
+                value = "Image url")
         private String image;
+
+        @ApiModelProperty( name = "content",
+                value = "Content",
+                required = true)
         @NotNull @NotBlank @NotEmpty
         private String content;
     }
