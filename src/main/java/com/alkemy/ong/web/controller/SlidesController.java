@@ -68,6 +68,14 @@ public class SlidesController {
         return new ResponseEntity<>(slidesDto, HttpStatus.CREATED);
     }
 
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<SlidesDto> updateSlide(@PathVariable Long id, @Valid @RequestBody SimpleSlideDto slideBody){
+
+        SlidesDto slidesDto = toDto(slidesService.update(id, toSimpleDomain(slideBody)));
+
+        return new ResponseEntity<>(slidesDto, HttpStatus.OK);
+    }
+
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteSlide(@PathVariable Long id){
         slidesService.delete(id);
