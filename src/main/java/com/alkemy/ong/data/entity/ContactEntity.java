@@ -1,48 +1,40 @@
 package com.alkemy.ong.data.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@Builder
+@Entity
+@Table(name = "contacts")
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "slides")
-@Where(clause = "deleted = false")
-public class SlidesEntity {
+@Builder
+public class ContactEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
-    private String imageUrl;
-
-    @Column
-    private String text;
-
+    private String name;
     @Column(nullable = false)
-    private Integer slideOrder;
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "organizationId", nullable = false)
-    private OrganizationEntity organizationEntity;
-
-    @Column
-    private Boolean deleted = Boolean.FALSE;
-
+    private String phone;
     @Column(nullable = false)
+    private String email;
+    @Column(nullable = false)
+    private String message;
+    @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
-
-    @Column
+    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
+    @Column(nullable = false)
+    private boolean deleted;
 }

@@ -18,6 +18,10 @@ public class CategoryService  {
         return categoryGateway.findAll();
     }
 
+    public List<Category> findAllByPage(int page, int size) {
+        return categoryGateway.findAllByPage(page, size);
+    }
+
     public Category findById(Long id) {
         return categoryGateway.findById(id);
     }
