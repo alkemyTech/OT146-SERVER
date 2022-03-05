@@ -10,4 +10,6 @@ public interface UserGateway {
 
     User findByEmail(String email);
 
+    User findById(Long id);
+
 }

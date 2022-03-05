@@ -46,6 +46,15 @@ public class DefaultUserGateway implements UserGateway {
         return toModel(entity);
     }
 
+    @Override
+    public User findById(Long id) {
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("User not found")
+                );
+        return toModel(entity);
+    }
+
 
     private User toModel(UserEntity entity) {
         return User.builder()

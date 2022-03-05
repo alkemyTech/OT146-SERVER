@@ -29,5 +29,10 @@ public class UserService implements UserGateway {
         return userGateway.findByEmail(email);
     }
 
+    @Override
+    public User findById(Long id) {
+        return userGateway.findById(id);
+    }
+
 
 }

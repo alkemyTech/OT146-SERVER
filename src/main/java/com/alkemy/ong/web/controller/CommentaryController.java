@@ -2,12 +2,16 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryService;
+import com.alkemy.ong.domain.users.User;
+import com.alkemy.ong.domain.users.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,9 +26,11 @@ import static java.util.stream.Collectors.toList;
 public class CommentaryController {
 
     private final CommentaryService commentaryService;
+    private final UserService userService;
 
-    public CommentaryController(CommentaryService commentaryService) {
+    public CommentaryController(CommentaryService commentaryService, UserService userService) {
         this.commentaryService = commentaryService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -52,12 +58,18 @@ public class CommentaryController {
     @PutMapping("/{id}")
     public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id){
 
-        /*Añadir condicional una vez añadido token de seguridad
-        if(commentaryDTO.getUserId() != loggedUserId || loggedUserRole != admin) {
-            return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.findById(commentaryDTO.getId())), HttpStatus.FORBIDDEN);
-        }*/
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.update(toDomain(commentaryDTO))), HttpStatus.CREATED);
+        String loggedUserMail = ((UserDetails)principal).getUsername();
+
+        User loggedUser = userService.findByEmail(loggedUserMail);
+        User user = userService.findById(commentaryDTO.getUserId());
+
+        if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
+            return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.update(toDomain(commentaryDTO))), HttpStatus.CREATED);
+        }
+
+        return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.findById(commentaryDTO.getId())), HttpStatus.FORBIDDEN);
     }
 
     @Data
