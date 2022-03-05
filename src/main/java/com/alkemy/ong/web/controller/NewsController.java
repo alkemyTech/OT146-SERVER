@@ -4,6 +4,7 @@ import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsService;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,6 +55,15 @@ public class NewsController {
 
 
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteNews(@PathVariable Long id) {
+        News news = newsService.findById(id);
+        newsService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
+    }
+
 
     private News toDomain(NewsDTO newDTO) {
         return News.builder()

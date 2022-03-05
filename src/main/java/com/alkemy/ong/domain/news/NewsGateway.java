@@ -8,4 +8,5 @@ public interface NewsGateway {
     News findById(Long id);
     List<News> findAll();
     News update(Long id, News news);
+    void deleteById(Long id);
 }
