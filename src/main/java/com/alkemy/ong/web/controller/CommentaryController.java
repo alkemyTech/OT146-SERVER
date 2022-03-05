@@ -72,6 +72,27 @@ public class CommentaryController {
         return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.findById(commentaryDTO.getId())), HttpStatus.FORBIDDEN);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if(!commentaryService.existsById(id)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String loggedUserMail = ((UserDetails)principal).getUsername();
+
+        User loggedUser = userService.findByEmail(loggedUserMail);
+        User user = userService.findById(toDto(commentaryService.findById(id)).getUserId());
+
+        if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
+            commentaryService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
+    }
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

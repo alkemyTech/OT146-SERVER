@@ -2,14 +2,12 @@ package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.data.entity.CommentaryEntity;
 import com.alkemy.ong.data.entity.NewsEntity;
-import com.alkemy.ong.data.entity.OrganizationEntity;
 import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.CommentaryRepository;
 import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
-import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Sort;
@@ -63,6 +61,17 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
 
         return toModel(commentaryRepository.save(newUpdate(commEntity, commentary)));
     }
+
+    @Override
+    public void delete(Long id) {
+        commentaryRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return commentaryRepository.existsById(id);
+    }
+
 
     private CommentaryEntity newUpdate(CommentaryEntity commentaryEntity, Commentary commentary) {
         commentaryEntity.setBody(commentary.getBody());

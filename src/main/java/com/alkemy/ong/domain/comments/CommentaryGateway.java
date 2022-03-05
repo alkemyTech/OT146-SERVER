@@ -1,8 +1,6 @@
 package com.alkemy.ong.domain.comments;
 
 
-import com.alkemy.ong.domain.organization.Organization;
-
 import java.util.List;
 
 public interface CommentaryGateway {
@@ -15,4 +13,7 @@ public interface CommentaryGateway {
 
     Commentary update(Commentary commentary);
 
+    void delete(Long id);
+
+    boolean existsById(Long id);
 }
