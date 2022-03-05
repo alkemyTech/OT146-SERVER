@@ -33,6 +33,15 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ErrorResponse notFound(HttpServletRequest request, Exception e) {
         return new ErrorResponse(HttpStatus.NOT_FOUND, e.getMessage(), request.getRequestURI());
-    } 
+    }
+
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    @ExceptionHandler({
+            ServiceUnavailable.class
+    })
+    @ResponseBody
+    public ErrorResponse ServiceUnavailable(HttpServletRequest request, Exception e){
+        return new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, e.getMessage(), request.getRequestURI());
+    }
 
 }

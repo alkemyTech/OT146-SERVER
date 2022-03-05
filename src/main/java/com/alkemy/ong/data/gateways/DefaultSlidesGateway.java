@@ -4,8 +4,6 @@ import com.alkemy.ong.data.entity.OrganizationEntity;
 import com.alkemy.ong.data.entity.SlidesEntity;
 import com.alkemy.ong.data.repository.OrganizationRepository;
 import com.alkemy.ong.data.repository.SlidesRepository;
-import com.alkemy.ong.domain.organization.Organization;
-import com.alkemy.ong.domain.organization.OrganizationService;
 import com.alkemy.ong.domain.slides.SimpleSlide;
 import com.alkemy.ong.domain.slides.SlidesGateway;
 import com.alkemy.ong.domain.slides.Slides;
@@ -72,6 +70,20 @@ public class DefaultSlidesGateway implements SlidesGateway {
         slideEntity.setDeleted(false);
 
         return toDomain(slidesRepository.save(slideEntity));
+    }
+
+    @Override
+    public Slides update(Long id, SimpleSlide slides) {
+
+        SlidesEntity slide = slidesRepository
+                .findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot find slide with id: " + id));
+
+        slide.setSlideOrder(slides.getSlideOrder());
+        slide.setImageUrl(slides.getImageUrl());
+        slide.setText(slides.getText());
+
+        return toDomain(slidesRepository.save(slide));
     }
 
     @Override

@@ -1,12 +1,17 @@
 package com.alkemy.ong.data.gateways;
 
+import com.alkemy.ong.domain.storage.Image;
 import com.alkemy.ong.domain.storage.StorageGateway;
+import com.alkemy.ong.web.exceptions.ServiceUnavailable;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +26,6 @@ import java.io.IOException;
 @Component
 public class DefaultStorageGateway implements StorageGateway {
     private AmazonS3 s3client;
-
-    @Value("${amazonProperties.endpointUrl}")
-    private String endpointUrl;
 
     @Value("${amazonProperties.bucketName}")
     private String bucketName;
@@ -40,7 +42,7 @@ public class DefaultStorageGateway implements StorageGateway {
         this.s3client = AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .withRegion("us-east-2")
+                .withRegion(Regions.US_EAST_1)
                 .build();
     }
 
@@ -61,4 +63,24 @@ public class DefaultStorageGateway implements StorageGateway {
         s3client.putObject(new PutObjectRequest(bucketName, fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
     }
+
+    @Override
+    public Image save(MultipartFile multipartFile) {
+
+        try {
+            File file = convertMultiPartToFile(multipartFile);
+            String fileName = generateFileName(multipartFile);
+            String fileUrl = generateFileUrl(fileName);
+            uploadFileTos3bucket(fileName, file);
+            file.delete();
+            return new Image(fileName, fileUrl);
+        } catch (AmazonServiceException | IOException e) {
+            throw new ServiceUnavailable("s3 amazon not available for save File");
+        }
+    }
+    
+    private String generateFileUrl(String fileName) {
+        return "https://s3." + s3client.getRegionName() + ".amazonaws.com/" + bucketName + "/" + fileName;
+    }
+
 }
