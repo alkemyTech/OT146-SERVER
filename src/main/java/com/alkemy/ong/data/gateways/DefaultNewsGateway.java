@@ -39,6 +39,18 @@ public class DefaultNewsGateway implements NewsGateway {
         return toModelList(news);
     }
 
+    @Override
+    public News update(Long id, News news) {
+        NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no news with such ID"));
+        newsEntity.setName(news.getName());
+        newsEntity.setContent(news.getContent());
+        newsEntity.setImage(news.getImage());
+        newsEntity.setUpdatedAt(LocalDateTime.now());
+        newsRepository.save(newsEntity);
+        return toModel(newsEntity);
+
+    }
+
 
     private NewsEntity toEntity(News news) {
         return NewsEntity.builder()
