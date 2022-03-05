@@ -27,9 +27,6 @@ import java.io.IOException;
 public class DefaultStorageGateway implements StorageGateway {
     private AmazonS3 s3client;
 
-    //@Value("${amazonProperties.endpointUrl}")
-    //private String endpointUrl;
-
     @Value("${amazonProperties.bucketName}")
     private String bucketName;
 
@@ -69,19 +66,17 @@ public class DefaultStorageGateway implements StorageGateway {
 
     @Override
     public Image save(MultipartFile multipartFile) {
-        Image image = null;
-        String fileUrl = "";
+
         try {
             File file = convertMultiPartToFile(multipartFile);
             String fileName = generateFileName(multipartFile);
-            fileUrl = generateFileUrl(fileName);
+            String fileUrl = generateFileUrl(fileName);
             uploadFileTos3bucket(fileName, file);
             file.delete();
-            image = new Image(fileName, fileUrl);
+            return new Image(fileName, fileUrl);
         } catch (AmazonServiceException | IOException e) {
-            throw new ServiceUnavailable("s3 amazon ot available for save File");
+            throw new ServiceUnavailable("s3 amazon not available for save File");
         }
-        return image;
     }
     
     private String generateFileUrl(String fileName) {
