@@ -5,6 +5,8 @@ import com.alkemy.ong.data.repository.MemberRepository;
 import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.members.MemberGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -48,6 +50,15 @@ public class DefaultMemberGateway implements MemberGateway {
         entity.setUpdatedAt(LocalDate.now());
         memberRepository.save(entity);
         memberRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Member> listByPage(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return memberRepository.findByDeleted(false, pageable)
+                .stream()
+                .map(this::toModel)
+                .collect(toList());
     }
 
     private MemberEntity updateEntity(MemberEntity entity, Member member) {

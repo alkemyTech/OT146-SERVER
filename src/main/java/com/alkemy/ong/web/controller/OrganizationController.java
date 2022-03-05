@@ -40,7 +40,7 @@ public class OrganizationController {
         return new ResponseEntity<OrganizationDto>(toDto(organizationService.update(toDomain(organizationDto))), HttpStatus.CREATED);
     }
 
-    private Organization toDomain(OrganizationController.OrganizationDto dto){
+    public static Organization toDomain(OrganizationController.OrganizationDto dto){
         return Organization.builder()
                 .idOrganization(dto.getIdOrganization())
                 .name(dto.getName())
@@ -53,10 +53,13 @@ public class OrganizationController {
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())
                 .deleted(dto.getDeleted())
+                .facebookLink(dto.getFacebookLink())
+                .instagramLink(dto.getInstagramLink())
+                .linkedinLink((dto.getLinkedinLink()))
                 .build();
     }
 
-    private OrganizationController.OrganizationDto toDto(Organization organization){
+    public static OrganizationController.OrganizationDto toDto(Organization organization){
         return OrganizationDto.builder()
                 .idOrganization(organization.getIdOrganization())
                 .name(organization.getName())
@@ -69,6 +72,9 @@ public class OrganizationController {
                 .createdAt(organization.getCreatedAt())
                 .updatedAt(organization.getUpdatedAt())
                 .deleted(organization.getDeleted())
+                .facebookLink(organization.getFacebookLink())
+                .instagramLink(organization.getInstagramLink())
+                .linkedinLink(organization.getLinkedinLink())
                 .build();
     }
 
@@ -78,6 +84,9 @@ public class OrganizationController {
                 .image(organization.getImage())
                 .address(organization.getAddress())
                 .phone(organization.getPhone())
+                .facebookLink(organization.getFacebookLink())
+                .instagramLink(organization.getInstagramLink())
+                .linkedinLink(organization.getLinkedinLink())
                 .build();
     }
 
@@ -130,16 +139,21 @@ public class OrganizationController {
 
         @Column(nullable = false)
         private Boolean deleted;
+
+        @Column
+        private String facebookLink;
+
+        @Column
+        private String instagramLink;
+
+        @Column
+        private String linkedinLink;
     }
 
     @Builder
     @Data
     @AllArgsConstructor
     public static class OrganizationSimpleDto {
-        @Id
-        @GeneratedValue(strategy= GenerationType.IDENTITY)
-        private long idOrganization;
-
         @NotBlank(message="The name can´t be empty")
         @Size(min = 3, max = 45, message = "Name length must be between 3 and 45 characters")
         @Column(nullable = false)
@@ -158,10 +172,13 @@ public class OrganizationController {
         @Column
         private Integer phone;
 
-        @NotBlank(message="The email can´t be empty")
-        @Size(min = 10, max = 45, message = "Email length must be between 10 and 45 characters")
-        @Email
-        @Column(nullable = false)
-        private String email;
+        @Column
+        private String facebookLink;
+
+        @Column
+        private String instagramLink;
+
+        @Column
+        private String linkedinLink;
     }
 }

@@ -18,7 +18,6 @@ import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/users")
-//TODO: @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class UserController {
 
     private final UserService userService;
@@ -32,6 +31,7 @@ public class UserController {
         List<User> users = isDeleted == null ? userService.findAll() : userService.findByDeleted(isDeleted);
         return ResponseEntity.ok(toListDto(users));
     }
+
 
     @Data
     private static class UserDTO {

@@ -1,4 +1,4 @@
-package com.alkemy.ong.domain.users;
+package com.alkemy.ong.domain.contacts;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,27 +8,16 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class User {
+public class Contact {
 
     private Long id;
-
-    private String firstName;
-
-    private String lastName;
-
+    private String name;
+    private String phone;
     private String email;
-
-    private String password;
-
-    private String photo;
-
-    private Long roleId;
-
+    private String message;
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
-
 }

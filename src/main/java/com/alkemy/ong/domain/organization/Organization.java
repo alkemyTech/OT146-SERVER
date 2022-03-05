@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.time.LocalDateTime;
 
 @Data
@@ -34,6 +35,12 @@ public class Organization {
     private LocalDateTime updatedAt;
 
     private Boolean deleted;
+
+    private String facebookLink;
+
+    private String instagramLink;
+
+    private String linkedinLink;
 
     @Override
     public String toString() {

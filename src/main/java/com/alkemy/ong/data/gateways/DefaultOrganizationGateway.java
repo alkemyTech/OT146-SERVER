@@ -6,6 +6,7 @@ import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.domain.organization.OrganizationGateway;
 import com.alkemy.ong.web.controller.OrganizationController;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
 
     @Override
     public Organization findById(long idOrganization) {
-        OrganizationEntity ong = organizationRepository.findById(idOrganization).orElseThrow(() -> new BadRequestException("mensaje"));
+        OrganizationEntity ong = organizationRepository.findById(idOrganization).orElseThrow(() -> new ResourceNotFoundException("Organization not found"));
         return toModel(ong);
     }
 
@@ -39,12 +40,12 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
     }
 
     @PutMapping("/public/{id}")
-    public Organization update(Organization organization){
+    public Organization update(Organization organization) {
         OrganizationEntity ongEntity = organizationRepository.findById(organization.getIdOrganization()).orElseThrow(() -> new BadRequestException("mensaje"));
         return toModel(organizationRepository.save(newUpdate(ongEntity, organization)));
     }
 
-    private OrganizationEntity newUpdate(OrganizationEntity organizationEntity, Organization organization){
+    private OrganizationEntity newUpdate(OrganizationEntity organizationEntity, Organization organization) {
         organizationEntity.setName(organization.getName());
         organizationEntity.setImage(organization.getImage());
         organizationEntity.setAddress(organization.getAddress());
@@ -57,7 +58,7 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
         organizationEntity.setDeleted(organization.getDeleted());
         return organizationEntity;
     }
-    private Organization toModel(OrganizationEntity organizationEntity){
+    public static Organization toModel(OrganizationEntity organizationEntity){
         return Organization.builder()
                 .idOrganization(organizationEntity.getIdOrganization())
                 .name(organizationEntity.getName())
@@ -70,10 +71,13 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
                 .createdAt(organizationEntity.getCreatedAt())
                 .updatedAt(organizationEntity.getUpdatedAt())
                 .deleted(organizationEntity.getDeleted())
+                .facebookLink(organizationEntity.getFacebookLink())
+                .instagramLink(organizationEntity.getInstagramLink())
+                .linkedinLink(organizationEntity.getLinkedinLink())
                 .build();
     }
 
-    private OrganizationEntity toEntity(Organization organization) {
+    public static OrganizationEntity toEntity(Organization organization) {
         return OrganizationEntity.builder()
                 .name(organization.getName())
                 .image(organization.getImage())
@@ -85,15 +89,9 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
                 .createdAt(organization.getCreatedAt())
                 .updatedAt(organization.getUpdatedAt())
                 .deleted(organization.getDeleted())
-                .build();
-    }
-
-    private OrganizationController.OrganizationDto toSimpleDto(OrganizationEntity organization){
-        return OrganizationController.OrganizationDto.builder()
-                .name(organization.getName())
-                .image(organization.getImage())
-                .address(organization.getAddress())
-                .phone(organization.getPhone())
+                .facebookLink(organization.getFacebookLink())
+                .instagramLink(organization.getInstagramLink())
+                .linkedinLink(organization.getLinkedinLink())
                 .build();
     }
 }
