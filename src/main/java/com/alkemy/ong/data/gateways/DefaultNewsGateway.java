@@ -1,14 +1,13 @@
 package com.alkemy.ong.data.gateways;
 
-
 import com.alkemy.ong.data.entity.NewsEntity;
 import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsGateway;
-import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
