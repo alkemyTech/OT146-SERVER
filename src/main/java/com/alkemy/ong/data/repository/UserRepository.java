@@ -1,6 +1,7 @@
 package com.alkemy.ong.data.repository;
 
 import com.alkemy.ong.data.entity.UserEntity;
+import com.alkemy.ong.domain.users.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findByDeleted(boolean isDeleted);
 
     Optional<UserEntity> findByEmail(String email);
+
+    /*Boolean existByEmail(String email);*/
+
+    UserEntity save(User user);
 }

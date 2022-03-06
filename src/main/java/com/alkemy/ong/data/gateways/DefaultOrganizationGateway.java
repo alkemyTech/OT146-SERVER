@@ -4,18 +4,12 @@ import com.alkemy.ong.data.entity.OrganizationEntity;
 import com.alkemy.ong.data.repository.OrganizationRepository;
 import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.domain.organization.OrganizationGateway;
-import com.alkemy.ong.web.controller.OrganizationController;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class DefaultOrganizationGateway implements OrganizationGateway {

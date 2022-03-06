@@ -12,4 +12,7 @@ public interface UserGateway {
 
     User findById(Long id);
 
+    //Boolean existsByEmail(String email);
+
+    User save(User user);
 }

@@ -33,5 +33,11 @@ public class UserService {
         return userGateway.findById(id);
     }
 
+   // public Boolean existsByEmail(String email){
+  //      return userGateway.existsByEmail(email);
+  //  }
 
+    public User save(User user){
+        return userGateway.save(user);
+    }
 }

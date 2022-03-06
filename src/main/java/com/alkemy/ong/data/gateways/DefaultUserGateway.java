@@ -55,6 +55,17 @@ public class DefaultUserGateway implements UserGateway {
         return toModel(entity);
     }
 
+  //  @Override
+   // public Boolean existsByEmail(String email) {
+  //      return userRepository.existByEmail(email);
+    //}
+
+    @Override
+    public User save(User user) {
+        UserEntity entity = userRepository.save(user);
+        return toModel(entity);
+    }
+
 
     private User toModel(UserEntity entity) {
         return User.builder()
