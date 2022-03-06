@@ -52,8 +52,6 @@ public class NewsController {
         news = newsService.update(id, news);
         news.setUpdatedAt(LocalDateTime.now());
         return ResponseEntity.ok().body(toDTO(news));
-
-
     }
 
     @DeleteMapping("/{id}")
@@ -63,7 +61,6 @@ public class NewsController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 
     }
-
 
     private News toDomain(NewsDTO newDTO) {
         return News.builder()
