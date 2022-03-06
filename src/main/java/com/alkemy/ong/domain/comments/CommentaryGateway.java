@@ -16,4 +16,6 @@ public interface CommentaryGateway {
     void delete(Long id);
 
     boolean existsById(Long id);
+
+    List<Commentary> findByNewsId(Long newsId);
 }

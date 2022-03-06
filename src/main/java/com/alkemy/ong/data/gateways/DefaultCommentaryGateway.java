@@ -72,6 +72,11 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
         return commentaryRepository.existsById(id);
     }
 
+    @Override
+    public List<Commentary> findByNewsId(Long newsId) {
+        return commentaryRepository.findByNewsId(newsId);
+    }
+
 
     private CommentaryEntity newUpdate(CommentaryEntity commentaryEntity, Commentary commentary) {
         commentaryEntity.setBody(commentary.getBody());

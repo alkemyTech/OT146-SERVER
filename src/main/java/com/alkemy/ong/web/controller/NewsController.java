@@ -1,6 +1,7 @@
 package com.alkemy.ong.web.controller;
 
 
+import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsService;
 import lombok.Builder;
@@ -76,5 +77,6 @@ public class NewsController {
         private String image;
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
+        private List<Commentary> comments;
     }
 }

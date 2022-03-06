@@ -1,5 +1,6 @@
 package com.alkemy.ong.web.controller;
 
+import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryService;
 import com.alkemy.ong.domain.users.User;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -93,6 +95,13 @@ public class CommentaryController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
     }
+
+    @GetMapping("/posts/{newsId}/comments")
+    public ResponseEntity<List<CommentaryController.CommentaryDTO>> getComments(@PathVariable Long newsId){
+        List<Commentary> commentsList = commentaryService.findByNewsId(newsId);
+        List<CommentaryController.CommentaryDTO> dtoList = toDtoList(commentsList);
+        return ResponseEntity.ok().body(dtoList);
+    }
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -134,6 +143,9 @@ public class CommentaryController {
                 .build();
     }
 
+    private List<CommentaryController.CommentaryDTO> toDtoList(List<Commentary> commentaries) {
+        return commentaries.stream().map(this::toDto).collect(Collectors.toList());
+    }
 }
 
 
