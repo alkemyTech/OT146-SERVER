@@ -32,4 +32,20 @@ public class CommentaryService implements CommentaryGateway {
     public Commentary update(Commentary commentary) {
         return gateway.update(commentary);
     }
+
+    @Override
+    public void delete(Long id) {
+        gateway.delete(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return gateway.existsById(id);
+    }
+
+    @Override
+    public List<Commentary> findByNewsId(Long newsId) {
+        return gateway.findByNewsId(newsId);
+    }
+
 }

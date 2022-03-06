@@ -1,5 +1,6 @@
 package com.alkemy.ong.web.controller;
 
+import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryService;
 import com.alkemy.ong.domain.users.User;
@@ -18,6 +19,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -58,20 +60,48 @@ public class CommentaryController {
     @PutMapping("/{id}")
     public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id){
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String loggedUserMail = ((UserDetails)principal).getUsername();
-
-        User loggedUser = userService.findByEmail(loggedUserMail);
-        User user = userService.findById(commentaryDTO.getUserId());
-
-        if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
+        if (userVerification(id)) {
             return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.update(toDomain(commentaryDTO))), HttpStatus.CREATED);
         }
 
         return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.findById(commentaryDTO.getId())), HttpStatus.FORBIDDEN);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        if (!commentaryService.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        if (userVerification(id)) {
+            commentaryService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    private Boolean userVerification(Long id){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String loggedUserMail = ((UserDetails)principal).getUsername();
+
+        User loggedUser = userService.findByEmail(loggedUserMail);
+        User user = userService.findById(toDto(commentaryService.findById(id)).getUserId());
+
+        if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
+            return true;
+        }
+        return false;
+    }
+
+
+    @GetMapping("/posts/{newsId}/comments")
+    public ResponseEntity<List<CommentaryController.CommentaryDTO>> getComments(@PathVariable Long newsId){
+        List<Commentary> commentsList = commentaryService.findByNewsId(newsId);
+        List<CommentaryController.CommentaryDTO> dtoList = toDtoList(commentsList);
+        return ResponseEntity.ok().body(dtoList);
+    }
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -113,6 +143,9 @@ public class CommentaryController {
                 .build();
     }
 
+    private List<CommentaryController.CommentaryDTO> toDtoList(List<Commentary> commentaries) {
+        return commentaries.stream().map(this::toDto).collect(Collectors.toList());
+    }
 }
 
 

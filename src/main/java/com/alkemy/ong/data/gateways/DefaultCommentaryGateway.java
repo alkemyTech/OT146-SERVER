@@ -2,14 +2,12 @@ package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.data.entity.CommentaryEntity;
 import com.alkemy.ong.data.entity.NewsEntity;
-import com.alkemy.ong.data.entity.OrganizationEntity;
 import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.CommentaryRepository;
 import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
-import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Sort;
@@ -53,16 +51,32 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
 
     @Override
     public Commentary findById(Long id) {
-        CommentaryEntity comm= commentaryRepository.findById(id).orElseThrow(() -> new BadRequestException("mensaje"));
+        CommentaryEntity comm= commentaryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
         return toModel(comm);
     }
 
     @PutMapping("/{id}")
     public Commentary update(Commentary commentary) {
-        CommentaryEntity commEntity = commentaryRepository.findById(commentary.getId()).orElseThrow(() -> new ResourceNotFoundException("message"));
+        CommentaryEntity commEntity = commentaryRepository.findById(commentary.getId()).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
 
         return toModel(commentaryRepository.save(newUpdate(commEntity, commentary)));
     }
+
+    @Override
+    public void delete(Long id) {
+        commentaryRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return commentaryRepository.existsById(id);
+    }
+
+    @Override
+    public List<Commentary> findByNewsId(Long newsId) {
+        return commentaryRepository.findByNewsId(newsId);
+    }
+
 
     private CommentaryEntity newUpdate(CommentaryEntity commentaryEntity, Commentary commentary) {
         commentaryEntity.setBody(commentary.getBody());
