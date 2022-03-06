@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -111,10 +112,18 @@ public class CategoryController {
     @NoArgsConstructor
     private static class CategoryDto { 
 
+        @ApiModelProperty(example = "1")
         private Long id;
+
+        @ApiModelProperty(required = true, example="RRHH")
         private String name;
+        
+        @ApiModelProperty(example = "Categoria designada para contenido de RRHH.")
         private String description;
+
+        @ApiModelProperty(required = true)
         private Boolean deleted;
+
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
     } 
