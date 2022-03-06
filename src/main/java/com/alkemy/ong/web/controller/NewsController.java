@@ -2,12 +2,17 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/news")
+@Api(value = "news")
 public class NewsController {
 
     private final NewsService newsService;
@@ -23,12 +29,15 @@ public class NewsController {
         this.newsService = newsService;
     }
 
+
+    @ApiOperation(value = "Create News")
     @PostMapping
     public ResponseEntity<NewsDTO> create(@RequestBody NewsDTO newDTO) {
         News news = newsService.create(toDomain(newDTO));
         return ResponseEntity.ok(toDTO(news));
     }
 
+    @ApiOperation(value = "List News")
     @GetMapping
     public ResponseEntity<List<NewsDTO>> getNews() {
         List<News> newsList = newsService.findAll();
@@ -36,6 +45,7 @@ public class NewsController {
         return ResponseEntity.ok().body(dtoList);
     }
 
+    @ApiOperation(value = "Get News by Id")
     @GetMapping("/{id}")
     public ResponseEntity<NewsDTO> showId(@PathVariable Long id) {
         News news = newsService.findById(id);
@@ -88,12 +98,31 @@ public class NewsController {
 
     @Data
     @Builder
+    @ApiModel
     private static class NewsDTO {
+        @ApiModelProperty(name = "id")
         private Long id;
+
+        @ApiModelProperty(name = "name",
+                required = true,
+                value = "name of the new")
+        @NotBlank
         private String name;
+
+        @ApiModelProperty(name = "content",
+                required = true,
+                value = "content of the new")
+        @NotBlank
         private String content;
+
+        @ApiModelProperty(name = "image",
+                value = "Image url")
         private String image;
+
+        @ApiModelProperty(name = "createdAt")
         private LocalDateTime createdAt;
+
+        @ApiModelProperty(name = "updatedAt")
         private LocalDateTime updatedAt;
     }
 }
