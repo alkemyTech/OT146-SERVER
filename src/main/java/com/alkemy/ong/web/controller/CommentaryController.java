@@ -60,14 +60,7 @@ public class CommentaryController {
     @PutMapping("/{id}")
     public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id){
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String loggedUserMail = ((UserDetails)principal).getUsername();
-
-        User loggedUser = userService.findByEmail(loggedUserMail);
-        User user = userService.findById(commentaryDTO.getUserId());
-
-        if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
+        if (userVerification(id)) {
             return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.update(toDomain(commentaryDTO))), HttpStatus.CREATED);
         }
 
@@ -76,10 +69,19 @@ public class CommentaryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if(!commentaryService.existsById(id)){
+        if (!commentaryService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+        if (userVerification(id)) {
+            commentaryService.delete(id);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    private Boolean userVerification(Long id){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String loggedUserMail = ((UserDetails)principal).getUsername();
@@ -88,13 +90,11 @@ public class CommentaryController {
         User user = userService.findById(toDto(commentaryService.findById(id)).getUserId());
 
         if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
-            commentaryService.delete(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return true;
         }
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
+        return false;
     }
+
 
     @GetMapping("/posts/{newsId}/comments")
     public ResponseEntity<List<CommentaryController.CommentaryDTO>> getComments(@PathVariable Long newsId){

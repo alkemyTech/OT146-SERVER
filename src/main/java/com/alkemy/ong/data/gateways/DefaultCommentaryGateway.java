@@ -51,13 +51,13 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
 
     @Override
     public Commentary findById(Long id) {
-        CommentaryEntity comm= commentaryRepository.findById(id).orElseThrow(() -> new BadRequestException("mensaje"));
+        CommentaryEntity comm= commentaryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
         return toModel(comm);
     }
 
     @PutMapping("/{id}")
     public Commentary update(Commentary commentary) {
-        CommentaryEntity commEntity = commentaryRepository.findById(commentary.getId()).orElseThrow(() -> new ResourceNotFoundException("message"));
+        CommentaryEntity commEntity = commentaryRepository.findById(commentary.getId()).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
 
         return toModel(commentaryRepository.save(newUpdate(commEntity, commentary)));
     }
