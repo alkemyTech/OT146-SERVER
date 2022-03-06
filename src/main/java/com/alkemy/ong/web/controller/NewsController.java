@@ -3,41 +3,49 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/news")
+@Api(value = "news")
 public class NewsController {
 
     private final NewsService newsService;
-    
-    public NewsController(NewsService newsService){
+
+    public NewsController(NewsService newsService) {
         this.newsService = newsService;
     }
-    
+
+    @ApiOperation(value = "Create News")
     @PostMapping
-    public ResponseEntity<NewsDTO> create(@RequestBody NewsDTO newDTO){
+    public ResponseEntity<NewsDTO> create(@RequestBody NewsDTO newDTO) {
         News news = newsService.create(toDomain(newDTO));
         return ResponseEntity.ok(toDTO(news));
     }
 
+    @ApiOperation(value = "List News")
     @GetMapping
-    public ResponseEntity<List<NewsDTO>> getNews(){
+    public ResponseEntity<List<NewsDTO>> getNews() {
         List<News> newsList = newsService.findAll();
         List<NewsDTO> dtoList = toDtoList(newsList);
         return ResponseEntity.ok().body(dtoList);
     }
 
+    @ApiOperation(value = "Get News by Id")
     @GetMapping("/{id}")
-    public ResponseEntity<NewsDTO> showId(@PathVariable Long id){
+    public ResponseEntity<NewsDTO> showId(@PathVariable Long id) {
         News news = newsService.findById(id);
         NewsDTO newsDTO = toDTO(news);
         return ResponseEntity.ok().body(newsDTO);
@@ -52,7 +60,7 @@ public class NewsController {
                 .build();
     }
 
-    private NewsDTO toDTO(News news){
+    private NewsDTO toDTO(News news) {
         return NewsDTO.builder()
                 .id(news.getId())
                 .name(news.getName())
@@ -69,12 +77,31 @@ public class NewsController {
 
     @Data
     @Builder
-    private static class NewsDTO{
+    @ApiModel
+    private static class NewsDTO {
+        @ApiModelProperty(name = "id")
         private Long id;
+
+        @ApiModelProperty(name = "name",
+                required = true,
+                value = "name of the new")
+        @NotBlank
         private String name;
+
+        @ApiModelProperty(name = "content",
+                required = true,
+                value = "content of the new")
+        @NotBlank
         private String content;
+
+        @ApiModelProperty(name = "image",
+                value = "Image url")
         private String image;
+
+        @ApiModelProperty(name = "createdAt")
         private LocalDateTime createdAt;
+
+        @ApiModelProperty(name = "updatedAt")
         private LocalDateTime updatedAt;
     }
 }
