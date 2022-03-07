@@ -11,8 +11,4 @@ public interface UserGateway {
     User findByEmail(String email);
 
     User findById(Long id);
-
-    //Boolean existsByEmail(String email);
-
-    User create(User user);
 }

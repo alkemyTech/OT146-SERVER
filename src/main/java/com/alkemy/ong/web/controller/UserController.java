@@ -41,23 +41,6 @@ public class UserController {
         return ResponseEntity.ok(toListDto(users));
     }
 
-    @PostMapping("/auth/register")
-    public ResponseEntity<User> register (@Valid @RequestBody User newUser){
-        /*if(userService.existsByEmail(newUser.getEmail())){
-            throw new BadRequestException("There is already a user with that email");
-        }
-*/
-        User user = new User();
-        user.setFirstName(newUser.getFirstName());
-        user.setLastName(newUser.getLastName());
-        user.setEmail(newUser.getEmail());
-        user.setPassword(encoder.encode(newUser.getPassword()));
-        user.setRoleId(2L);
-
-        return new ResponseEntity<User>(userService.save(user), HttpStatus.CREATED);
-    }
-
-
     @Data
     private static class UserDTO {
         @Id
