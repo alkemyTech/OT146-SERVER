@@ -28,11 +28,9 @@ import static java.util.stream.Collectors.toList;
 public class UserController {
 
     private final UserService userService;
-    private final PasswordEncoder encoder;
 
     public UserController(UserService userService, PasswordEncoder encoder) {
         this.userService = userService;
-        this.encoder = encoder;
     }
 
     @GetMapping

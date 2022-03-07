@@ -136,7 +136,7 @@ public class CommentaryController {
     }
 
     private List<CommentaryController.CommentaryDTO> toDtoList(List<Commentary> commentaries) {
-        return commentaries.stream().map(this::toDto).collect(Collectors.toList());
+        return commentaries.stream().map(this::toDto).collect(toList());
     }
 }
 
