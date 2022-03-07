@@ -1,9 +1,12 @@
 package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.data.entity.OrganizationEntity;
+import com.alkemy.ong.data.entity.SlidesEntity;
 import com.alkemy.ong.data.repository.OrganizationRepository;
+import com.alkemy.ong.data.repository.SlidesRepository;
 import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.domain.organization.OrganizationGateway;
+import com.alkemy.ong.domain.slides.Slides;
 import com.alkemy.ong.web.controller.OrganizationController;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
@@ -14,8 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Component
 public class DefaultOrganizationGateway implements OrganizationGateway {
@@ -30,6 +38,7 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
     @Override
     public Organization findById(long idOrganization) {
         OrganizationEntity ong = organizationRepository.findById(idOrganization).orElseThrow(() -> new ResourceNotFoundException("Organization not found"));
+
         return toModel(ong);
     }
 
@@ -74,6 +83,10 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
                 .facebookLink(organizationEntity.getFacebookLink())
                 .instagramLink(organizationEntity.getInstagramLink())
                 .linkedinLink(organizationEntity.getLinkedinLink())
+                .slides(organizationEntity.getSlides()
+                        .stream()
+                        .map(slide -> DefaultSlidesGateway.simpleToDomain(slide))
+                        .collect(toList()))
                 .build();
     }
 
