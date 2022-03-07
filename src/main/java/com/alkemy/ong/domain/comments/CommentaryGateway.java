@@ -17,5 +17,4 @@ public interface CommentaryGateway {
 
     boolean existsById(Long id);
 
-    List<Commentary> findByNewsId(Long newsId);
 }

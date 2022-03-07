@@ -43,9 +43,4 @@ public class CommentaryService implements CommentaryGateway {
         return gateway.existsById(id);
     }
 
-    @Override
-    public List<Commentary> findByNewsId(Long newsId) {
-        return gateway.findByNewsId(newsId);
-    }
-
 }
