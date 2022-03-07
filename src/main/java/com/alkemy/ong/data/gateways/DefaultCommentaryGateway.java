@@ -8,6 +8,7 @@ import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
+import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Sort;
@@ -74,7 +75,8 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
 
     @Override
     public List<Commentary> findByNewsId(Long newsId) {
-        return commentaryRepository.findByNewsId(newsId);
+        List<CommentaryEntity> entities = commentaryRepository.findByNewsId(newsId);
+        return toModelList(entities);
     }
 
 
@@ -121,4 +123,7 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
                 .build();
     }
 
+    private List<Commentary> toModelList(List<CommentaryEntity> comments) {
+        return comments.stream().map(this::toModel).collect(toList());
+    }
 }
