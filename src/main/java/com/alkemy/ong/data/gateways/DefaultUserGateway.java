@@ -1,12 +1,16 @@
 package com.alkemy.ong.data.gateways;
 
+import com.alkemy.ong.data.entity.ActivityEntity;
 import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.UserRepository;
+import com.alkemy.ong.domain.activities.Activity;
+import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -61,9 +65,23 @@ public class DefaultUserGateway implements UserGateway {
     //}
 
     @Override
-    public User save(User user) {
-        UserEntity entity = userRepository.save(user);
-        return toModel(entity);
+    public User create(User user) {
+        UserEntity entity = toEntity(user);
+        entity.setCreatedAt(LocalDateTime.now());
+        return toModel(userRepository.save(user));
+    }
+
+    private UserEntity toEntity(User user){
+        return UserEntity.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .photo(user.getPhoto())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build();
     }
 
 

@@ -38,6 +38,6 @@ public class UserService {
   //  }
 
     public User save(User user){
-        return userGateway.save(user);
+        return userGateway.create(user);
     }
 }

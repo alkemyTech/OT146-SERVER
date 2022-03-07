@@ -14,5 +14,5 @@ public interface UserGateway {
 
     //Boolean existsByEmail(String email);
 
-    User save(User user);
+    User create(User user);
 }
