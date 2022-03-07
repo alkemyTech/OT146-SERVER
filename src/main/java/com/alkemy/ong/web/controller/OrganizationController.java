@@ -15,6 +15,9 @@ import javax.persistence.Id;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @CrossOrigin
 @RestController
@@ -87,6 +90,10 @@ public class OrganizationController {
                 .facebookLink(organization.getFacebookLink())
                 .instagramLink(organization.getInstagramLink())
                 .linkedinLink(organization.getLinkedinLink())
+                .slides(organization.getSlides()
+                        .stream()
+                        .map(slide -> SlidesController.toSimpleDto(slide))
+                        .collect(toList()))
                 .build();
     }
 
@@ -148,6 +155,9 @@ public class OrganizationController {
 
         @Column
         private String linkedinLink;
+
+        private List<SlidesController.SimpleSlideDto> slides;
+
     }
 
     @Builder
@@ -180,5 +190,7 @@ public class OrganizationController {
 
         @Column
         private String linkedinLink;
+
+        private List<SlidesController.SimpleSlideDto> slides;
     }
 }
