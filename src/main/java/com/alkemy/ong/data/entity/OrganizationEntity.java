@@ -60,7 +60,8 @@ public class OrganizationEntity implements Serializable {
 
     @Column
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "organizationEntity", orphanRemoval = true)
-    private Set<SlidesEntity> slides = new HashSet<>();
+    @OrderBy("slideOrder")
+    private List<SlidesEntity> slides = new ArrayList<>();
 
     @Column
     private String facebookLink;
