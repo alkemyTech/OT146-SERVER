@@ -1,7 +1,9 @@
 package com.alkemy.ong.web.controller;
 
 
+
 import com.alkemy.ong.domain.comments.Commentary;
+
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsService;
 import io.swagger.annotations.Api;
@@ -10,10 +12,12 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +32,7 @@ public class NewsController {
     public NewsController(NewsService newsService) {
         this.newsService = newsService;
     }
+
 
     @ApiOperation(value = "Create News")
     @PostMapping
@@ -50,6 +55,25 @@ public class NewsController {
         News news = newsService.findById(id);
         NewsDTO newsDTO = toDTO(news);
         return ResponseEntity.ok().body(newsDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<NewsDTO> updateNews(@PathVariable Long id, @RequestBody @Valid NewsDTO newsDto) {
+        News news = newsService.findById(id);
+        news.setName(newsDto.getName());
+        news.setImage(newsDto.getImage());
+        news.setContent(newsDto.getContent());
+        news = newsService.update(id, news);
+        news.setUpdatedAt(LocalDateTime.now());
+        return ResponseEntity.ok().body(toDTO(news));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteNews(@PathVariable Long id) {
+        News news = newsService.findById(id);
+        newsService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+
     }
 
     private News toDomain(NewsDTO newDTO) {

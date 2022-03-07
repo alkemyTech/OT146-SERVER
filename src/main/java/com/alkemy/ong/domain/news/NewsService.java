@@ -25,6 +25,17 @@ public class NewsService implements NewsGateway {
     }
 
     @Override
+    public News update(Long id, News news) {
+        return newGateway.update(id, news);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        newGateway.deleteById(id);
+
+    }
+
+    @Override
     public News findById(Long id) {
         return newGateway.findById(id);
     }
