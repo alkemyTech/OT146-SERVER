@@ -1,6 +1,7 @@
 package com.alkemy.ong.web.controller;
 
 
+import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
@@ -42,19 +43,22 @@ public class UserController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<User> register (@Valid @RequestBody User newUser){
+    public ResponseEntity<UserDTO> register (@Valid @RequestBody UserDTO newUser){
         /*if(userService.existsByEmail(newUser.getEmail())){
             throw new BadRequestException("There is already a user with that email");
         }
 */
-        User user = new User();
-        user.setFirstName(newUser.getFirstName());
-        user.setLastName(newUser.getLastName());
-        user.setEmail(newUser.getEmail());
-        user.setPassword(encoder.encode(newUser.getPassword()));
-        user.setRoleId(2L);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setFirstName(newUser.getFirstName());
+        userDTO.setLastName(newUser.getLastName());
+        userDTO.setEmail(newUser.getEmail());
+        userDTO.setPassword(encoder.encode(newUser.getPassword()));
+        userDTO.setRoleId(2L);
+        userDTO.setCreatedAt(LocalDateTime.now());
 
-        return new ResponseEntity<User>(userService.save(user), HttpStatus.CREATED);
+        User user = userService.save(toDomain(newUser));
+
+        return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
     }
 
 
@@ -111,6 +115,19 @@ public class UserController {
         return dto;
     }
 
+    private User toDomain(UserController.UserDTO dto) {
+        return User.builder()
+                .id(dto.getId())
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .photo(dto.getPhoto())
+                .createdAt(dto.getCreatedAt())
+                .updatedAt(dto.getUpdatedAt())
+                .roleId(dto.getRoleId())
+                .build();
+    }
 
     private List<UserDTO> toListDto(List<User> users) {
         return users.stream()
