@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,26 +44,26 @@ public class CategoryController {
     @GetMapping("/categories")
     public List<CategoryDto> findAll() {
         List<Category> categories = categoryService.findAll();
-        
+
         return categories.stream().map(category -> toDto(category)).collect(Collectors.toList());
     }
 
     @GetMapping(params = {"page"})
     ResponseEntity<PageResponse<CategoryDto>> findAllByPage(@RequestParam(name = "page") Integer page) {
-        if(page < 0)
+        if (page < 0)
             throw new BadRequestException("Page not found");
         List<CategoryDto> catDto = categoryService.findAllByPage(page, PageUtils.PAGE_SIZE).stream().map(category -> toDto(category)).collect(Collectors.toList());
 
-        PageResponse<CategoryDto> pr= new PageResponse<>(catDto, "/categories/page", page, PageUtils.PAGE_SIZE);
+        PageResponse<CategoryDto> pr = new PageResponse<>(catDto, "/categories/page", page, PageUtils.PAGE_SIZE);
         return ResponseEntity.status(HttpStatus.OK).body(pr);
     }
 
     @GetMapping("/categories/{id}")
     public ResponseEntity<CategoryDto> show(@PathVariable Long id) {
-       
+
         CategoryDto categoryDto = toDto(categoryService.findById(id));
-   
-        return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);          
+
+        return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);
     }
 
     @PostMapping("/categories")
@@ -78,28 +79,28 @@ public class CategoryController {
     }
 
     @DeleteMapping("/categories/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) { 
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         categoryService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     private CategoryDto toDto(Category category) {
         CategoryDto categoryDto = CategoryDto.builder()
-        .id(category.getId())
-        .name(category.getName())
-        .build();
-    
+                .id(category.getId())
+                .name(category.getName())
+                .build();
+
         return categoryDto;
     }
 
     private Category toCategory(CategoryDto categoryDto) {
         Category category = Category.builder()
-        .name(categoryDto.getName())
-        .description(categoryDto.getDescription())
-        .deleted(categoryDto.getDeleted())
-        .createdAt(categoryDto.getCreatedAt())
-        .updatedAt(categoryDto.getUpdatedAt())
-        .build();
+                .name(categoryDto.getName())
+                .description(categoryDto.getDescription())
+                .deleted(categoryDto.getDeleted())
+                .createdAt(categoryDto.getCreatedAt())
+                .updatedAt(categoryDto.getUpdatedAt())
+                .build();
 
         return category;
     }
@@ -109,14 +110,22 @@ public class CategoryController {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    private static class CategoryDto { 
+    private static class CategoryDto {
 
+        @ApiModelProperty(example = "1")
         private Long id;
+
+        @ApiModelProperty(required = true, example = "RRHH")
         private String name;
+
+        @ApiModelProperty(example = "Categoria designada para contenido de RRHH.")
         private String description;
+
+        @ApiModelProperty(required = true)
         private Boolean deleted;
+
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
-    } 
-    
+    }
+
 }
