@@ -35,12 +35,28 @@ public class MemberEntity {
     private String description;
 
     @Column(name = "created_at")
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate createdAt;
 
     @Column(name = "updated_at")
-    @DateTimeFormat(pattern = "yyyy/MM/dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate updatedAt;
 
     private boolean deleted = Boolean.FALSE;
+
+     @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if (obj instanceof MemberEntity) {
+            if (((MemberEntity) obj).getName().equals(getName())) {
+                return true;
+            }
+        }
+       return false;
+    }
 }
