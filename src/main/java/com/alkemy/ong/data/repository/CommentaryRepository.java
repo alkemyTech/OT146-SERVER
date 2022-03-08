@@ -10,6 +10,4 @@ import java.util.List;
 
 @Repository
 public interface CommentaryRepository extends JpaRepository<CommentaryEntity, Long> {
-    @Query(value = "SELECT * FROM commentaries WHERE news_id=?1;", nativeQuery = true)
-    List<Commentary> findByNewsId(Long newsId);
 }

@@ -1,6 +1,5 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.RolesEntity;
 import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.RolesRepository;
 import com.alkemy.ong.data.repository.UserRepository;
@@ -59,6 +58,7 @@ public class DefaultUserGateway implements UserGateway {
         return toModel(entity);
     }
 
+
   //  @Override
    // public Boolean existsByEmail(String email) {
   //      return userRepository.existByEmail(email);
@@ -82,7 +82,6 @@ public class DefaultUserGateway implements UserGateway {
                 .updatedAt(user.getUpdatedAt())
                 .build();
     }
-
 
     private User toModel(UserEntity entity) {
         return User.builder()

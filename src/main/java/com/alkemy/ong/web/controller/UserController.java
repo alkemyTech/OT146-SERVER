@@ -1,10 +1,8 @@
 package com.alkemy.ong.web.controller;
 
 
-import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
-import com.alkemy.ong.web.exceptions.BadRequestException;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
@@ -41,6 +39,7 @@ public class UserController {
         List<User> users = isDeleted == null ? userService.findAll() : userService.findByDeleted(isDeleted);
         return ResponseEntity.ok(toListDto(users));
     }
+
 
     @PostMapping("/auth/register")
     public ResponseEntity<UserDTO> register (@Valid @RequestBody UserDTO newUser){

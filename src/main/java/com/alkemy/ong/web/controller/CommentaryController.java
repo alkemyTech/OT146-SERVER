@@ -1,6 +1,5 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryService;
 import com.alkemy.ong.domain.users.User;
@@ -81,7 +80,7 @@ public class CommentaryController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    private Boolean userVerification(Long id){
+    private boolean userVerification(Long id){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String loggedUserMail = ((UserDetails)principal).getUsername();
@@ -95,13 +94,6 @@ public class CommentaryController {
         return false;
     }
 
-
-    @GetMapping("/posts/{newsId}/comments")
-    public ResponseEntity<List<CommentaryController.CommentaryDTO>> getComments(@PathVariable Long newsId){
-        List<Commentary> commentsList = commentaryService.findByNewsId(newsId);
-        List<CommentaryController.CommentaryDTO> dtoList = toDtoList(commentsList);
-        return ResponseEntity.ok().body(dtoList);
-    }
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -144,7 +136,7 @@ public class CommentaryController {
     }
 
     private List<CommentaryController.CommentaryDTO> toDtoList(List<Commentary> commentaries) {
-        return commentaries.stream().map(this::toDto).collect(Collectors.toList());
+        return commentaries.stream().map(this::toDto).collect(toList());
     }
 }
 
