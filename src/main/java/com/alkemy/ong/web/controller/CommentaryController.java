@@ -56,16 +56,9 @@ public class CommentaryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id){
+    public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id) {
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String loggedUserMail = ((UserDetails)principal).getUsername();
-
-        User loggedUser = userService.findByEmail(loggedUserMail);
-        User user = userService.findById(commentaryDTO.getUserId());
-
-        if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
+        if (userVerification(id)) {
             return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.update(toDomain(commentaryDTO))), HttpStatus.CREATED);
         }
 
@@ -74,24 +67,30 @@ public class CommentaryController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        if(!commentaryService.existsById(id)){
+        if (!commentaryService.existsById(id)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        String loggedUserMail = ((UserDetails)principal).getUsername();
-
-        User loggedUser = userService.findByEmail(loggedUserMail);
-        User user = userService.findById(toDto(commentaryService.findById(id)).getUserId());
-
-        if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
+        if (userVerification(id)) {
             commentaryService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
 
+    private boolean userVerification(Long id) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        String loggedUserMail = ((UserDetails) principal).getUsername();
+
+        User loggedUser = userService.findByEmail(loggedUserMail);
+        User user = userService.findById(toDto(commentaryService.findById(id)).getUserId());
+
+        if (user.getEmail().equals(loggedUserMail) || loggedUser.getRoleId() == 1) {
+            return true;
+        }
+        return false;
     }
 
     @GetMapping("/post/{newsId}")
@@ -100,6 +99,7 @@ public class CommentaryController {
         List<CommentaryDTO> dtoList = toDtoList(commentsList);
         return ResponseEntity.ok().body(dtoList);
     }
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor

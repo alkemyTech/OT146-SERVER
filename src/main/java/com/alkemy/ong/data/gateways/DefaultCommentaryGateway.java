@@ -8,7 +8,6 @@ import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
-import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Sort;
@@ -52,13 +51,13 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
 
     @Override
     public Commentary findById(Long id) {
-        CommentaryEntity comm= commentaryRepository.findById(id).orElseThrow(() -> new BadRequestException("mensaje"));
+        CommentaryEntity comm= commentaryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
         return toModel(comm);
     }
 
     @PutMapping("/{id}")
     public Commentary update(Commentary commentary) {
-        CommentaryEntity commEntity = commentaryRepository.findById(commentary.getId()).orElseThrow(() -> new ResourceNotFoundException("message"));
+        CommentaryEntity commEntity = commentaryRepository.findById(commentary.getId()).orElseThrow(() -> new ResourceNotFoundException("Id not found"));
 
         return toModel(commentaryRepository.save(newUpdate(commEntity, commentary)));
     }
@@ -78,7 +77,6 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
         List<CommentaryEntity> entities = commentaryRepository.findByNewsEntityId(newsId);
         return toModelList(entities);
     }
-
 
     private CommentaryEntity newUpdate(CommentaryEntity commentaryEntity, Commentary commentary) {
         commentaryEntity.setBody(commentary.getBody());

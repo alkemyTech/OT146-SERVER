@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserService implements UserGateway {
+public class UserService {
 
     private final UserGateway userGateway;
 
@@ -14,25 +14,31 @@ public class UserService implements UserGateway {
         this.userGateway = userGateway;
     }
 
-    @Override
+
     public List<User> findAll() {
         return userGateway.findAll();
     }
 
-    @Override
+
     public List<User> findByDeleted(boolean isDeleted) {
         return userGateway.findByDeleted(isDeleted);
     }
 
-    @Override
+
     public User findByEmail(String email) {
         return userGateway.findByEmail(email);
     }
 
-    @Override
     public User findById(Long id) {
         return userGateway.findById(id);
     }
 
+    public User save(User user){
+        return userGateway.create(user);
+    }
+
+    public boolean existsByEmail(String email){
+        return userGateway.existsByEmail(email);
+    }
 
 }
