@@ -1,11 +1,12 @@
 package com.alkemy.ong.data.entity;
 
-import com.alkemy.ong.domain.Category.Category;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import org.hibernate.annotations.Where;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,19 +24,26 @@ public class NewsEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private String content;
+
     @Column(nullable = false)
     private String image;
+
     @Column(name = "created_at")
     @CreationTimestamp
     private LocalDateTime createdAt;
+
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
     private boolean deleted;
+
 
 //    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name="categories_id")
