@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SlidesRepository extends JpaRepository<SlidesEntity, Long> {
+    SlidesEntity findTopByOrderBySlideOrderDesc();
 }
