@@ -14,8 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -25,7 +23,7 @@ import java.util.Optional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
 class TestimonialControllerTest {
@@ -44,26 +42,32 @@ class TestimonialControllerTest {
     public void saveTestimonial() throws Exception{
         TestimonialController.TestimonialDTO testimonialDTO = TestimonialController.TestimonialDTO.builder()
                 .id(null)
-                .name("Marcelo Iniqual")
-                .image("https://s3.us-east-1.amazonaws.com/cohorte-febrero-b35bfd02/2022-03-04T20:09:32.426-foto.jpg")
+                .name("Marcelo")
+                .image("https://s3.us-ea...")
+                .content("Contenido")
+                .build();
+        TestimonialEntity testimonialS = TestimonialEntity.builder()
+                .id(null)
+                .name("Marcelo")
+                .image("https://s3.us-ea...")
                 .content("Contenido")
                 .build();
         TestimonialEntity testimonialR = TestimonialEntity.builder()
                 .id(2L)
-                .name("Marcelo Iniqual")
-                .image("https://s3.us-east-1.amazonaws.com/cohorte-febrero-b35bfd02/2022-03-04T20:09:32.426-foto.jpg")
+                .name("Marcelo")
+                .image("https://s3.us-ea...")
                 .content("Contenido")
                 .build();
 
-        Mockito.when(testimonialRepository.save(ArgumentMatchers.any(TestimonialEntity.class))).thenReturn(testimonialR);
+        when(testimonialRepository.save(testimonialS)).thenReturn(testimonialR);
         String response = mockMvc.perform(
                 post(apiRootPath + "/testimonials")
                     .content(objectMapper.writeValueAsString(testimonialDTO))
                     .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNumber())
-                .andExpect(jsonPath("name").value("Marcelo Iniqual"))
-                .andExpect(jsonPath("image").value("https://s3.us-east-1.amazonaws.com/cohorte-febrero-b35bfd02/2022-03-04T20:09:32.426-foto.jpg"))
+                .andExpect(jsonPath("name").value("Marcelo"))
+                .andExpect(jsonPath("image").value("https://s3.us-ea..."))
                 .andExpect(jsonPath("content").value("Contenido"))
                 .andReturn().getResponse().getContentAsString();
         System.out.println(response);
@@ -76,7 +80,7 @@ class TestimonialControllerTest {
         testimonials.add(TestimonialEntity.builder().id(1L).name("A").image("http://...").content("asd").build());
         testimonials.add(TestimonialEntity.builder().id(2L).name("A").image("http://...").content("asd").build());
         Page<TestimonialEntity> page = new PageImpl(testimonials);
-        Mockito.when(testimonialRepository.findByDeleted(ArgumentMatchers.eq(false), ArgumentMatchers.anyObject())).thenReturn(page);
+        when(testimonialRepository.findByDeleted(ArgumentMatchers.eq(false), ArgumentMatchers.anyObject())).thenReturn(page);
         String response = mockMvc.perform(
                 get(apiRootPath + "/testimonials?page=0")
                         .contentType(MediaType.APPLICATION_JSON))
@@ -90,13 +94,39 @@ class TestimonialControllerTest {
 
     @Test
     public void removeTestimonial() throws Exception {
-        TestimonialEntity testimonial = TestimonialEntity.builder().id(1L).name("A").image("http://...").content("asd").deleted(true).build();
-        Mockito.when(testimonialRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(testimonial));
-        Mockito.when(testimonialRepository.save(testimonial)).thenReturn(testimonial);
+        TestimonialEntity testimonial = TestimonialEntity.builder().id(1L).name("A").image("http://...").content("asd").deleted(false).build();
+        TestimonialEntity testimonialSave = TestimonialEntity.builder().id(1L).name("A").image("http://...").content("asd").deleted(true).build();
+        when(testimonialRepository.findById(1L)).thenReturn(Optional.of(testimonial));
+        when(testimonialRepository.save(testimonialSave)).thenReturn(testimonialSave);
         String response = mockMvc.perform(
                         delete(apiRootPath + "/testimonials/1")
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
+                .andReturn().getResponse().getContentAsString();
+        System.out.println(response);
+    }
+
+    @Test
+    public void updateTestimonials() throws Exception {
+        TestimonialController.TestimonialDTO testimonialDTO = TestimonialController.TestimonialDTO.builder()
+                .id(1L)
+                .name("Marcelo")
+                .image("https://...")
+                .content("Contenido")
+                .build();
+        TestimonialEntity testimonial = TestimonialEntity.builder().id(1L).name("A").image("https://...").content("asd").deleted(false).build();
+        when(testimonialRepository.findById(1L)).thenReturn(Optional.of(testimonial));
+        TestimonialEntity testimonialEntity = TestimonialEntity.builder().id(1L).name("Marcelo").image("https://...").content("Contenido").deleted(false).build();
+        when(testimonialRepository.save(testimonialEntity)).thenReturn(testimonialEntity);
+        String response = mockMvc.perform(
+                        put(apiRootPath + "/testimonials/1")
+                                .content(objectMapper.writeValueAsString(testimonialDTO))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("id").value("1"))
+                .andExpect(jsonPath("name").value("Marcelo"))
+                .andExpect(jsonPath("image").value("https://..."))
+                .andExpect(jsonPath("content").value("Contenido"))
                 .andReturn().getResponse().getContentAsString();
         System.out.println(response);
     }
