@@ -6,16 +6,18 @@ import com.alkemy.ong.domain.slides.Slides;
 import com.alkemy.ong.domain.slides.SlidesService;
 import com.alkemy.ong.domain.slides.response.SlideShortResponse;
 import com.alkemy.ong.web.controller.OrganizationController.OrganizationDto;
+import com.amazonaws.util.Base64;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +29,13 @@ import static java.util.stream.Collectors.toList;
 public class SlidesController {
     private final SlidesService slidesService;
     private final OrganizationService organizationService;
+    private final ImageController imageController;
 
 
-    public SlidesController(SlidesService slidesService, OrganizationService organizationService) {
+    public SlidesController(SlidesService slidesService, OrganizationService organizationService, ImageController imageController) {
         this.slidesService = slidesService;
         this.organizationService = organizationService;
+        this.imageController = imageController;
     }
 
     @GetMapping
@@ -60,8 +64,25 @@ public class SlidesController {
         return new ResponseEntity<>(slide, HttpStatus.OK);
     }
 
+    private File convertMultiPartToFile(byte[] file) throws IOException {
+        File convFile = new File(String.valueOf(file));
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file);
+        fos.close();
+        return convFile;
+    }
+
     @PostMapping
-    public ResponseEntity<SlidesDto> createSlide(@Valid @RequestBody SimpleSlideDto slideBody){
+    public ResponseEntity<SlidesDto> createSlide(@Valid @RequestBody SimpleSlideDto slideBody) throws IOException {
+
+        byte[] decodedFile = Base64.decode(slideBody.getImageEncoded());
+        File image = convertMultiPartToFile(decodedFile);
+        
+        // Uso el controlador de Image para enviar una solicitud de subida de imagen
+        String imageUrl = imageController
+                .save(decodedFile)
+                .getBody()
+                .getUrl();
 
         SlidesDto slidesDto = toDto(slidesService.create(toSimpleDomain(slideBody)));
 
@@ -113,7 +134,7 @@ public class SlidesController {
     public static SimpleSlideDto toSimpleDto(SimpleSlide slides){
         return SimpleSlideDto.builder()
                 .id(slides.getId())
-                .imageUrl(slides.getImageUrl())
+                //.imageEncoded(slides.getImageUrl())
                 .text(slides.getText())
                 .slideOrder(slides.getSlideOrder())
                 .deleted(slides.getDeleted())
@@ -126,7 +147,7 @@ public class SlidesController {
     public SimpleSlide toSimpleDomain(SimpleSlideDto simpleSlideDto){
         return SimpleSlide.builder()
                 .id(simpleSlideDto.getId())
-                .imageUrl(simpleSlideDto.getImageUrl())
+                .imageUrl(simpleSlideDto.getImageEncoded())
                 .text(simpleSlideDto.getText())
                 .slideOrder(simpleSlideDto.getSlideOrder())
                 .organizationId(simpleSlideDto.getOrganizationId())
@@ -143,7 +164,6 @@ public class SlidesController {
     @Builder
     public static class SlidesDto implements Serializable {
         private Long id;
-        @NotBlank
         private String imageUrl;
         @NotBlank
         private String text;
@@ -164,8 +184,7 @@ public class SlidesController {
     @Builder
     public static class SimpleSlideDto implements Serializable{
         private Long id;
-        @NotBlank
-        private String imageUrl;
+        private byte[] imageEncoded;
         @NotBlank
         private String text;
         @NotNull
