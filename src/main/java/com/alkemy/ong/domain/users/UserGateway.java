@@ -13,4 +13,6 @@ public interface UserGateway {
     User findById(Long id);
 
     User create(User user);
+
+    boolean existsByEmail(String email);
 }

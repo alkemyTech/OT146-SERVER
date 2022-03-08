@@ -59,10 +59,10 @@ public class DefaultUserGateway implements UserGateway {
     }
 
 
-  //  @Override
-   // public Boolean existsByEmail(String email) {
-  //      return userRepository.existByEmail(email);
-    //}
+    @Override
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     @Override
     public User create(User user) {

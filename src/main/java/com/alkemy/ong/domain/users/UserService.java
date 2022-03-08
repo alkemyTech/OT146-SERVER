@@ -37,4 +37,8 @@ public class UserService {
         return userGateway.create(user);
     }
 
+    public boolean existsByEmail(String email){
+        return userGateway.existsByEmail(email);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
+import com.alkemy.ong.web.exceptions.BadRequestException;
 import jdk.jfr.Unsigned;
 import lombok.Data;
 import org.hibernate.validator.constraints.UniqueElements;
@@ -45,6 +46,10 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<UserDTO> register (@Valid @RequestBody UserDTO newUser){
+
+        if(userService.existsByEmail(newUser.email)){
+            throw new BadRequestException("The email is already registered");
+        }
 
         User user = userService.save(toDomain(newUser));
 
