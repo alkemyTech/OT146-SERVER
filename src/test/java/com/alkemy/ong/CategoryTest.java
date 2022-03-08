@@ -23,10 +23,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -71,13 +81,13 @@ public class CategoryTest {
     @Test
     void listCategoriesTest() throws Exception {
 
-        CategoryEntity categoryEntity = mock(CategoryEntity.class);
+        CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName("Marketing");
         categoryEntity.setDescription("Categoria de marketing");
         categoryEntity.setDeleted(false);
         String category = categoryEntity.toString();
 
-        CategoryEntity categoryEntity2 = mock(CategoryEntity.class);
+        CategoryEntity categoryEntity2 = new CategoryEntity();
         categoryEntity2.setName("Salud");
         categoryEntity2.setDescription("categoria de salud");
         categoryEntity2.setDeleted(false);
@@ -89,8 +99,7 @@ public class CategoryTest {
         
         when(categoryRepository.findAll()).thenReturn(ce);
 
-        mockMvc.perform(get("/ong/categories")).contentType(MediaType.APPLICATION_JSON)
-                .andExpect(jsonPath(hasSize(2)));
+        mockMvc.perform(get("/ong/categories")).andExpect(status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
     }
 
     @Test
@@ -102,7 +111,7 @@ public class CategoryTest {
         categoryEntity.setDeleted(false);
         String category = categoryEntity.toString();
 
-        mockMvc.perform(put("/ong/categories/1")).contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(put("/ong/categories/1").contentType(MediaType.APPLICATION_JSON));
 
         CategoryEntity categoryEntity2 = mock(CategoryEntity.class);
         categoryEntity2.setName(categoryEntity.getName());
