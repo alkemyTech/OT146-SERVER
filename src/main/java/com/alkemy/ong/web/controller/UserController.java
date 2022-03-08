@@ -3,7 +3,9 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
+import jdk.jfr.Unsigned;
 import lombok.Data;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -43,17 +45,6 @@ public class UserController {
 
     @PostMapping("/auth/register")
     public ResponseEntity<UserDTO> register (@Valid @RequestBody UserDTO newUser){
-        /*if(userService.existsByEmail(newUser.getEmail())){
-            throw new BadRequestException("There is already a user with that email");
-        }
-*/
-        UserDTO userDTO = new UserDTO();
-        userDTO.setFirstName(newUser.getFirstName());
-        userDTO.setLastName(newUser.getLastName());
-        userDTO.setEmail(newUser.getEmail());
-        userDTO.setPassword(encoder.encode(newUser.getPassword()));
-        userDTO.setRoleId(2L);
-        userDTO.setCreatedAt(LocalDateTime.now());
 
         User user = userService.save(toDomain(newUser));
 
@@ -63,8 +54,6 @@ public class UserController {
 
     @Data
     private static class UserDTO {
-        @Id
-        @GeneratedValue(strategy= GenerationType.IDENTITY)
         private Long id;
 
         @NotBlank(message="The first name can´t be empty")
@@ -80,7 +69,6 @@ public class UserController {
         @NotBlank(message="The email can´t be empty")
         @Size(min = 10, max = 255, message = "Email length must be between 10 and 255 characters")
         @Email
-        @Column(nullable = false, unique = true)
         private String email;
 
         @NotBlank(message="The password can´t be empty")

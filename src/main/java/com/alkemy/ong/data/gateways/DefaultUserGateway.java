@@ -80,6 +80,9 @@ public class DefaultUserGateway implements UserGateway {
                 .photo(user.getPhoto())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
+                .role(roleRepository.findById(user.getRoleId()).orElseThrow(
+                        () -> new ResourceNotFoundException("Rol not found")
+                ))
                 .build();
     }
 
