@@ -40,24 +40,10 @@ class TestimonialControllerTest {
 
     @Test
     public void saveTestimonial() throws Exception{
-        TestimonialController.TestimonialDTO testimonialDTO = TestimonialController.TestimonialDTO.builder()
-                .id(null)
-                .name("Marcelo")
-                .image("https://s3.us-ea...")
-                .content("Contenido")
-                .build();
-        TestimonialEntity testimonialS = TestimonialEntity.builder()
-                .id(null)
-                .name("Marcelo")
-                .image("https://s3.us-ea...")
-                .content("Contenido")
-                .build();
-        TestimonialEntity testimonialR = TestimonialEntity.builder()
-                .id(2L)
-                .name("Marcelo")
-                .image("https://s3.us-ea...")
-                .content("Contenido")
-                .build();
+
+        var testimonialDTO = generateTestimonialDTO(null, "Marcelo", "https://s3.us-ea...", "Contenido");
+        var testimonialS = generateTestimonialEntity(null, "Marcelo", "https://s3.us-ea...", "Contenido");
+        var testimonialR = generateTestimonialEntity(2L, "Marcelo", "https://s3.us-ea...", "Contenido");
 
         when(testimonialRepository.save(testimonialS)).thenReturn(testimonialR);
         String response = mockMvc.perform(
@@ -108,12 +94,7 @@ class TestimonialControllerTest {
 
     @Test
     public void updateTestimonials() throws Exception {
-        TestimonialController.TestimonialDTO testimonialDTO = TestimonialController.TestimonialDTO.builder()
-                .id(1L)
-                .name("Marcelo")
-                .image("https://...")
-                .content("Contenido")
-                .build();
+        var testimonialDTO = generateTestimonialDTO(1L, "Marcelo", "https://...", "Contenido");
         TestimonialEntity testimonial = TestimonialEntity.builder().id(1L).name("A").image("https://...").content("asd").deleted(false).build();
         when(testimonialRepository.findById(1L)).thenReturn(Optional.of(testimonial));
         TestimonialEntity testimonialEntity = TestimonialEntity.builder().id(1L).name("Marcelo").image("https://...").content("Contenido").deleted(false).build();
@@ -129,5 +110,22 @@ class TestimonialControllerTest {
                 .andExpect(jsonPath("content").value("Contenido"))
                 .andReturn().getResponse().getContentAsString();
         System.out.println(response);
+    }
+
+    private TestimonialController.TestimonialDTO generateTestimonialDTO(Long id, String name, String image, String content){
+        return TestimonialController.TestimonialDTO.builder()
+                .id(id)
+                .name(name)
+                .image(image)
+                .content(content)
+                .build();
+    }
+    private TestimonialEntity generateTestimonialEntity(Long id, String name, String image, String content){
+        return TestimonialEntity.builder()
+                .id(id)
+                .name(name)
+                .image(image)
+                .content(content)
+                .build();
     }
 }
