@@ -92,12 +92,36 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(memberDTOS)))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("content").isArray())
-                .andReturn().getResponse().getContentAsString();
+                .andExpect(MockMvcResultMatchers.jsonPath("content").isArray());
     }
 
     @Test
-    void update() {
+    void update() throws Exception {
+        MemberDTO dtoBody = MemberDTO.builder()
+                .name("Update member name")
+                .facebookUrl("https://www.facebook.com/profile")
+                .instagramUrl("https://www.instagram.com/profile")
+                .linkedinUrl("https://www.linkedin.com/profile")
+                .image("user/img/photo.jpg")
+                .description("Update description")
+                .createdAt(LocalDate.of(2022, 03, 05))
+                .build();
+        MemberEntity resultEntity = buildEntityWhitId(5L);
+
+        when(memberRepository.findById(5L)).thenReturn(Optional.of(resultEntity));
+        when(memberRepository.save(resultEntity)).thenReturn(resultEntity);
+
+       mockMvc.perform(put("/members/{id}", 5)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dtoBody)))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(5)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", is("Update member name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.facebookUrl", is("https://www.facebook.com/profile")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.instagramUrl", is("https://www.instagram.com/profile")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.image", is("user/img/photo.jpg")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description", is("Update description")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.createdAt", is("2022-03-05")));
     }
 
     @Test
