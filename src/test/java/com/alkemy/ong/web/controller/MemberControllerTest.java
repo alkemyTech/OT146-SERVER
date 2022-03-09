@@ -2,9 +2,9 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.repository.MemberRepository;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.alkemy.ong.web.controller.MemberController.*;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -66,6 +65,37 @@ class MemberControllerTest {
     }
 
     @Test
+    void save_BadRequest() throws Exception {
+        MemberDTO memberDTO = MemberDTO.builder()
+                .name(null)
+                .image(null)
+                .build();;
+        MemberEntity entityWithoutId = buildEntityWithoutId();
+        MemberEntity resultEntityWhitId = buildEntityWhitId(1L);
+
+        when(memberRepository.save(entityWithoutId)).thenReturn(resultEntityWhitId);
+
+        mockMvc.perform(post("/members")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberDTO)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void save_NotFound() throws Exception {
+        MemberDTO memberDTO = buildDto();
+        MemberEntity entityWithoutId = buildEntityWithoutId();
+        MemberEntity resultEntityWhitId = buildEntityWhitId(1L);
+
+        when(memberRepository.save(entityWithoutId)).thenReturn(resultEntityWhitId);
+
+        mockMvc.perform(post("/saveMember")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberDTO)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void getAllMembers_success() throws Exception {
         List<MemberEntity> members = Arrays.asList(buildEntityWhitId(1L), buildEntityWhitId(2L), buildEntityWhitId(3L));
 
@@ -77,6 +107,16 @@ class MemberControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].id", is(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].id", is(3)));
+    }
+
+    @Test
+    void getAllMembers_NotFound() throws Exception {
+        List<MemberEntity> members = Arrays.asList(buildEntityWhitId(1L), buildEntityWhitId(2L), buildEntityWhitId(3L));
+
+        when(memberRepository.findAll()).thenReturn(members);
+
+        mockMvc.perform(get("/member/00").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -96,7 +136,37 @@ class MemberControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void getMembersByPage_BadRequest() throws Exception {
+        List<MemberDTO> memberDTOS = new ArrayList<>();
+        Pageable pageable = PageRequest.of(1, 10);
+        List<MemberEntity> memberEntities = buildEntityListWhitId();
+        Page<MemberEntity> memberEntityPage = new PageImpl(memberEntities);
+
+        when(memberRepository.findByDeleted(false, pageable)).thenReturn(memberEntityPage);
+
+        mockMvc.perform(get("/members?page=")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberDTOS)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getMembersByPage_NotFound() throws Exception {
+        List<MemberDTO> memberDTOS = new ArrayList<>();
+        Pageable pageable = PageRequest.of(1, 10);
+        List<MemberEntity> memberEntities = buildEntityListWhitId();
+        Page<MemberEntity> memberEntityPage = new PageImpl(memberEntities);
+
+        when(memberRepository.findByDeleted(false, pageable)).thenReturn(memberEntityPage);
+
+        mockMvc.perform(get("/members/page/00")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(memberDTOS)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void update_success() throws Exception {
         MemberDTO dtoBody = MemberDTO.builder()
                 .name("Update member name")
                 .facebookUrl("https://www.facebook.com/profile")
@@ -125,13 +195,50 @@ class MemberControllerTest {
     }
 
     @Test
+    void update_BadRequest() throws Exception {
+        MemberDTO dtoBody = MemberDTO.builder()
+                .name(null)
+                .image(null)
+                .build();
+        MemberEntity resultEntity = buildEntityWhitId(5L);
+
+        when(memberRepository.findById(5L)).thenReturn(Optional.of(resultEntity));
+        when(memberRepository.save(resultEntity)).thenReturn(resultEntity);
+
+        mockMvc.perform(put("/members/{id}", 5)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dtoBody)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void update_NotFound() throws Exception {
+        MemberDTO dtoBody = buildDto();
+
+        when(memberRepository.findById(8L)).thenThrow(new ResourceNotFoundException("Member not found"));
+
+        mockMvc.perform(put("/members/{id}", 8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dtoBody)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void delete_success() throws Exception {
         MemberEntity entity = buildEntityWhitId(20L);
 
         when(memberRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/members/{id}", entity.getId()))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/members/{id}", 20))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void delete_NotFound() throws Exception {
+        when(memberRepository.findById(150L)).thenThrow(new ResourceNotFoundException("Member not found"));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/members/{id}", 150))
+                .andExpect(status().isNotFound());
     }
 
 
