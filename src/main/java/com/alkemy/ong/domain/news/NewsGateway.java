@@ -1,5 +1,7 @@
 package com.alkemy.ong.domain.news;
 
+import com.alkemy.ong.domain.testimonial.Testimonial;
+
 import java.util.List;
 
 public interface NewsGateway {
@@ -9,4 +11,6 @@ public interface NewsGateway {
     List<News> findAll();
     News update(Long id, News news);
     void deleteById(Long id);
+     List<News> listByPage(int page, int size);
+
 }

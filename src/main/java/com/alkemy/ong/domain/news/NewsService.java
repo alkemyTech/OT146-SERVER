@@ -36,6 +36,11 @@ public class NewsService implements NewsGateway {
     }
 
     @Override
+    public List<News> listByPage(int page, int size) {
+        return newGateway.listByPage(page, size);
+    }
+
+    @Override
     public News findById(Long id) {
         return newGateway.findById(id);
     }

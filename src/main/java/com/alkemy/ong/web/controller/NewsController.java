@@ -4,6 +4,8 @@ import com.alkemy.ong.domain.comments.Commentary;
 
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsService;
+import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.utils.PageResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 @Api(value = "news")
 public class NewsController {
 
+    private final int PAGE_SIZE = 2;
     private final NewsService newsService;
 
     public NewsController(NewsService newsService) {
@@ -40,11 +43,16 @@ public class NewsController {
     }
 
     @ApiOperation(value = "List News")
-    @GetMapping
-    public ResponseEntity<List<NewsDTO>> getNews() {
-        List<News> newsList = newsService.findAll();
-        List<NewsDTO> dtoList = toDtoList(newsList);
-        return ResponseEntity.ok().body(dtoList);
+    @GetMapping(params = {"page"})
+     ResponseEntity<PageResponse<NewsDTO>> lisAllByPage(@RequestParam(name = "page") Integer page) {
+        if (page < 0)
+            throw new BadRequestException("Page index must not be less than zero");
+        List<NewsController.NewsDTO> NewsDTO =  newsService.listByPage(page, PAGE_SIZE)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+        PageResponse<NewsController.NewsDTO> pageResponse = new PageResponse<>(NewsDTO, "/news", page, PAGE_SIZE);
+        return ResponseEntity.status(HttpStatus.OK).body(pageResponse);
     }
 
     @ApiOperation(value = "Get News by Id")
