@@ -1,5 +1,6 @@
 package com.alkemy.ong.domain.users;
 
+import com.alkemy.ong.data.entity.RolesEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

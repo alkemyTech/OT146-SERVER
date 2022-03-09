@@ -37,4 +37,7 @@ public class CommentaryService {
         return gateway.existsById(id);
     }
 
+    public List<Commentary> findByNewsId(Long newsId) {
+        return gateway.findByNewsId(newsId);
+    }
 }

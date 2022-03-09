@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import static java.util.stream.Collectors.toList;
 
-
 @Component
 public class DefaultOrganizationGateway implements OrganizationGateway {
 

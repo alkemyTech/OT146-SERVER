@@ -4,7 +4,9 @@ package com.alkemy.ong.web.controller;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import jdk.jfr.Unsigned;
 import lombok.Data;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -28,9 +30,11 @@ import static java.util.stream.Collectors.toList;
 public class UserController {
 
     private final UserService userService;
+    private final PasswordEncoder encoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder encoder) {
         this.userService = userService;
+        this.encoder = encoder;
     }
 
     @GetMapping
@@ -39,10 +43,22 @@ public class UserController {
         return ResponseEntity.ok(toListDto(users));
     }
 
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<UserDTO> register (@Valid @RequestBody UserDTO newUser){
+
+        if(userService.existsByEmail(newUser.email)){
+            throw new BadRequestException("The email is already registered");
+        }
+
+        User user = userService.save(toDomain(newUser));
+
+        return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
+    }
+
+
     @Data
     private static class UserDTO {
-        @Id
-        @GeneratedValue(strategy= GenerationType.IDENTITY)
         private Long id;
 
         @NotBlank(message="The first name can´t be empty")
@@ -58,7 +74,6 @@ public class UserController {
         @NotBlank(message="The email can´t be empty")
         @Size(min = 10, max = 255, message = "Email length must be between 10 and 255 characters")
         @Email
-        @Column(nullable = false, unique = true)
         private String email;
 
         @NotBlank(message="The password can´t be empty")
@@ -92,6 +107,19 @@ public class UserController {
         return dto;
     }
 
+    private User toDomain(UserController.UserDTO dto) {
+        return User.builder()
+                .id(dto.getId())
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .photo(dto.getPhoto())
+                .createdAt(dto.getCreatedAt())
+                .updatedAt(dto.getUpdatedAt())
+                .roleId(dto.getRoleId())
+                .build();
+    }
 
     private List<UserDTO> toListDto(List<User> users) {
         return users.stream()
