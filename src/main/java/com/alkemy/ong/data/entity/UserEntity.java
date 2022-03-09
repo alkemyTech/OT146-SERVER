@@ -1,7 +1,9 @@
 package com.alkemy.ong.data.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @Data
+@NoArgsConstructor @AllArgsConstructor
 public class UserEntity {
 
     @Id

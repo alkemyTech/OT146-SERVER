@@ -3,18 +3,20 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
-import com.alkemy.ong.web.exceptions.BadRequestException;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.persistence.*;
-import javax.validation.Valid;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -34,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> findUsers(@RequestParam(name = "deleted", required = false) Boolean isDeleted) {
+    public ResponseEntity<List<UserDTO>> getAllUsers(@RequestParam(name = "deleted", required = false) Boolean isDeleted) {
         List<User> users = isDeleted == null ? userService.findAll() : userService.findByDeleted(isDeleted);
         return ResponseEntity.ok(toListDto(users));
     }
