@@ -18,7 +18,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -57,7 +56,7 @@ public class CommentaryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id){
+    public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id) {
 
         if (userVerification(id)) {
             return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.update(toDomain(commentaryDTO))), HttpStatus.CREATED);
@@ -80,10 +79,10 @@ public class CommentaryController {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
-    private boolean userVerification(Long id){
+    private boolean userVerification(Long id) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String loggedUserMail = ((UserDetails)principal).getUsername();
+        String loggedUserMail = ((UserDetails) principal).getUsername();
 
         User loggedUser = userService.findByEmail(loggedUserMail);
         User user = userService.findById(toDto(commentaryService.findById(id)).getUserId());
@@ -92,6 +91,13 @@ public class CommentaryController {
             return true;
         }
         return false;
+    }
+
+    @GetMapping("/post/{newsId}")
+    public ResponseEntity<List<CommentaryDTO>> getComments(@PathVariable Long newsId){
+        List<Commentary> commentsList = commentaryService.findByNewsId(newsId);
+        List<CommentaryDTO> dtoList = toDtoList(commentsList);
+        return ResponseEntity.ok().body(dtoList);
     }
 
     @Data
@@ -135,7 +141,7 @@ public class CommentaryController {
                 .build();
     }
 
-    private List<CommentaryController.CommentaryDTO> toDtoList(List<Commentary> commentaries) {
+    private List<CommentaryDTO> toDtoList(List<Commentary> commentaries) {
         return commentaries.stream().map(this::toDto).collect(toList());
     }
 }

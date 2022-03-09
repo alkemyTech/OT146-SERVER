@@ -72,6 +72,11 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
         return commentaryRepository.existsById(id);
     }
 
+    @Override
+    public List<Commentary> findByNewsId(Long newsId) {
+        List<CommentaryEntity> entities = commentaryRepository.findByNewsEntityId(newsId);
+        return toModelList(entities);
+    }
 
     private CommentaryEntity newUpdate(CommentaryEntity commentaryEntity, Commentary commentary) {
         commentaryEntity.setBody(commentary.getBody());
@@ -101,7 +106,9 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
         return CommentaryEntity.builder()
                 .userId(user)
                 .body(commentary.getBody())
-                .newsId(news)
+                .newsEntity(newsRepository.findById(commentary.getNewsId()).orElseThrow(
+                        () -> new BadRequestException("News id not found.")
+                ))
                 .createdAt(LocalDateTime.now())
                 .id(commentary.getUserId())
                 .build();
@@ -111,9 +118,12 @@ public class DefaultCommentaryGateway implements CommentaryGateway {
         return Commentary.builder()
                 .userId(entity.getUserId().getId())
                 .body(entity.getBody())
-                .newsId(entity.getNewsId().getId())
+                .newsId(entity.getNewsEntity().getId())
                 .id(entity.getId())
                 .build();
     }
 
+    private List<Commentary> toModelList(List<CommentaryEntity> comments) {
+        return comments.stream().map(this::toModel).collect(toList());
+    }
 }

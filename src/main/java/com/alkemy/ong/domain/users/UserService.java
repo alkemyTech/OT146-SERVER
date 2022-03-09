@@ -33,4 +33,12 @@ public class UserService {
         return userGateway.findById(id);
     }
 
+    public User save(User user){
+        return userGateway.create(user);
+    }
+
+    public boolean existsByEmail(String email){
+        return userGateway.existsByEmail(email);
+    }
+
 }
