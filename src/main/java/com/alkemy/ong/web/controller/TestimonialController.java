@@ -87,22 +87,25 @@ public class TestimonialController {
     @Getter @Setter @AllArgsConstructor
     @ApiModel
     public static class TestimonialDTO {
-        @ApiModelProperty( name = "id")
+        @ApiModelProperty( name = "id", example = "1")
         private Long id;
 
         @ApiModelProperty( name = "name",
                 value = "Name of the Testimonial",
-                required = true)
+                required = true,
+                example = "Martin Suarez")
         @NotNull @NotBlank @NotEmpty
         private String name;
 
         @ApiModelProperty( name = "image",
-                value = "Image url")
+                value = "Image url",
+                example = "https://s3.us-east-1.amazonaws.com/cohorte-febrero-b35bfd02/2022-03-04T20:09:32.426-foto.jpg")
         private String image;
 
         @ApiModelProperty( name = "content",
                 value = "Content",
-                required = true)
+                required = true,
+                example = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.")
         @NotNull @NotBlank @NotEmpty
         private String content;
     }

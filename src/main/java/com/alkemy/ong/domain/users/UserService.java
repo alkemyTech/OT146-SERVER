@@ -3,6 +3,7 @@ package com.alkemy.ong.domain.users;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -28,5 +29,8 @@ public class UserService {
         return userGateway.findByEmail(email);
     }
 
+    public User findById(Long id) {
+        return userGateway.findById(id);
+    }
 
 }

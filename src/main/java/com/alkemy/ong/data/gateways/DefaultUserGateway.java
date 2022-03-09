@@ -1,12 +1,16 @@
 package com.alkemy.ong.data.gateways;
 
+import com.alkemy.ong.data.entity.ActivityEntity;
 import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.UserRepository;
+import com.alkemy.ong.domain.activities.Activity;
+import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -40,6 +44,15 @@ public class DefaultUserGateway implements UserGateway {
     @Override
     public User findByEmail(String email) {
         UserEntity entity = userRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("User not found")
+                );
+        return toModel(entity);
+    }
+
+    @Override
+    public User findById(Long id) {
+        UserEntity entity = userRepository.findById(id)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("User not found")
                 );

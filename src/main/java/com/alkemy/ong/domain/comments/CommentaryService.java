@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CommentaryService implements CommentaryGateway {
+public class CommentaryService {
 
     private final CommentaryGateway gateway;
 
@@ -13,13 +13,28 @@ public class CommentaryService implements CommentaryGateway {
         this.gateway = gateway;
     }
 
-    @Override
     public Commentary create(Commentary commentary) {
         return gateway.create(commentary);
     }
 
-    @Override
     public List<Commentary> findAll() {
         return gateway.findAll();
     }
+
+    public Commentary findById(Long id) {
+        return gateway.findById(id);
+    }
+
+    public Commentary update(Commentary commentary) {
+        return gateway.update(commentary);
+    }
+
+    public void delete(Long id) {
+        gateway.delete(id);
+    }
+
+    public boolean existsById(Long id) {
+        return gateway.existsById(id);
+    }
+
 }

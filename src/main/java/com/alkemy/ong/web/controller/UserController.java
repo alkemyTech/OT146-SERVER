@@ -3,14 +3,21 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
+import com.alkemy.ong.web.exceptions.BadRequestException;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,17 +39,47 @@ public class UserController {
         return ResponseEntity.ok(toListDto(users));
     }
 
-
     @Data
     private static class UserDTO {
+        @Id
+        @GeneratedValue(strategy= GenerationType.IDENTITY)
         private Long id;
+
+        @NotBlank(message="The first name can´t be empty")
+        @Size(min = 3, max = 255, message = "First name length must be between 3 and 255 characters")
+        @Column(nullable = false)
         private String firstName;
+
+        @NotBlank(message="The last name can´t be empty")
+        @Size(min = 3, max = 255, message = "Last name length must be between 3 and 255 characters")
+        @Column(nullable = false)
         private String lastName;
+
+        @NotBlank(message="The email can´t be empty")
+        @Size(min = 10, max = 255, message = "Email length must be between 10 and 255 characters")
+        @Email
+        @Column(nullable = false, unique = true)
         private String email;
+
+        @NotBlank(message="The password can´t be empty")
+        @Size(min = 8, max = 255, message = "Password length must be between 8 and 255 characters")
+        @Column(nullable = false)
+        private String password;
+
+        @Size(max = 255, message = "The maximum photo length should be 255 characters")
+        @Column
         private String photo;
+
         private Long roleId;
+
         private String roleName;
+
+        @Column(name = "created_at")
+        @CreatedDate
         private LocalDateTime createdAt;
+
+        @Column(name = "updated_at")
+        @LastModifiedDate
         private LocalDateTime updatedAt;
     }
 
