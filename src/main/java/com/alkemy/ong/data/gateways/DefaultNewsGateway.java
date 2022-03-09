@@ -5,10 +5,13 @@ import com.alkemy.ong.data.repository.NewsRepository;
 import com.alkemy.ong.domain.news.News;
 import com.alkemy.ong.domain.news.NewsGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -47,6 +50,11 @@ public class DefaultNewsGateway implements NewsGateway {
                 .collect(Collectors.toList());
     }
 
+    //@Override
+    ////  List<NewsEntity> news = newsRepository.findAll();
+    //return toModelList(news);
+    //}
+
     @Override
     public News update(Long id, News news) {
         NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no news with such ID"));
@@ -61,8 +69,8 @@ public class DefaultNewsGateway implements NewsGateway {
 
     @Override
     public void deleteById(Long id) {
-     NewsEntity newsEntity   = newsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no news with such ID"));
-     newsRepository.delete(newsEntity);
+        NewsEntity newsEntity = newsRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("There is no news with such ID"));
+        newsRepository.delete(newsEntity);
 
     }
 

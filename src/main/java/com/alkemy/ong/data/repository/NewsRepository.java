@@ -13,5 +13,4 @@ public interface NewsRepository extends PagingAndSortingRepository<NewsEntity, L
     public Page<NewsEntity> findByDeleted(boolean deleted, Pageable pageable);
 
     Optional<NewsEntity> findById(Long id);
-
 }
