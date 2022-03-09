@@ -35,8 +35,16 @@ public class DefaultNewsGateway implements NewsGateway {
 
     @Override
     public List<News> findAll() {
-        List<NewsEntity> news = newsRepository.findAll();
-        return toModelList(news);
+        return null;
+    }
+
+    @Override
+    public List<News> listByPage(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return newsRepository.findByDeleted(false, pageable)
+                .stream()
+                .map(this::toModel)
+                .collect(Collectors.toList());
     }
 
     @Override
