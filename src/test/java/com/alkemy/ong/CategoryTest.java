@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -49,16 +50,23 @@ public class CategoryTest {
     @MockBean
     CategoryRepository categoryRepository;
 
+    @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    MessageSource messageSource;
+
 
     @Test
     void createCategoryTest() throws Exception {
 
-        CategoryEntity categoryEntity = mock(CategoryEntity.class);
+        CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName("RRHH");
         categoryEntity.setDescription("Categoria de RRHH");
         categoryEntity.setDeleted(false);
-        String category = categoryEntity.toString();
+        String category = objectMapper.writeValueAsString(categoryEntity);
+
+        when(categoryRepository.save(categoryEntity)).thenReturn(categoryEntity);
 
 
         mockMvc.perform(post("/ong/categories").contentType(MediaType.APPLICATION_JSON).content(category));
@@ -79,19 +87,34 @@ public class CategoryTest {
     }
 
     @Test
+    void deleteCategoryTestWrongId() throws Exception {
+
+        when(categoryRepository.existsById(-1L)).thenReturn(false);
+
+        mockMvc.perform(delete("/ong/categories/500")).andExpect(status().isNotFound());
+
+        String message = messageSource.getMessage("Id not found",
+        null, null);
+
+        ResponseEntity <?> responseEntity = new ResponseEntity(message, HttpStatus.NOT_FOUND);
+        assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        assertEquals(message, responseEntity.getBody());
+    }
+
+    @Test
     void listCategoriesTest() throws Exception {
 
         CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName("Marketing");
         categoryEntity.setDescription("Categoria de marketing");
         categoryEntity.setDeleted(false);
-        String category = categoryEntity.toString();
+        String category = objectMapper.writeValueAsString(categoryEntity);
 
         CategoryEntity categoryEntity2 = new CategoryEntity();
         categoryEntity2.setName("Salud");
         categoryEntity2.setDescription("categoria de salud");
         categoryEntity2.setDeleted(false);
-        String category2 = categoryEntity.toString();
+        String category2 = objectMapper.writeValueAsString(categoryEntity2);
 
         List<CategoryEntity> ce = new ArrayList<>();
         ce.add(categoryEntity);
@@ -99,24 +122,31 @@ public class CategoryTest {
         
         when(categoryRepository.findAll()).thenReturn(ce);
 
-        mockMvc.perform(get("/ong/categories")).andExpect(status().isOk()).andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)));
+        mockMvc.perform(get("/ong/categories")).andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].name", is("Marketing")))
+                .andExpect(jsonPath("$[1].name", is("Salud")));
+   
     }
 
     @Test
     void updateCategoryTest() throws Exception { 
 
-        CategoryEntity categoryEntity = mock(CategoryEntity.class);
+        CategoryEntity categoryEntity = new CategoryEntity();
         categoryEntity.setName("Marketing");
         categoryEntity.setDescription("Categoria de marketing");
         categoryEntity.setDeleted(false);
-        String category = categoryEntity.toString();
+        String category = objectMapper.writeValueAsString(categoryEntity);
+
+        when(categoryRepository.save(categoryEntity)).thenReturn(categoryEntity);
 
         mockMvc.perform(put("/ong/categories/1").contentType(MediaType.APPLICATION_JSON));
 
-        CategoryEntity categoryEntity2 = mock(CategoryEntity.class);
+        CategoryEntity categoryEntity2 = new CategoryEntity();
         categoryEntity2.setName(categoryEntity.getName());
         categoryEntity2.setDescription(categoryEntity.getDescription());
         categoryEntity2.setDeleted(categoryEntity.getDeleted());
+        String category2 = objectMapper.writeValueAsString(categoryEntity2);
 
         ResponseEntity<?> response = new ResponseEntity(categoryEntity2, HttpStatus.OK);
         assertEquals(HttpStatus.OK, response.getStatusCode());
