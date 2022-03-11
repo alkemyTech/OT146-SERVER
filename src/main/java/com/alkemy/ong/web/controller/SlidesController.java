@@ -4,12 +4,15 @@ import com.alkemy.ong.domain.slides.SimpleSlide;
 import com.alkemy.ong.domain.slides.Slides;
 import com.alkemy.ong.domain.slides.SlidesService;
 import com.alkemy.ong.domain.slides.response.SlideShortResponse;
+import com.alkemy.ong.domain.storage.Image;
+import com.alkemy.ong.domain.storage.StorageService;
 import com.alkemy.ong.web.controller.OrganizationController.OrganizationDto;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -25,9 +28,12 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/slides")
 public class SlidesController {
     private final SlidesService slidesService;
+    private final StorageService storageService;
 
-    public SlidesController(SlidesService slidesService) {
+    public SlidesController(SlidesService slidesService, StorageService storageService) {
+
         this.slidesService = slidesService;
+        this.storageService = storageService;
     }
 
     @GetMapping
@@ -58,6 +64,9 @@ public class SlidesController {
 
     @PostMapping
     public ResponseEntity<SlidesDto> createSlide(@Valid @RequestBody SimpleSlideDto slideBody) {
+
+        Image image = storageService.save(slideBody.getImageEncoded(), "slide.jpeg");
+        slideBody.setImageUrl(image.getUrl());
 
         SlidesDto slidesDto = toDto(slidesService.create(toSimpleDomain(slideBody)));
 
@@ -121,7 +130,6 @@ public class SlidesController {
     public SimpleSlide toSimpleDomain(SimpleSlideDto simpleSlideDto){
         return SimpleSlide.builder()
                 .id(simpleSlideDto.getId())
-                .imageEncoded(simpleSlideDto.getImageEncoded())
                 .imageUrl(simpleSlideDto.getImageUrl())
                 .text(simpleSlideDto.getText())
                 .slideOrder(simpleSlideDto.getSlideOrder())

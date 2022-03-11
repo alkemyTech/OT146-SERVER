@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @Builder
 public class SimpleSlide {
     private Long id;
-    private String imageEncoded;
     private String imageUrl;
     private String text;
     private Integer slideOrder;

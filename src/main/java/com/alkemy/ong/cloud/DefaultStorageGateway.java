@@ -82,6 +82,11 @@ public class DefaultStorageGateway implements StorageGateway {
     }
 
     @Override
+    public Image save(String base64, String fileName) {
+        MultipartFile image = this.base64ToImage(base64, fileName);
+        return this.save(image);
+    }
+
     public MultipartFile base64ToImage(String encoded, String fileName) {
         // Quito "data:image/jpeg;base64" para quedarme solo con los bytes a decodear
         String trimmedEncodedImage = encoded.substring(encoded.indexOf(",") + 1);

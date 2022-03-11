@@ -6,4 +6,6 @@ public interface StorageGateway {
 
     public Image save(MultipartFile multipartFile);
 
+    public Image save(String base64, String fileName);
+
 }

@@ -11,4 +11,9 @@ public class StorageService {
     public Image save(MultipartFile multipartFile){
         return this.storageGateway.save(multipartFile);
     }
+
+    public Image save(String base64, String fileName){
+        return this.storageGateway.save(base64, fileName);
+    }
+
 }
