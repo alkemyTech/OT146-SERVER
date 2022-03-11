@@ -65,9 +65,6 @@ public class SlidesController {
     @PostMapping
     public ResponseEntity<SlidesDto> createSlide(@Valid @RequestBody SimpleSlideDto slideBody) {
 
-        Image image = storageService.save(slideBody.getImageEncoded(), "slide.jpeg");
-        slideBody.setImageUrl(image.getUrl());
-
         SlidesDto slidesDto = toDto(slidesService.create(toSimpleDomain(slideBody)));
 
         return new ResponseEntity<>(slidesDto, HttpStatus.CREATED);
@@ -130,6 +127,7 @@ public class SlidesController {
     public SimpleSlide toSimpleDomain(SimpleSlideDto simpleSlideDto){
         return SimpleSlide.builder()
                 .id(simpleSlideDto.getId())
+                .imageEncoded(simpleSlideDto.getImageEncoded())
                 .imageUrl(simpleSlideDto.getImageUrl())
                 .text(simpleSlideDto.getText())
                 .slideOrder(simpleSlideDto.getSlideOrder())
