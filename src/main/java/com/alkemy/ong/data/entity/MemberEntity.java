@@ -44,19 +44,30 @@ public class MemberEntity {
 
     private boolean deleted = Boolean.FALSE;
 
-     @Override
+    @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
+        final MemberEntity other = (MemberEntity) obj;
+        if (other.getId() != null) {
+            return other.getName().equals(getName())
+                    && other.getId().equals(getId())
+                    && other.getFacebookUrl().equals(getFacebookUrl())
+                    && other.getInstagramUrl().equals(getInstagramUrl())
+                    && other.getLinkedinUrl().equals(getLinkedinUrl())
+                    && other.getImage().equals(getImage())
+                    && other.getDescription().equals(getDescription())
+                    && other.getCreatedAt().equals(getCreatedAt());
+        } else {
+            return other.getName().equals(getName())
+                    && other.getFacebookUrl().equals(getFacebookUrl())
+                    && other.getInstagramUrl().equals(getInstagramUrl())
+                    && other.getLinkedinUrl().equals(getLinkedinUrl())
+                    && other.getImage().equals(getImage())
+                    && other.getDescription().equals(getDescription())
+                    && other.getCreatedAt().equals(getCreatedAt());
         }
-        if (obj instanceof MemberEntity) {
-            if (((MemberEntity) obj).getName().equals(getName())) {
-                return true;
-            }
-        }
-       return false;
     }
+
 }
