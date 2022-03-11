@@ -20,11 +20,11 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static com.alkemy.ong.web.controller.MemberController.*;
+import static java.util.Arrays.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -66,11 +66,10 @@ class MemberControllerTest {
 
     @Test
     void save_BadRequest() throws Exception {
-        MemberDTO memberDTO = MemberDTO.builder()
-                .name(null)
-                .image(null)
-                .build();;
-        MemberEntity entityWithoutId = buildEntityWithoutId();
+        MemberDTO memberDTO = buildDto();
+        memberDTO.setName(null);
+        memberDTO.setImage(null);
+        MemberEntity entityWithoutId = buildEntity(null);
         MemberEntity resultEntityWhitId = buildEntity(1L);
 
         when(memberRepository.save(entityWithoutId)).thenReturn(resultEntityWhitId);
@@ -82,22 +81,8 @@ class MemberControllerTest {
     }
 
     @Test
-    void save_NotFound() throws Exception {
-        MemberDTO memberDTO = buildDto();
-        MemberEntity entityWithoutId = buildEntityWithoutId();
-        MemberEntity resultEntityWhitId = buildEntity(1L);
-
-        when(memberRepository.save(entityWithoutId)).thenReturn(resultEntityWhitId);
-
-        mockMvc.perform(post("/saveMember")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(memberDTO)))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
     void getAllMembers_success() throws Exception {
-        List<MemberEntity> members = Arrays.asList(buildEntity(1L), buildEntity(2L), buildEntity(3L));
+        List<MemberEntity> members = asList(buildEntity(1L), buildEntity(2L), buildEntity(3L));
 
         when(memberRepository.findAll()).thenReturn(members);
 
@@ -107,16 +92,6 @@ class MemberControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", is(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].id", is(2)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].id", is(3)));
-    }
-
-    @Test
-    void getAllMembers_NotFound() throws Exception {
-        List<MemberEntity> members = Arrays.asList(buildEntity(1L), buildEntity(2L), buildEntity(3L));
-
-        when(memberRepository.findAll()).thenReturn(members);
-
-        mockMvc.perform(get("/member/00").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -167,30 +142,22 @@ class MemberControllerTest {
 
     @Test
     void update_success() throws Exception {
-        MemberDTO dtoBody = MemberDTO.builder()
-                .name("Update member name")
-                .facebookUrl("https://www.facebook.com/profile")
-                .instagramUrl("https://www.instagram.com/profile")
-                .linkedinUrl("https://www.linkedin.com/profile")
-                .image("user/img/photo.jpg")
-                .description("Update description")
-                .createdAt(LocalDate.of(2022, 03, 05))
-                .build();
+        MemberDTO dtoBody = buildDto();
         MemberEntity resultEntity = buildEntity(5L);
 
         when(memberRepository.findById(5L)).thenReturn(Optional.of(resultEntity));
         when(memberRepository.save(resultEntity)).thenReturn(resultEntity);
 
-       mockMvc.perform(put("/members/{id}", 5)
+       mockMvc.perform(put("/members/5")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dtoBody)))
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(5)))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name", is("Update member name")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name", is("TestName")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.facebookUrl", is("https://www.facebook.com/profile")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.instagramUrl", is("https://www.instagram.com/profile")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.image", is("user/img/photo.jpg")))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description", is("Update description")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description", is("Member description")))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.createdAt", is("2022-03-05")));
     }
 
@@ -270,7 +237,7 @@ class MemberControllerTest {
     private List<MemberEntity> buildEntityListWhitId() {
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            memberEntities.add(buildEntity(i + 1));
+            memberEntities.add(buildEntity(Long.valueOf(i + 1)));
         }
         return memberEntities;
     }
