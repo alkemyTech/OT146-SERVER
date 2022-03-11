@@ -5,10 +5,13 @@ import com.alkemy.ong.data.repository.RolesRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserGateway;
+import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -67,10 +70,27 @@ public class DefaultUserGateway implements UserGateway {
     @Override
     public User create(User user) {
         UserEntity entity = toEntity(user);
+        entity.setCreatedAt(LocalDateTime.now());
         return toModel(userRepository.save(entity));
     }
 
-    private UserEntity toEntity(User user){
+    @Override
+    public User update(Long id, User user) {
+        UserEntity entity = userRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("User not found")
+                );
+        if (!Objects.equals(entity.getEmail(), user.getEmail())
+                && userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new BadRequestException("Email taken!");
+        }
+        user.setId(id);
+        entity = toEntity(user);
+        entity.setUpdatedAt(LocalDateTime.now());
+        return toModel(userRepository.save(entity));
+    }
+
+    private UserEntity toEntity(User user) {
         return UserEntity.builder()
                 .id(user.getId())
                 .firstName(user.getFirstName())
@@ -87,6 +107,7 @@ public class DefaultUserGateway implements UserGateway {
     }
 
     private User toModel(UserEntity entity) {
+        String roleName = entity.getRole().getId() == 1L ? "ADMIN" : "USER";
         return User.builder()
                 .id(entity.getId())
                 .firstName(entity.getFirstName())
@@ -95,6 +116,7 @@ public class DefaultUserGateway implements UserGateway {
                 .password(entity.getPassword())
                 .photo(entity.getPhoto())
                 .roleId(entity.getRole().getId())
+                .roleName(roleName)
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
