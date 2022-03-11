@@ -55,37 +55,30 @@ public class CategoryControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-     private CategoryEntity buildEntity(Long id, String name, String description) {
-
-        CategoryEntity categoryEntity = new CategoryEntity();
-        categoryEntity.setId(id);
-        categoryEntity.setName(name);
-        categoryEntity.setDescription(description);
-        categoryEntity.setDeleted(false);
-        return categoryEntity;
-        
-    }
+   
 
     @Test
     void createCategoryTest() throws Exception {
  
 
         CategoryEntity ceWithIdNull = buildEntity(null, "Marketing", "category of marketing");
-        CategoryEntity ceWithId = buildEntity((long)1, "Health", "category of health");
+        CategoryEntity ceWithId = buildEntity(1L, "Health", "category of health");
 
         when(categoryRepository.save(ceWithIdNull)).thenReturn(ceWithId);
 
         mockMvc.perform(post("/ong/categories").contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(ceWithId)))
-            .andExpect(status().isCreated());        
-
+            .andExpect(status().isCreated())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(1L)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.name", is("Health")))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.description", is("category of health")));        
     }
 
     @Test
     void deleteCategoryTest() throws Exception {
 
-        when(categoryRepository.existsById((long) 5)).thenReturn(true);
-        when(categoryRepository.findById((long) 5)).thenReturn(Optional.of(buildEntity((long)5, "RRHH", "category of RRHH")));
+        when(categoryRepository.existsById(5L)).thenReturn(true);
+        when(categoryRepository.findById(5L)).thenReturn(Optional.of(buildEntity(5L, "RRHH", "category of RRHH")));
 
         mockMvc.perform(delete("/ong/categories/5")).andExpect(status().isNoContent()); 
     }
@@ -102,8 +95,8 @@ public class CategoryControllerTest {
     @Test
     void listCategoriesTest() throws Exception {
 
-        CategoryEntity categoryEntity = buildEntity((long)1, "Marketing", "category of marketing");
-        CategoryEntity categoryEntity2 = buildEntity((long)2, "Health", "category of health" );
+        CategoryEntity categoryEntity = buildEntity(1L, "Marketing", "category of marketing");
+        CategoryEntity categoryEntity2 = buildEntity(2L, "Health", "category of health" );
     
         List<CategoryEntity> ce = new ArrayList<>();
         ce.add(categoryEntity);
@@ -122,16 +115,27 @@ public class CategoryControllerTest {
     @Test
     void updateCategoryTest() throws Exception { 
 
-        CategoryEntity categoryEntity = buildEntity((long)1, "Marketing", "category of marketing");
+        CategoryEntity categoryEntity = buildEntity(1L, "Marketing", "category of marketing");
 
         when(categoryRepository.save(categoryEntity)).thenReturn(categoryEntity);
-        when(categoryRepository.findById((long) 1)).thenReturn(Optional.of(categoryEntity)); 
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(categoryEntity)); 
         
         CategoryEntity categoryEntity2 = buildEntity(categoryEntity.getId(), categoryEntity.getName(), categoryEntity.getDescription());
         
         mockMvc.perform(put("/ong/categories/1").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(categoryEntity2)))
                 .andExpect(status().isOk());
 
+    }
+
+    private CategoryEntity buildEntity(Long id, String name, String description) {
+
+        CategoryEntity categoryEntity = new CategoryEntity();
+        categoryEntity.setId(id);
+        categoryEntity.setName(name);
+        categoryEntity.setDescription(description);
+        categoryEntity.setDeleted(false);
+        return categoryEntity;
+        
     }
     
 }
