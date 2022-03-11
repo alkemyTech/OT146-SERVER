@@ -98,7 +98,7 @@ class MemberControllerTest {
     void getMembersByPage_success() throws Exception {
         List<MemberDTO> memberDTOS = new ArrayList<>();
         Pageable pageable = PageRequest.of(1, 10);
-        List<MemberEntity> memberEntities = buildEntityListWhitId();
+        List<MemberEntity> memberEntities = buildEntityListWithId();
         Page<MemberEntity> memberEntityPage = new PageImpl(memberEntities);
 
         when(memberRepository.findByDeleted(false, pageable)).thenReturn(memberEntityPage);
@@ -114,7 +114,7 @@ class MemberControllerTest {
     void getMembersByPage_BadRequest() throws Exception {
         List<MemberDTO> memberDTOS = new ArrayList<>();
         Pageable pageable = PageRequest.of(1, 10);
-        List<MemberEntity> memberEntities = buildEntityListWhitId();
+        List<MemberEntity> memberEntities = buildEntityListWithId();
         Page<MemberEntity> memberEntityPage = new PageImpl(memberEntities);
 
         when(memberRepository.findByDeleted(false, pageable)).thenReturn(memberEntityPage);
@@ -129,7 +129,7 @@ class MemberControllerTest {
     void getMembersByPage_NotFound() throws Exception {
         List<MemberDTO> memberDTOS = new ArrayList<>();
         Pageable pageable = PageRequest.of(1, 10);
-        List<MemberEntity> memberEntities = buildEntityListWhitId();
+        List<MemberEntity> memberEntities = buildEntityListWithId();
         Page<MemberEntity> memberEntityPage = new PageImpl(memberEntities);
 
         when(memberRepository.findByDeleted(false, pageable)).thenReturn(memberEntityPage);
@@ -234,7 +234,7 @@ class MemberControllerTest {
                 .build();
     }
 
-    private List<MemberEntity> buildEntityListWhitId() {
+    private List<MemberEntity> buildEntityListWithId() {
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             memberEntities.add(buildEntity(Long.valueOf(i + 1)));
