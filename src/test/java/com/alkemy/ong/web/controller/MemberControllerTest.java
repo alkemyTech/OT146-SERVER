@@ -46,8 +46,8 @@ class MemberControllerTest {
     @Test
     void save_success() throws Exception {
         MemberDTO memberDTO = buildDto();
-        MemberEntity entityWithoutId = buildEntityWithoutId();
-        MemberEntity resultEntityWhitId = buildEntityWhitId(1L);
+        MemberEntity entityWithoutId = buildEntity(null);
+        MemberEntity resultEntityWhitId = buildEntity(1L);
 
         when(memberRepository.save(entityWithoutId)).thenReturn(resultEntityWhitId);
 
@@ -71,7 +71,7 @@ class MemberControllerTest {
                 .image(null)
                 .build();;
         MemberEntity entityWithoutId = buildEntityWithoutId();
-        MemberEntity resultEntityWhitId = buildEntityWhitId(1L);
+        MemberEntity resultEntityWhitId = buildEntity(1L);
 
         when(memberRepository.save(entityWithoutId)).thenReturn(resultEntityWhitId);
 
@@ -85,7 +85,7 @@ class MemberControllerTest {
     void save_NotFound() throws Exception {
         MemberDTO memberDTO = buildDto();
         MemberEntity entityWithoutId = buildEntityWithoutId();
-        MemberEntity resultEntityWhitId = buildEntityWhitId(1L);
+        MemberEntity resultEntityWhitId = buildEntity(1L);
 
         when(memberRepository.save(entityWithoutId)).thenReturn(resultEntityWhitId);
 
@@ -97,7 +97,7 @@ class MemberControllerTest {
 
     @Test
     void getAllMembers_success() throws Exception {
-        List<MemberEntity> members = Arrays.asList(buildEntityWhitId(1L), buildEntityWhitId(2L), buildEntityWhitId(3L));
+        List<MemberEntity> members = Arrays.asList(buildEntity(1L), buildEntity(2L), buildEntity(3L));
 
         when(memberRepository.findAll()).thenReturn(members);
 
@@ -111,7 +111,7 @@ class MemberControllerTest {
 
     @Test
     void getAllMembers_NotFound() throws Exception {
-        List<MemberEntity> members = Arrays.asList(buildEntityWhitId(1L), buildEntityWhitId(2L), buildEntityWhitId(3L));
+        List<MemberEntity> members = Arrays.asList(buildEntity(1L), buildEntity(2L), buildEntity(3L));
 
         when(memberRepository.findAll()).thenReturn(members);
 
@@ -176,7 +176,7 @@ class MemberControllerTest {
                 .description("Update description")
                 .createdAt(LocalDate.of(2022, 03, 05))
                 .build();
-        MemberEntity resultEntity = buildEntityWhitId(5L);
+        MemberEntity resultEntity = buildEntity(5L);
 
         when(memberRepository.findById(5L)).thenReturn(Optional.of(resultEntity));
         when(memberRepository.save(resultEntity)).thenReturn(resultEntity);
@@ -200,7 +200,7 @@ class MemberControllerTest {
                 .name(null)
                 .image(null)
                 .build();
-        MemberEntity resultEntity = buildEntityWhitId(5L);
+        MemberEntity resultEntity = buildEntity(5L);
 
         when(memberRepository.findById(5L)).thenReturn(Optional.of(resultEntity));
         when(memberRepository.save(resultEntity)).thenReturn(resultEntity);
@@ -225,7 +225,7 @@ class MemberControllerTest {
 
     @Test
     void delete_success() throws Exception {
-        MemberEntity entity = buildEntityWhitId(20L);
+        MemberEntity entity = buildEntity(20L);
 
         when(memberRepository.findById(entity.getId())).thenReturn(Optional.of(entity));
 
@@ -242,21 +242,9 @@ class MemberControllerTest {
     }
 
 
-    private MemberEntity buildEntityWhitId(long id) {
+    private MemberEntity buildEntity(Long id) {
         return MemberEntity.builder()
                 .id(id)
-                .name("TestName")
-                .facebookUrl("https://www.facebook.com/profile")
-                .instagramUrl("https://www.instagram.com/profile")
-                .linkedinUrl("https://www.linkedin.com/profile")
-                .image("user/img/photo.jpg")
-                .description("Member description")
-                .createdAt(LocalDate.of(2022, 03, 05))
-                .build();
-    }
-
-    private MemberEntity buildEntityWithoutId() {
-        return MemberEntity.builder()
                 .name("TestName")
                 .facebookUrl("https://www.facebook.com/profile")
                 .instagramUrl("https://www.instagram.com/profile")
@@ -282,7 +270,7 @@ class MemberControllerTest {
     private List<MemberEntity> buildEntityListWhitId() {
         List<MemberEntity> memberEntities = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            memberEntities.add(buildEntityWhitId(i + 1));
+            memberEntities.add(buildEntity(i + 1));
         }
         return memberEntities;
     }
