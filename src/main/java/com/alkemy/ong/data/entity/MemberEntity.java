@@ -8,6 +8,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+import static com.google.common.base.Objects.equal;
+
 @Entity
 @Table(name = "members")
 @Getter
@@ -49,25 +51,14 @@ public class MemberEntity {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        final MemberEntity other = (MemberEntity) obj;
-        if (other.getId() != null) {
-            return other.getName().equals(getName())
-                    && other.getId().equals(getId())
-                    && other.getFacebookUrl().equals(getFacebookUrl())
-                    && other.getInstagramUrl().equals(getInstagramUrl())
-                    && other.getLinkedinUrl().equals(getLinkedinUrl())
-                    && other.getImage().equals(getImage())
-                    && other.getDescription().equals(getDescription())
-                    && other.getCreatedAt().equals(getCreatedAt());
-        } else {
-            return other.getName().equals(getName())
-                    && other.getFacebookUrl().equals(getFacebookUrl())
-                    && other.getInstagramUrl().equals(getInstagramUrl())
-                    && other.getLinkedinUrl().equals(getLinkedinUrl())
-                    && other.getImage().equals(getImage())
-                    && other.getDescription().equals(getDescription())
-                    && other.getCreatedAt().equals(getCreatedAt());
-        }
+        MemberEntity entity = (MemberEntity) obj;
+        return equal(getId(), entity.getId())
+                && equal(getName(), entity.getName())
+                && equal(getFacebookUrl(), entity.getFacebookUrl())
+                && equal(getInstagramUrl(), entity.getInstagramUrl())
+                && equal(getLinkedinUrl(), entity.getLinkedinUrl())
+                && equal(getImage(), entity.getImage())
+                && equal(getDescription(), entity.getDescription())
+                && equal(getCreatedAt(), entity.getCreatedAt());
     }
-
 }
