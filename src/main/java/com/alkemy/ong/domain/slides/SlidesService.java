@@ -1,22 +1,21 @@
 package com.alkemy.ong.domain.slides;
 
-import com.alkemy.ong.domain.storage.Image;
-import com.alkemy.ong.domain.storage.StorageGateway;
+import com.alkemy.ong.domain.cloud.CloudGateway;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class SlidesService {
     private final SlidesGateway slidesGateways;
-    private final StorageGateway storageGateway;
+    private final CloudGateway cloudGateway;
 
-    public SlidesService(SlidesGateway slidesGateways, StorageGateway storageGateway){
+    public SlidesService(SlidesGateway slidesGateways, CloudGateway cloudGateway){
         this.slidesGateways = slidesGateways;
-        this.storageGateway = storageGateway;
+        this.cloudGateway = cloudGateway;
     }
 
     public Slides create(SimpleSlide slide) {
-        String imageUrl = storageGateway
+        String imageUrl = cloudGateway
                 .save(slide.getImageEncoded(), "slide.jpeg")
                 .getUrl();
 

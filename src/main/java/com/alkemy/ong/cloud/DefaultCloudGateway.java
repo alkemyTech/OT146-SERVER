@@ -1,8 +1,8 @@
 package com.alkemy.ong.cloud;
 
-import com.alkemy.ong.domain.storage.CustomMultipartFile;
-import com.alkemy.ong.domain.storage.Image;
-import com.alkemy.ong.domain.storage.StorageGateway;
+import com.alkemy.ong.domain.cloud.CustomMultipartFile;
+import com.alkemy.ong.domain.cloud.Image;
+import com.alkemy.ong.domain.cloud.CloudGateway;
 import com.alkemy.ong.web.exceptions.ServiceUnavailable;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.AWSCredentials;
@@ -12,7 +12,6 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.Base64;
 import org.joda.time.LocalDateTime;
@@ -26,7 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Component
-public class DefaultStorageGateway implements StorageGateway {
+public class DefaultCloudGateway implements CloudGateway {
     private AmazonS3 s3client;
 
     @Value("${amazonProperties.bucketName}")

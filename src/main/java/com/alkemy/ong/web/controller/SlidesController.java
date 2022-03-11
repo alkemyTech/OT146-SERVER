@@ -4,15 +4,13 @@ import com.alkemy.ong.domain.slides.SimpleSlide;
 import com.alkemy.ong.domain.slides.Slides;
 import com.alkemy.ong.domain.slides.SlidesService;
 import com.alkemy.ong.domain.slides.response.SlideShortResponse;
-import com.alkemy.ong.domain.storage.Image;
-import com.alkemy.ong.domain.storage.StorageService;
+import com.alkemy.ong.domain.cloud.CloudService;
 import com.alkemy.ong.web.controller.OrganizationController.OrganizationDto;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -28,12 +26,12 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/slides")
 public class SlidesController {
     private final SlidesService slidesService;
-    private final StorageService storageService;
+    private final CloudService cloudService;
 
-    public SlidesController(SlidesService slidesService, StorageService storageService) {
+    public SlidesController(SlidesService slidesService, CloudService cloudService) {
 
         this.slidesService = slidesService;
-        this.storageService = storageService;
+        this.cloudService = cloudService;
     }
 
     @GetMapping

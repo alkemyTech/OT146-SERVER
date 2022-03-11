@@ -7,10 +7,8 @@ import com.alkemy.ong.data.repository.SlidesRepository;
 import com.alkemy.ong.domain.slides.SimpleSlide;
 import com.alkemy.ong.domain.slides.SlidesGateway;
 import com.alkemy.ong.domain.slides.Slides;
-import com.alkemy.ong.domain.storage.StorageService;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 

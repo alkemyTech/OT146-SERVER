@@ -1,8 +1,8 @@
-package com.alkemy.ong.domain.storage;
+package com.alkemy.ong.domain.cloud;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public interface StorageGateway {
+public interface CloudGateway {
 
     public Image save(MultipartFile multipartFile);
 

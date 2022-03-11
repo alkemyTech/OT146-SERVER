@@ -1,4 +1,4 @@
-package com.alkemy.ong.domain.storage;
+package com.alkemy.ong.domain.cloud;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
