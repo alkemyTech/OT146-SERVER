@@ -1,4 +1,4 @@
-package com.alkemy.ong.domain.security;
+package com.alkemy.ong.web.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
