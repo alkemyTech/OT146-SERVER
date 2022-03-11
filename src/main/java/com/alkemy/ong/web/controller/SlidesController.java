@@ -83,7 +83,7 @@ public class SlidesController {
     }
 
 
-    public SlidesDto toDto(Slides slides){
+    public static SlidesDto toDto(Slides slides){
         return SlidesDto.builder()
                 .id(slides.getId())
                 .imageUrl(slides.getImageUrl())
@@ -95,6 +95,7 @@ public class SlidesController {
                 .updatedAt(slides.getUpdatedAt())
                 .build();
     }
+
 
     public Slides toDomain(SlidesDto slidesDto){
         return Slides.builder()
@@ -109,7 +110,7 @@ public class SlidesController {
                 .build();
     }
 
-    public SimpleSlideDto toSimpleDto(SimpleSlide slides){
+    public static SimpleSlideDto toSimpleDto(SimpleSlide slides){
         return SimpleSlideDto.builder()
                 .id(slides.getId())
                 .imageUrl(slides.getImageUrl())

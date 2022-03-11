@@ -25,7 +25,7 @@ public class DefaultSlidesGateway implements SlidesGateway {
         this.organizationRepository = organizationRepository;
     }
 
-    private Slides toDomain(SlidesEntity slidesEntity){
+    public static Slides toDomain(SlidesEntity slidesEntity){
         return Slides.builder()
                 .id(slidesEntity.getId())
                 .imageUrl(slidesEntity.getImageUrl())
@@ -38,7 +38,20 @@ public class DefaultSlidesGateway implements SlidesGateway {
                 .build();
     }
 
-    private SlidesEntity toEntity(Slides slides){
+    public static SimpleSlide simpleToDomain(SlidesEntity slidesEntity){
+        return SimpleSlide.builder()
+                .id(slidesEntity.getId())
+                .imageUrl(slidesEntity.getImageUrl())
+                .text(slidesEntity.getText())
+                .organizationId(slidesEntity.getOrganizationEntity().getIdOrganization())
+                .slideOrder(slidesEntity.getSlideOrder())
+                .deleted(slidesEntity.getDeleted())
+                .createdAt(slidesEntity.getCreatedAt())
+                .updatedAt(slidesEntity.getUpdatedAt())
+                .build();
+    }
+
+    public static SlidesEntity toEntity(Slides slides){
         return SlidesEntity.builder()
                 .id(slides.getId())
                 .imageUrl(slides.getImageUrl())
@@ -48,7 +61,7 @@ public class DefaultSlidesGateway implements SlidesGateway {
                 .build();
     }
 
-    private SlidesEntity simpleToEntity(SimpleSlide slides, OrganizationEntity organization){
+    public static SlidesEntity simpleToEntity(SimpleSlide slides, OrganizationEntity organization){
         return SlidesEntity.builder()
                 .id(slides.getId())
                 .imageUrl(slides.getImageUrl())

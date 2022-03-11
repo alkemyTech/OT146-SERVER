@@ -29,7 +29,7 @@ public class CommentaryEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "news_id")
-    private NewsEntity newsId;
+    private NewsEntity newsEntity;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

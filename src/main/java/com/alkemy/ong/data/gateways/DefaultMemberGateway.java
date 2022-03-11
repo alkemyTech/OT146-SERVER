@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -80,7 +79,7 @@ public class DefaultMemberGateway implements MemberGateway {
                 .linkedinUrl(member.getLinkedinUrl())
                 .image(member.getImage())
                 .description(member.getDescription())
-                .createdAt(toLocalDate(member.getCreatedAt()))
+                .createdAt(member.getCreatedAt())
                 .build();
     }
 
@@ -93,13 +92,8 @@ public class DefaultMemberGateway implements MemberGateway {
                 .linkedinUrl(entity.getLinkedinUrl())
                 .image(entity.getImage())
                 .description(entity.getDescription())
-                .createdAt(entity.getCreatedAt().toString())
+                .createdAt(entity.getCreatedAt())
                 .build();
-    }
-
-    private LocalDate toLocalDate(String stringDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-        return LocalDate.parse(stringDate, formatter);
     }
 
     private List<Member> toModelList(List<MemberEntity> members) {
