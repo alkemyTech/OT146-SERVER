@@ -4,9 +4,7 @@ package com.alkemy.ong.web.controller;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
-import jdk.jfr.Unsigned;
 import lombok.Data;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -45,9 +43,9 @@ public class UserController {
 
 
     @PostMapping("/auth/register")
-    public ResponseEntity<UserDTO> register (@Valid @RequestBody UserDTO newUser){
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO newUser) {
 
-        if(userService.existsByEmail(newUser.email)){
+        if (userService.existsByEmail(newUser.email)) {
             throw new BadRequestException("The email is already registered");
         }
 
@@ -58,26 +56,36 @@ public class UserController {
     }
 
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UserDTO> update(@PathVariable("id") Long id,
+                                          @Valid @RequestBody UserDTO dto) {
+
+        dto.setPassword(encoder.encode(dto.password));
+        UserDTO dtoUpdated = toDto(userService.update(id, toDomain(dto)));
+        return new ResponseEntity<>(dtoUpdated, HttpStatus.OK);
+    }
+
+
     @Data
     private static class UserDTO {
         private Long id;
 
-        @NotBlank(message="The first name can´t be empty")
+        @NotBlank(message = "The first name can´t be empty")
         @Size(min = 3, max = 255, message = "First name length must be between 3 and 255 characters")
         @Column(nullable = false)
         private String firstName;
 
-        @NotBlank(message="The last name can´t be empty")
+        @NotBlank(message = "The last name can´t be empty")
         @Size(min = 3, max = 255, message = "Last name length must be between 3 and 255 characters")
         @Column(nullable = false)
         private String lastName;
 
-        @NotBlank(message="The email can´t be empty")
+        @NotBlank(message = "The email can´t be empty")
         @Size(min = 10, max = 255, message = "Email length must be between 10 and 255 characters")
         @Email
         private String email;
 
-        @NotBlank(message="The password can´t be empty")
+        @NotBlank(message = "The password can´t be empty")
         @Size(min = 8, max = 255, message = "Password length must be between 8 and 255 characters")
         @Column(nullable = false)
         private String password;

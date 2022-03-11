@@ -3,7 +3,6 @@ package com.alkemy.ong.domain.users;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -41,4 +40,7 @@ public class UserService {
         return userGateway.existsByEmail(email);
     }
 
+    public User update(Long id, User user) {
+        return userGateway.update(id, user);
+    }
 }
