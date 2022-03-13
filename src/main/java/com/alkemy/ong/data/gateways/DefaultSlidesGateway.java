@@ -19,7 +19,8 @@ public class DefaultSlidesGateway implements SlidesGateway {
     private final SlidesRepository slidesRepository;
     private final OrganizationRepository organizationRepository;
 
-    public DefaultSlidesGateway(SlidesRepository slidesRepository, OrganizationRepository organizationRepository){
+    public DefaultSlidesGateway(SlidesRepository slidesRepository,
+                                OrganizationRepository organizationRepository){
 
         this.slidesRepository = slidesRepository;
         this.organizationRepository = organizationRepository;
@@ -73,13 +74,22 @@ public class DefaultSlidesGateway implements SlidesGateway {
 
     @Override
     public Slides create(SimpleSlide slides) {
-        // TODO: almacenar imagenes en Bucket Amazon S3
 
         OrganizationEntity organization = organizationRepository
                 .findById(slides.getOrganizationId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot find organization with id: " + slides.getOrganizationId()));
 
         SlidesEntity slideEntity = simpleToEntity(slides, organization);
+
+        // Si no se especifica el orden del slide, busco el último valor y le sumo uno
+        if(slideEntity.getSlideOrder() == null){
+            slideEntity.setSlideOrder(
+                    slidesRepository
+                            .findTopByOrderBySlideOrderDesc()
+                            .getSlideOrder() + 1
+            );
+        }
+
         slideEntity.setDeleted(false);
 
         return toDomain(slidesRepository.save(slideEntity));
