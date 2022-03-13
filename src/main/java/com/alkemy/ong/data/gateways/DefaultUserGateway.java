@@ -1,14 +1,17 @@
 package com.alkemy.ong.data.gateways;
 
+import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.RolesRepository;
 import com.alkemy.ong.data.repository.UserRepository;
+import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserGateway;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -84,10 +87,8 @@ public class DefaultUserGateway implements UserGateway {
                 && userRepository.findByEmail(user.getEmail()).isPresent()) {
             throw new BadRequestException("Email taken!");
         }
-        user.setId(id);
-        entity = toEntity(user);
-        entity.setUpdatedAt(LocalDateTime.now());
-        return toModel(userRepository.save(entity));
+        UserEntity UpdatedEntity = updateUser(entity, user);
+        return toModel(userRepository.save(UpdatedEntity));
     }
 
     private UserEntity toEntity(User user) {
@@ -121,4 +122,21 @@ public class DefaultUserGateway implements UserGateway {
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }
+
+
+    private UserEntity updateUser(UserEntity entity, User user) {
+        entity.setFirstName(user.getFirstName());
+        entity.setLastName(user.getLastName());
+        entity.setEmail(user.getEmail());
+        entity.setPassword(user.getPassword());
+        entity.setPhoto(user.getPhoto());
+        entity.setUpdatedAt(LocalDateTime.now());
+        entity.setRole(roleRepository.findById(user.getRoleId())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Rol not found")
+                ));
+        return entity;
+    }
 }
+
+
