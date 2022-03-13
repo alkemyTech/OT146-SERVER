@@ -1,6 +1,5 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.data.entity.ActivityEntity;
 import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.activities.ActivityService;
 import lombok.AllArgsConstructor;
@@ -53,7 +52,7 @@ public class ActivityController {
     @PutMapping("/{id}")
     public ResponseEntity<ActivityDTO> updateActivity(@PathVariable Long id , @Valid @RequestBody ActivityDTO dto){
 
-    Activity activity = activityService.findById(id); //ver error
+    Activity activity = activityService.findById(id);
     activity.setName(dto.getName());
     activity.setImage(dto.getImage());
     activity.setContent(dto.getContent());

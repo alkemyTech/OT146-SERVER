@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Builder
@@ -15,5 +17,5 @@ public class Member {
     private String linkedinUrl;
     private String image;
     private String description;
-    private String createdAt;
+    private LocalDate createdAt;
 }

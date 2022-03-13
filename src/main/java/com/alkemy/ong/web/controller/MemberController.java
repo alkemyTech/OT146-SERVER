@@ -5,6 +5,7 @@ import com.alkemy.ong.domain.members.MemberService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.utils.PageResponse;
 import com.alkemy.ong.web.utils.PageUtils;
+import io.swagger.annotations.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,12 +17,14 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.stream.Collectors.*;
 
 @RestController
 @RequestMapping("/members")
+@Api(value = "members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -30,6 +33,7 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    @ApiOperation(value = "Insert the information of a new member to the DB.")
     @PostMapping
     public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberDTO dto) {
         Member memberSaved = memberService.save(toModel(dto));
@@ -37,6 +41,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resultDTO);
     }
 
+    @ApiOperation(value = "Bring all the members of the DB without paging")
     @GetMapping("/all")
     public ResponseEntity<List<MemberDTO>> getMembers() {
         List<Member> memberList = memberService.getAllMembers();
@@ -44,6 +49,7 @@ public class MemberController {
         return ResponseEntity.ok().body(dtoList);
     }
 
+    @ApiOperation(value = "Bring all the members of the DB with pagination")
     @GetMapping(params = {"page"})
     public ResponseEntity<PageResponse<MemberDTO>> getMembersByPage(@RequestParam(name = "page") Integer page) {
         if (page < 0) {
@@ -59,6 +65,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(pageResponse);
     }
 
+    @ApiOperation(value = "Modify a member by id")
     @PutMapping("/{id}")
     public ResponseEntity<MemberDTO> update(@Valid @PathVariable long id, @Valid @RequestBody MemberDTO dto) {
         Member member = memberService.update(id, toModel(dto));
@@ -66,6 +73,7 @@ public class MemberController {
         return ResponseEntity.ok().body(resultDTO);
     }
 
+    @ApiOperation(value = "Delete a member by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@Valid @PathVariable long id) {
         memberService.delete(id);
@@ -106,25 +114,37 @@ public class MemberController {
     @Getter
     @Setter
     @Builder
+    @ApiModel(description = "member entity representation")
     public static class MemberDTO {
 
+        @ApiModelProperty(dataType = "Long", value = "Member id")
         private Long id;
 
         @NotNull
         @NotBlank
         @NotEmpty
+        @ApiModelProperty(dataType = "String", value = "Member name.", example = "Felipe Herrera", required = true)
         private String name;
 
+        @ApiModelProperty(dataType = "String", value = "Facebook url.", example = "https://www.facebook.com/profile")
         private String facebookUrl;
+
+        @ApiModelProperty(dataType = "String", value = "Instagram url.", example = "https://www.instagram.com/profile")
         private String instagramUrl;
+
+        @ApiModelProperty(dataType = "String", value = "Linkedin url.", example = "https://www.linkedin.com/profile")
         private String linkedinUrl;
 
         @NotNull
         @NotBlank
         @NotEmpty
+        @ApiModelProperty(dataType = "String", value = "Image url.", example = "user/img/photo.jpg", required = true)
         private String image;
 
+        @ApiModelProperty(dataType = "String", value = "Member description.", example = "I am a backend developer")
         private String description;
-        private String createdAt;
+
+        @ApiModelProperty(dataType = "String", value = "Creation date.", example = "2022-03-05")
+        private LocalDate createdAt;
     }
 }

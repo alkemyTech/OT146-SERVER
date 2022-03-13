@@ -1,10 +1,10 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.domain.organization.OrganizationService;
 import com.alkemy.ong.domain.slides.SimpleSlide;
 import com.alkemy.ong.domain.slides.Slides;
 import com.alkemy.ong.domain.slides.SlidesService;
 import com.alkemy.ong.domain.slides.response.SlideShortResponse;
+import com.alkemy.ong.domain.cloud.CloudService;
 import com.alkemy.ong.web.controller.OrganizationController.OrganizationDto;
 import lombok.*;
 import org.springframework.beans.BeanUtils;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.io.Serializable;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,12 +26,12 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/slides")
 public class SlidesController {
     private final SlidesService slidesService;
-    private final OrganizationService organizationService;
+    private final CloudService cloudService;
 
+    public SlidesController(SlidesService slidesService, CloudService cloudService) {
 
-    public SlidesController(SlidesService slidesService, OrganizationService organizationService) {
         this.slidesService = slidesService;
-        this.organizationService = organizationService;
+        this.cloudService = cloudService;
     }
 
     @GetMapping
@@ -61,7 +61,7 @@ public class SlidesController {
     }
 
     @PostMapping
-    public ResponseEntity<SlidesDto> createSlide(@Valid @RequestBody SimpleSlideDto slideBody){
+    public ResponseEntity<SlidesDto> createSlide(@Valid @RequestBody SimpleSlideDto slideBody) {
 
         SlidesDto slidesDto = toDto(slidesService.create(toSimpleDomain(slideBody)));
 
@@ -83,7 +83,7 @@ public class SlidesController {
     }
 
 
-    public SlidesDto toDto(Slides slides){
+    public static SlidesDto toDto(Slides slides){
         return SlidesDto.builder()
                 .id(slides.getId())
                 .imageUrl(slides.getImageUrl())
@@ -95,6 +95,7 @@ public class SlidesController {
                 .updatedAt(slides.getUpdatedAt())
                 .build();
     }
+
 
     public Slides toDomain(SlidesDto slidesDto){
         return Slides.builder()
@@ -109,10 +110,9 @@ public class SlidesController {
                 .build();
     }
 
-    public SimpleSlideDto toSimpleDto(SimpleSlide slides){
+    public static SimpleSlideDto toSimpleDto(SimpleSlide slides){
         return SimpleSlideDto.builder()
                 .id(slides.getId())
-                .imageUrl(slides.getImageUrl())
                 .text(slides.getText())
                 .slideOrder(slides.getSlideOrder())
                 .deleted(slides.getDeleted())
@@ -125,6 +125,7 @@ public class SlidesController {
     public SimpleSlide toSimpleDomain(SimpleSlideDto simpleSlideDto){
         return SimpleSlide.builder()
                 .id(simpleSlideDto.getId())
+                .imageEncoded(simpleSlideDto.getImageEncoded())
                 .imageUrl(simpleSlideDto.getImageUrl())
                 .text(simpleSlideDto.getText())
                 .slideOrder(simpleSlideDto.getSlideOrder())
@@ -142,11 +143,9 @@ public class SlidesController {
     @Builder
     public static class SlidesDto implements Serializable {
         private Long id;
-        @NotBlank
         private String imageUrl;
         @NotBlank
         private String text;
-        @NotNull
         private Integer slideOrder;
         @NotNull
         private OrganizationDto organizationDto;
@@ -163,11 +162,10 @@ public class SlidesController {
     @Builder
     public static class SimpleSlideDto implements Serializable{
         private Long id;
-        @NotBlank
+        private String imageEncoded;
         private String imageUrl;
         @NotBlank
         private String text;
-        @NotNull
         private Integer slideOrder;
         @NotNull
         private Long organizationId;
