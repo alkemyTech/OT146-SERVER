@@ -127,6 +127,8 @@ public class OrganizationController {
 
         private String about_us_text;
 
+        @NotBlank(message="The welcome text field can´t be empty")
+        @Size(min = 10, max = 65535 , message = "The welcome text length must be between 10 and 65.535  characters")
         private String welcome_text;
 
         @DateTimeFormat(pattern = "yyyy-mm-dd")

@@ -1,11 +1,13 @@
 package com.alkemy.ong.web.controller;
 
+import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.entity.OrganizationEntity;
 import com.alkemy.ong.data.entity.SlidesEntity;
 import com.alkemy.ong.data.repository.OrganizationRepository;
 import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.web.controller.OrganizationController.OrganizationDto;
 import com.alkemy.ong.web.controller.OrganizationController.OrganizationSimpleDto;
+import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
@@ -108,6 +110,46 @@ public class OrganizationControllerTest {
                         .content(objectMapper.writeValueAsString(dtoBody)))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void update_BadRequest() throws Exception{
+        OrganizationDto dtoBody = OrganizationDto.builder()
+                .name(null)
+                .image(null)
+                .email(null)
+                .welcome_text(null)
+                .build();
+
+       OrganizationEntity resultEntity = buildEntity(5L);
+
+        when(ongRepository.findById(5L)).thenReturn(Optional.of(resultEntity));
+        when(ongRepository.save(resultEntity)).thenThrow(new BadRequestException("Some of the required fields are empty"));
+
+        mockMvc.perform(put(ROOT_PATH + "/public/5")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dtoBody)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void update_BadRequestOneField() throws Exception{
+        OrganizationDto dtoBody = OrganizationDto.builder()
+                .name(null)
+                .build();
+
+        OrganizationEntity resultEntity = buildEntity(5L);
+
+        when(ongRepository.findById(5L)).thenReturn(Optional.of(resultEntity));
+        when(ongRepository.save(resultEntity)).thenThrow(new BadRequestException("The name field is required"));
+
+        mockMvc.perform(put(ROOT_PATH + "/public/5")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dtoBody)))
+                .andExpect(status().isBadRequest());
+    }
+
 
     private OrganizationEntity buildEntity(long idOrganization) {
         OrganizationEntity ong = OrganizationEntity.builder()
