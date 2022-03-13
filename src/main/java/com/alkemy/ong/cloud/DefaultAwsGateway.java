@@ -1,6 +1,6 @@
 package com.alkemy.ong.cloud;
 
-import com.alkemy.ong.domain.cloud.CustomMultipartFile;
+import com.alkemy.ong.domain.utils.CustomMultipartFile;
 import com.alkemy.ong.domain.cloud.Image;
 import com.alkemy.ong.domain.cloud.CloudGateway;
 import com.alkemy.ong.web.exceptions.ServiceUnavailable;
@@ -25,7 +25,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 @Component
-public class DefaultCloudGateway implements CloudGateway {
+public class DefaultAwsGateway implements CloudGateway {
     private AmazonS3 s3client;
 
     @Value("${amazonProperties.bucketName}")

@@ -1,4 +1,4 @@
-package com.alkemy.ong.domain.cloud;
+package com.alkemy.ong.domain.utils;
 
 import org.springframework.web.multipart.MultipartFile;
 
