@@ -2,32 +2,30 @@ package com.alkemy.ong.web.controller;
 
 import com.alkemy.ong.data.entity.TestimonialEntity;
 import com.alkemy.ong.data.repository.TestimonialRepository;
-import com.alkemy.ong.domain.testimonial.Testimonial;
-import com.alkemy.ong.web.utils.PageResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
-
+import static com.alkemy.ong.web.controller.TestimonialController.TestimonialDTO;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
 class TestimonialControllerTest {
-    String apiRootPath = "http://localhost:8080";
+    static String apiRootPath = "http://localhost:8080/testimonials";
 
     @Autowired
     MockMvc mockMvc;
@@ -38,94 +36,133 @@ class TestimonialControllerTest {
     @MockBean
     TestimonialRepository testimonialRepository;
 
+
+    @BeforeEach
+    public void beforeAll(){
+        TestimonialEntity testimonialA = buildTestimonialEntity(1L, "A", "http://...", "content", false);
+        TestimonialEntity testimonialB = buildTestimonialEntity(2L, "B", "http://...", "content", false);
+        TestimonialEntity testimonialC = buildTestimonialEntity(3L, "C", "http://...", "content", false);
+        TestimonialEntity testimonialNew = buildTestimonialEntity(null, "E", "http://...", "content");
+        TestimonialEntity testimonialCreated = buildTestimonialEntity(4L, "E", "http://...", "content", true);
+        when(testimonialRepository.findById(1L)).thenReturn(Optional.of(testimonialA));
+        when(testimonialRepository.findById(2L)).thenReturn(Optional.of(testimonialB));
+        when(testimonialRepository.findById(3L)).thenReturn(Optional.of(testimonialC));
+        when(testimonialRepository.findById(4L)).thenReturn(Optional.empty());
+
+        when(testimonialRepository.findByDeleted(eq(false), any())).thenReturn(new PageImpl(Arrays.asList(testimonialA,testimonialB, testimonialC)));
+        when(testimonialRepository.save(testimonialNew)).thenReturn(testimonialCreated);
+    }
+
+
     @Test
     public void saveTestimonial() throws Exception{
-
-        var testimonialDTO = generateTestimonialDTO(null, "Marcelo", "https://s3.us-ea...", "Contenido");
-        var testimonialS = generateTestimonialEntity(null, "Marcelo", "https://s3.us-ea...", "Contenido");
-        var testimonialR = generateTestimonialEntity(2L, "Marcelo", "https://s3.us-ea...", "Contenido");
-
-        when(testimonialRepository.save(testimonialS)).thenReturn(testimonialR);
-        String response = mockMvc.perform(
-                post(apiRootPath + "/testimonials")
-                    .content(objectMapper.writeValueAsString(testimonialDTO))
-                    .contentType(MediaType.APPLICATION_JSON))
+        var testimonialDTO = buildTestimonialDTO(null, "E", "http://...", "content");
+        mockMvc.perform(post(apiRootPath)
+                        .content(convertToStringJson(testimonialDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("id").isNumber())
-                .andExpect(jsonPath("name").value("Marcelo"))
-                .andExpect(jsonPath("image").value("https://s3.us-ea..."))
-                .andExpect(jsonPath("content").value("Contenido"))
+                .andExpect(jsonPath("id").value(4L))
+                .andExpect(jsonPath("name").value("E"))
+                .andExpect(jsonPath("image").value("http://..."))
+                .andExpect(jsonPath("content").value("content"))
                 .andReturn().getResponse().getContentAsString();
-        System.out.println(response);
+    }
+
+    @Test
+    public void saveTestimonialBadRequest() throws Exception{
+        var testimonialDTO = buildTestimonialDTO(null, null, "", "content");
+        mockMvc.perform(post(apiRootPath)
+                        .content(convertToStringJson(testimonialDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is4xxClientError())
+                .andReturn().getResponse().getContentAsString();
     }
 
     @Test
     public void getPage() throws Exception {
-        List<TestimonialEntity> testimonials = new ArrayList<>();
-        testimonials.add(TestimonialEntity.builder().id(0L).name("A").image("http://...").content("asd").build());
-        testimonials.add(TestimonialEntity.builder().id(1L).name("A").image("http://...").content("asd").build());
-        testimonials.add(TestimonialEntity.builder().id(2L).name("A").image("http://...").content("asd").build());
-        Page<TestimonialEntity> page = new PageImpl(testimonials);
-        when(testimonialRepository.findByDeleted(ArgumentMatchers.eq(false), ArgumentMatchers.anyObject())).thenReturn(page);
-        String response = mockMvc.perform(
-                get(apiRootPath + "/testimonials?page=0")
+        mockMvc.perform(get(apiRootPath + "?page=0")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("content").isArray())
                 .andExpect(jsonPath("nextPage").value(""))
                 .andExpect(jsonPath("previousPage").value(""))
                 .andReturn().getResponse().getContentAsString();
-        System.out.println(response);
+    }
+
+    private void configRemoveTestimonialTest() {
+        TestimonialEntity testimonial = buildTestimonialEntity(1L, "A", "http://...", "content", false);
+        TestimonialEntity testimonialSave = buildTestimonialEntity(1L, "A", "http://...", "content", true);
+        when(testimonialRepository.findById(1L)).thenReturn(Optional.of(testimonial));
+        when(testimonialRepository.save(testimonialSave)).thenReturn(testimonialSave);
     }
 
     @Test
     public void removeTestimonial() throws Exception {
-        TestimonialEntity testimonial = TestimonialEntity.builder().id(1L).name("A").image("http://...").content("asd").deleted(false).build();
-        TestimonialEntity testimonialSave = TestimonialEntity.builder().id(1L).name("A").image("http://...").content("asd").deleted(true).build();
-        when(testimonialRepository.findById(1L)).thenReturn(Optional.of(testimonial));
-        when(testimonialRepository.save(testimonialSave)).thenReturn(testimonialSave);
-        String response = mockMvc.perform(
-                        delete(apiRootPath + "/testimonials/1")
-                                .contentType(MediaType.APPLICATION_JSON))
+        configRemoveTestimonialTest();
+
+        mockMvc.perform(delete(apiRootPath + "/1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent())
                 .andReturn().getResponse().getContentAsString();
-        System.out.println(response);
+    }
+
+    @Test
+    public void removeTestimonialNotFound() throws Exception {
+        configRemoveTestimonialTest();
+
+        mockMvc.perform(delete(apiRootPath + "/4")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andReturn().getResponse().getContentAsString();
     }
 
     @Test
     public void updateTestimonials() throws Exception {
-        var testimonialDTO = generateTestimonialDTO(1L, "Marcelo", "https://...", "Contenido");
-        TestimonialEntity testimonial = TestimonialEntity.builder().id(1L).name("A").image("https://...").content("asd").deleted(false).build();
-        when(testimonialRepository.findById(1L)).thenReturn(Optional.of(testimonial));
-        TestimonialEntity testimonialEntity = TestimonialEntity.builder().id(1L).name("Marcelo").image("https://...").content("Contenido").deleted(false).build();
-        when(testimonialRepository.save(testimonialEntity)).thenReturn(testimonialEntity);
-        String response = mockMvc.perform(
-                        put(apiRootPath + "/testimonials/1")
-                                .content(objectMapper.writeValueAsString(testimonialDTO))
-                                .contentType(MediaType.APPLICATION_JSON))
+        var testimonialDTO = buildTestimonialDTO(1L, "A", "https://...", "content");
+        configUpdateTestimonialsTest();
+
+        mockMvc.perform(put(apiRootPath + "/1")
+                        .content(convertToStringJson(testimonialDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("id").value("1"))
-                .andExpect(jsonPath("name").value("Marcelo"))
+                .andExpect(jsonPath("id").isNumber())
+                .andExpect(jsonPath("id").value(1))
+                .andExpect(jsonPath("name").value("A"))
                 .andExpect(jsonPath("image").value("https://..."))
-                .andExpect(jsonPath("content").value("Contenido"))
+                .andExpect(jsonPath("content").value("content"))
                 .andReturn().getResponse().getContentAsString();
-        System.out.println(response);
     }
 
-    private TestimonialController.TestimonialDTO generateTestimonialDTO(Long id, String name, String image, String content){
-        return TestimonialController.TestimonialDTO.builder()
+    private void configUpdateTestimonialsTest() {
+        TestimonialEntity testimonialEntity = buildTestimonialEntity(1L,"A","https://...","content",false);
+        when(testimonialRepository.save(testimonialEntity)).thenReturn(testimonialEntity);
+    }
+
+    private TestimonialDTO buildTestimonialDTO(Long id, String name, String image, String content){
+        return TestimonialDTO.builder()
                 .id(id)
                 .name(name)
                 .image(image)
                 .content(content)
                 .build();
     }
-    private TestimonialEntity generateTestimonialEntity(Long id, String name, String image, String content){
+    private TestimonialEntity buildTestimonialEntity(Long id, String name, String image, String content){
         return TestimonialEntity.builder()
                 .id(id)
                 .name(name)
                 .image(image)
                 .content(content)
                 .build();
+    }
+
+    private TestimonialEntity buildTestimonialEntity(Long id, String name, String image, String content, Boolean deleted){
+        TestimonialEntity testimonialEntity = buildTestimonialEntity(id, name, image, content);
+        testimonialEntity.setDeleted(deleted);
+        return testimonialEntity;
+    }
+
+    private String convertToStringJson(Object testimonialDTO) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(testimonialDTO);
     }
 }
