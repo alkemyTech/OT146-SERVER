@@ -69,7 +69,7 @@ public class CategoryControllerTest {
         mockMvc.perform(post("/ong/categories").contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(ceWithId)))
             .andExpect(status().isCreated())
-            .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(1L)))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.id", is(1)))
             .andExpect(MockMvcResultMatchers.jsonPath("$.name", is("Health")))
             .andExpect(MockMvcResultMatchers.jsonPath("$.description", is("category of health")));        
     }
