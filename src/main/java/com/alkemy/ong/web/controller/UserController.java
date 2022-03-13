@@ -51,6 +51,7 @@ public class UserController {
             throw new BadRequestException("The email is already registered");
         }
 
+        newUser.setCreatedAt(LocalDateTime.now());
         newUser.setPassword(encoder.encode(newUser.getPassword()));
         User user = userService.save(toDomain(newUser));
 

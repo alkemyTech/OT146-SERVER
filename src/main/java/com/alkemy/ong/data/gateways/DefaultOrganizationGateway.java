@@ -34,13 +34,13 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
 
     @GetMapping("/public/{id}")
     public Organization showOrganization(@PathVariable long id) {
-        OrganizationEntity organization = organizationRepository.findById(id).orElseThrow(() -> new BadRequestException("mensaje"));
+        OrganizationEntity organization = organizationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Organization not found"));
         return toModel(organization);
     }
 
     @PutMapping("/public/{id}")
     public Organization update(Organization organization) {
-        OrganizationEntity ongEntity = organizationRepository.findById(organization.getIdOrganization()).orElseThrow(() -> new BadRequestException("mensaje"));
+        OrganizationEntity ongEntity = organizationRepository.findById(organization.getIdOrganization()).orElseThrow(() -> new ResourceNotFoundException("Organization not found"));
         return toModel(organizationRepository.save(newUpdate(ongEntity, organization)));
     }
 
