@@ -88,6 +88,7 @@ public class CategoryController {
         CategoryDto categoryDto = CategoryDto.builder()
                 .id(category.getId())
                 .name(category.getName())
+                .description(category.getDescription())
                 .build();
 
         return categoryDto;
