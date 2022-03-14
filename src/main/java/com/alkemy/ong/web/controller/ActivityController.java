@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,6 +29,7 @@ public class ActivityController {
         this.activityService = activityService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(value = "")
     public ResponseEntity<ActivityDTO> save(@Valid @RequestBody ActivityDTO dto) {
 
@@ -42,6 +44,7 @@ public class ActivityController {
             return ResponseEntity.ok().body(dtoList);
         }
 
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<ActivityDTO> showId(@PathVariable Long id){
         Activity activities  = activityService.findById(id);
@@ -49,6 +52,7 @@ public class ActivityController {
         return ResponseEntity.ok().body(activitiesDTO);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ActivityDTO> updateActivity(@PathVariable Long id , @Valid @RequestBody ActivityDTO dto){
 

@@ -3,6 +3,8 @@ package com.alkemy.ong.web.controller;
 import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.domain.organization.OrganizationService;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
+    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @GetMapping("/public/{id}")
     public OrganizationSimpleDto showOrganization(@PathVariable long id) {
         Organization organization = organizationService.findById(id);
@@ -40,6 +43,8 @@ public class OrganizationController {
     @PutMapping("/public/{id}")
     public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organizationDto, @PathVariable long id){
         organizationDto.setIdOrganization(id);
+        OrganizationDto ong = toDto(organizationService.findById(id));
+        organizationDto.setCreatedAt(ong.getCreatedAt());
         return new ResponseEntity<OrganizationDto>(toDto(organizationService.update(toDomain(organizationDto))), HttpStatus.CREATED);
     }
 
@@ -130,9 +135,11 @@ public class OrganizationController {
         private String welcome_text;
 
         @DateTimeFormat(pattern = "yyyy-mm-dd")
+        @CreationTimestamp
         private LocalDateTime createdAt;
 
         @DateTimeFormat(pattern = "yyyy-mm-dd")
+        @UpdateTimestamp
         private LocalDateTime updatedAt;
 
         private Boolean deleted;

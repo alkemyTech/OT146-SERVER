@@ -5,11 +5,12 @@ import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,7 @@ public class UserController {
         this.encoder = encoder;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserDTO>> findUsers(@RequestParam(name = "deleted", required = false) Boolean isDeleted) {
         List<User> users = isDeleted == null ? userService.findAll() : userService.findByDeleted(isDeleted);
@@ -77,7 +79,7 @@ public class UserController {
         private String email;
 
         @NotBlank(message="The password can´t be empty")
-        @Size(min = 8, max = 255, message = "Password length must be between 8 and 255 characters")
+        @Size(min = 6, max = 255, message = "Password length must be between 6 and 255 characters")
         @Column(nullable = false)
         private String password;
 
@@ -90,11 +92,11 @@ public class UserController {
         private String roleName;
 
         @Column(name = "created_at")
-        @CreatedDate
+        @CreationTimestamp
         private LocalDateTime createdAt;
 
         @Column(name = "updated_at")
-        @LastModifiedDate
+        @UpdateTimestamp
         private LocalDateTime updatedAt;
     }
 
