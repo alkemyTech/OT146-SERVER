@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.util.stream.Collectors.*;
@@ -143,7 +144,7 @@ public class MemberController {
         @ApiModelProperty(dataType = "String", value = "Member description.", example = "I am a backend developer")
         private String description;
 
-        @ApiModelProperty(dataType = "String", value = "Creation date.", example = "2022/03/05")
-        private String createdAt;
+        @ApiModelProperty(dataType = "String", value = "Creation date.", example = "2022-03-05")
+        private LocalDate createdAt;
     }
 }

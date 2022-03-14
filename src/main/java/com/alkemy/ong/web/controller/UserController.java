@@ -4,9 +4,7 @@ package com.alkemy.ong.web.controller;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
-import jdk.jfr.Unsigned;
 import lombok.Data;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -51,6 +49,7 @@ public class UserController {
             throw new BadRequestException("The email is already registered");
         }
 
+        newUser.setPassword(encoder.encode(newUser.getPassword()));
         User user = userService.save(toDomain(newUser));
 
         return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);

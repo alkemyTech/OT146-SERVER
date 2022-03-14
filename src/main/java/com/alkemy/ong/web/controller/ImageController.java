@@ -1,7 +1,7 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.domain.storage.Image;
-import com.alkemy.ong.domain.storage.StorageService;
+import com.alkemy.ong.domain.cloud.Image;
+import com.alkemy.ong.domain.cloud.CloudService;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,15 +15,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping("/image")
 public class ImageController {
-    private final StorageService storageService;
+    private final CloudService cloudService;
 
-    public ImageController(StorageService storageService) {
-        this.storageService = storageService;
+    public ImageController(CloudService cloudService) {
+        this.cloudService = cloudService;
     }
 
     @PostMapping()
     public ResponseEntity<FileInfoResponse> save(@RequestParam("file") MultipartFile multipartFile){
-        Image image = storageService.save(multipartFile);
+        Image image = cloudService.save(multipartFile);
         return ResponseEntity.ok().body(toFileInfoResponse(image));
     }
 

@@ -46,5 +46,11 @@ public class CategoryEntity {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Override
+    public boolean equals(Object o) {
+        CategoryEntity categoryEntity = (CategoryEntity) o;
+        return this.getId() == categoryEntity.getId(); 
+    }
     
 }
