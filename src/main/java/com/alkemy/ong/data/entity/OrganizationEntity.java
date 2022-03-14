@@ -1,15 +1,15 @@
 package com.alkemy.ong.data.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @Entity
@@ -32,7 +32,6 @@ public class OrganizationEntity implements Serializable {
     @Column
     private String address;
 
-    //@DecimalMax(9999999999999)
     @Column
     private Integer phone;
 
@@ -45,10 +44,12 @@ public class OrganizationEntity implements Serializable {
     @Column(nullable = false)
     private String welcome_text;
 
+    @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     @Column(nullable = false)
     private LocalDateTime updatedAt;

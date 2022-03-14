@@ -5,7 +5,6 @@ import com.alkemy.ong.data.repository.OrganizationRepository;
 import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.domain.organization.OrganizationGateway;
 
-import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,13 +33,13 @@ public class DefaultOrganizationGateway implements OrganizationGateway {
 
     @GetMapping("/public/{id}")
     public Organization showOrganization(@PathVariable long id) {
-        OrganizationEntity organization = organizationRepository.findById(id).orElseThrow(() -> new BadRequestException("mensaje"));
+        OrganizationEntity organization = organizationRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Organization not found"));
         return toModel(organization);
     }
 
     @PutMapping("/public/{id}")
     public Organization update(Organization organization) {
-        OrganizationEntity ongEntity = organizationRepository.findById(organization.getIdOrganization()).orElseThrow(() -> new BadRequestException("mensaje"));
+        OrganizationEntity ongEntity = organizationRepository.findById(organization.getIdOrganization()).orElseThrow(() -> new ResourceNotFoundException("Organization not found"));
         return toModel(organizationRepository.save(newUpdate(ongEntity, organization)));
     }
 

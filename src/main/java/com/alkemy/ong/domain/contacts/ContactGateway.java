@@ -1,6 +1,5 @@
 package com.alkemy.ong.domain.contacts;
 
-import com.alkemy.ong.data.entity.ContactEntity;
 
 import java.util.List;
 
