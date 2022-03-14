@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "AllUsers",
+			"name": "GetAllUsers",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -24,7 +24,7 @@
 			"response": []
 		},
 		{
-			"name": "ActiveUsers",
+			"name": "GetActiveUsers",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -48,7 +48,7 @@
 			"response": []
 		},
 		{
-			"name": "DeletedUsers",
+			"name": "GetDeletedUsers",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -70,6 +70,54 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"firstName\": \"FirstName\",\n        \"lastName\": \"LastName\",\n        \"email\": \"mail@mail.com\",\n        \"password\": \"password\",\n        \"photo\": \"url:photo\",\n        \"roleId\": 1\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/users/{id}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
