@@ -35,7 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class OrganizationControllerTest {
 
-    String ROOT_PATH = "http://localhost:8080/organization";
+    private static String ROOT_PATH = "http://localhost:8080/organization";
 
     @Autowired
     MockMvc mockMvc;
