@@ -9,6 +9,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "news")
@@ -47,24 +48,16 @@ public class NewsEntity {
 //    @JoinColumn(name="categories_id")
 //    private Category categories;
 
-    public boolean equals(Object obj) {
-        if (obj == null || getClass() != obj.getClass()){
-            return false;
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NewsEntity that = (NewsEntity) o;
+        return deleted == that.deleted && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(content, that.content) && Objects.equals(image, that.image);
+    }
 
-        final NewsEntity other = (NewsEntity) obj;
-        if (other.getId() != null){
-            return other.getId().equals(getId()) &&
-                    other.getName().equals(getName()) &&
-                    other.getContent().equals(getContent()) &&
-                    other.getImage().equals(getImage()) &&
-                    other.getCreatedAt().equals(getCreatedAt());
-        } else {
-            return other.getId().equals(getId()) &&
-                    other.getName().equals(getName()) &&
-                    other.getContent().equals(getContent()) &&
-                    other.getImage().equals(getImage()) &&
-                    other.getCreatedAt().equals(getCreatedAt());
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, content, image, deleted);
     }
 }
