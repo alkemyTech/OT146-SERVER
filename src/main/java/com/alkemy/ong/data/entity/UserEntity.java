@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -39,10 +41,12 @@ public class UserEntity {
     @JoinColumn(name = "role_id")
     private RolesEntity role;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
