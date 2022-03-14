@@ -37,9 +37,9 @@ public class NewsController {
 
     @ApiOperation(value = "Create News")
     @PostMapping
-    public ResponseEntity<NewsDTO> create(@RequestBody NewsDTO newDTO) {
+    public ResponseEntity<NewsDTO> create(@Valid @RequestBody NewsDTO newDTO) {
         News news = newsService.create(toDomain(newDTO));
-        return ResponseEntity.ok(toDTO(news));
+        return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(news));
     }
 
     @ApiOperation(value = "List News")
@@ -109,7 +109,7 @@ public class NewsController {
     @Data
     @Builder
     @ApiModel
-    private static class NewsDTO {
+    public static class NewsDTO {
         @ApiModelProperty(name = "id")
         private Long id;
 
