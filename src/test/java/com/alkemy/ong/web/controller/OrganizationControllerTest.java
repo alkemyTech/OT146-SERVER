@@ -1,10 +1,8 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.entity.OrganizationEntity;
 import com.alkemy.ong.data.entity.SlidesEntity;
 import com.alkemy.ong.data.repository.OrganizationRepository;
-import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.web.controller.OrganizationController.OrganizationDto;
 import com.alkemy.ong.web.controller.OrganizationController.OrganizationSimpleDto;
 import com.alkemy.ong.web.exceptions.BadRequestException;
@@ -24,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;

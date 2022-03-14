@@ -9,9 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Builder
 @Entity
@@ -34,7 +32,6 @@ public class OrganizationEntity implements Serializable {
     @Column
     private String address;
 
-    //@DecimalMax(9999999999999)
     @Column
     private Integer phone;
 

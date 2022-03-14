@@ -5,7 +5,6 @@ import com.alkemy.ong.data.repository.OrganizationRepository;
 import com.alkemy.ong.domain.organization.Organization;
 import com.alkemy.ong.domain.organization.OrganizationGateway;
 
-import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
