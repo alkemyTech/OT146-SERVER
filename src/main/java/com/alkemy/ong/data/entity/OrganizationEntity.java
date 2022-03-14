@@ -1,6 +1,8 @@
 package com.alkemy.ong.data.entity;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -45,10 +47,12 @@ public class OrganizationEntity implements Serializable {
     @Column(nullable = false)
     private String welcome_text;
 
+    @CreationTimestamp
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @UpdateTimestamp
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     @Column(nullable = false)
     private LocalDateTime updatedAt;

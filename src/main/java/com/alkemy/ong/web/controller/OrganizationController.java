@@ -41,7 +41,6 @@ public class OrganizationController {
     @PutMapping("/public/{id}")
     public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organizationDto, @PathVariable long id){
         organizationDto.setIdOrganization(id);
-        //organizationDto.setUpdatedAt(LocalDateTime.now());
         return new ResponseEntity<OrganizationDto>(toDto(organizationService.update(toDomain(organizationDto))), HttpStatus.CREATED);
     }
 
