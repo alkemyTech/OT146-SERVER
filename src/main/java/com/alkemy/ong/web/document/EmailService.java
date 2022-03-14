@@ -24,8 +24,7 @@ public class EmailService {
 
     public Response sendemail(EmailRequest emailrequest) {
 
-        Mail mail = new Mail(new Email("javesq82@gmail.com"), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
-        mail.setReplyTo(new Email("abc@gmail.com"));
+        Mail mail = new Mail(new Email("paoliellolucas@gmail.com"), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
 
         Request request = new Request();
 
