@@ -43,8 +43,28 @@ public class NewsEntity {
 
     private boolean deleted;
 
-
 //    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name="categories_id")
 //    private Category categories;
+
+    public boolean equals(Object obj) {
+        if (obj == null || getClass() != obj.getClass()){
+            return false;
+        }
+
+        final NewsEntity other = (NewsEntity) obj;
+        if (other.getId() != null){
+            return other.getId().equals(getId()) &&
+                    other.getName().equals(getName()) &&
+                    other.getContent().equals(getContent()) &&
+                    other.getImage().equals(getImage()) &&
+                    other.getCreatedAt().equals(getCreatedAt());
+        } else {
+            return other.getId().equals(getId()) &&
+                    other.getName().equals(getName()) &&
+                    other.getContent().equals(getContent()) &&
+                    other.getImage().equals(getImage()) &&
+                    other.getCreatedAt().equals(getCreatedAt());
+        }
+    }
 }

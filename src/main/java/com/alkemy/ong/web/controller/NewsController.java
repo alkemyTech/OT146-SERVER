@@ -101,7 +101,7 @@ public class NewsController {
     @Data
     @Builder
     @ApiModel
-    private static class NewsDTO {
+    public static class NewsDTO {
         @ApiModelProperty(name = "id")
         private Long id;
 
