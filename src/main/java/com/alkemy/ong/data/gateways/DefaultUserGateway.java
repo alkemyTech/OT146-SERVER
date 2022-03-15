@@ -58,6 +58,10 @@ public class DefaultUserGateway implements UserGateway {
         return toModel(entity);
     }
 
+    @Override
+    public void deleteById(Long id) {
+
+    }
 
     @Override
     public boolean existsByEmail(String email) {

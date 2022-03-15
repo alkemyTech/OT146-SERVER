@@ -56,6 +56,15 @@ public class UserController {
         return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Void> deleteUser (@PathVariable Long id){
+        User user = userService.findById(id);
+        userService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+
+
 
     @Data
     private static class UserDTO {

@@ -14,5 +14,7 @@ public interface UserGateway {
 
     User create(User user);
 
+    void deleteById(Long id);
+
     boolean existsByEmail(String email);
 }
