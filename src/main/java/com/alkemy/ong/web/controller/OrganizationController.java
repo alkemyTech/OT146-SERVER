@@ -32,14 +32,14 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @GetMapping("/public/{id}")
     public OrganizationSimpleDto showOrganization(@PathVariable long id) {
         Organization organization = organizationService.findById(id);
         return toSimpleDto(organization);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/public/{id}")
     public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organizationDto, @PathVariable long id){
         organizationDto.setIdOrganization(id);
