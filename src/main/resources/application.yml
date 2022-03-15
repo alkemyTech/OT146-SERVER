@@ -12,3 +12,6 @@ amazonProperties:
   accessKey:
   secretKey:
   bucketName:
+
+spring.sendgrid.api-key: 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
+

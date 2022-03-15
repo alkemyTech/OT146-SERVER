@@ -17,4 +17,6 @@ public interface UserGateway {
     void deleteById(Long id);
 
     boolean existsByEmail(String email);
+
+    User update(Long id, User user);
 }
