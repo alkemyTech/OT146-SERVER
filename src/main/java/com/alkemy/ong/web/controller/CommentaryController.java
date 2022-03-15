@@ -10,7 +10,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +33,6 @@ public class CommentaryController {
         this.userService = userService;
     }
 
-
-    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @GetMapping
     public List<CommentaryBodyDto> findAll() {
         List<Commentary> commentaries = commentaryService.findAll();
@@ -44,7 +41,6 @@ public class CommentaryController {
                 .collect(toList());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/details")
     public List<CommentaryDTO> findAllWithDetails() {
         List<Commentary> commentaries = commentaryService.findAll();
@@ -53,14 +49,12 @@ public class CommentaryController {
                 .collect(toList());
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @PostMapping()
     public ResponseEntity<CommentaryDTO> create(@Valid @RequestBody CommentaryDTO dto) {
         Commentary commentary = commentaryService.create(toDomain(dto));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(commentary));
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<CommentaryDTO> update(@Valid @RequestBody CommentaryDTO commentaryDTO, @PathVariable long id) {
 
@@ -71,7 +65,6 @@ public class CommentaryController {
         return new ResponseEntity<CommentaryDTO>(toDto(commentaryService.findById(commentaryDTO.getId())), HttpStatus.FORBIDDEN);
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         if (!commentaryService.existsById(id)) {
@@ -100,7 +93,6 @@ public class CommentaryController {
         return false;
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @GetMapping("/post/{newsId}")
     public ResponseEntity<List<CommentaryDTO>> getComments(@PathVariable Long newsId){
         List<Commentary> commentsList = commentaryService.findByNewsId(newsId);

@@ -8,7 +8,6 @@ import io.swagger.annotations.*;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,7 +30,7 @@ public class TestimonialController {
         this.testimonialService = testimonialService;
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     @ApiOperation(value = "Save Testimonial")
     @PostMapping
     public ResponseEntity<TestimonialDTO> save(@Valid @RequestBody  TestimonialDTO dto) {
@@ -39,7 +38,7 @@ public class TestimonialController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(testimonial));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     @ApiOperation(value = "Update Testimonial")
     @PutMapping(value = "/{id}")
     public ResponseEntity<TestimonialDTO> update(@PathVariable Long id, @Valid @RequestBody  TestimonialDTO dto) {
@@ -47,7 +46,7 @@ public class TestimonialController {
         return ResponseEntity.status(HttpStatus.OK).body(toDto(testimonial));
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+
     @ApiOperation(value = "Delete Testimonial")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity delete(@PathVariable Long id) {
@@ -55,7 +54,6 @@ public class TestimonialController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
-    @PreAuthorize("hasRole('ROLE_USER') OR hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "List Testimonial by Page")
     @GetMapping(params = {"page"})
     ResponseEntity<PageResponse<TestimonialDTO>> lisAllByPage(@RequestParam(name = "page") Integer page){

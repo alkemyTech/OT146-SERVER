@@ -14,7 +14,6 @@ import com.alkemy.ong.web.utils.PageUtils;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -42,7 +41,6 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/categories")
     public List<CategoryDto> findAll() {
         List<Category> categories = categoryService.findAll();
@@ -50,7 +48,6 @@ public class CategoryController {
         return categories.stream().map(category -> toDto(category)).collect(Collectors.toList());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(params = {"page"})
     ResponseEntity<PageResponse<CategoryDto>> findAllByPage(@RequestParam(name = "page") Integer page) {
         if (page < 0)
@@ -61,7 +58,6 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.OK).body(pr);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/categories/{id}")
     public ResponseEntity<CategoryDto> show(@PathVariable Long id) {
 
@@ -70,21 +66,18 @@ public class CategoryController {
         return new ResponseEntity<CategoryDto>(categoryDto, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/categories")
     public ResponseEntity<CategoryDto> create(@Valid @RequestBody CategoryDto categoryDto) {
         Category category = categoryService.create(toCategory(categoryDto));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(category));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/categories/{id}")
     public ResponseEntity<CategoryDto> update(@PathVariable Long id, @Valid @RequestBody CategoryDto categoryDto) {
         Category category = categoryService.update(id, toCategory(categoryDto));
         return ResponseEntity.status(HttpStatus.OK).body(toDto(category));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/categories/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         categoryService.delete(id);

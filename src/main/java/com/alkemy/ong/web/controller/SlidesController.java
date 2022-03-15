@@ -10,7 +10,6 @@ import lombok.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -53,7 +52,6 @@ public class SlidesController {
         return new ResponseEntity<>(returnValue, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "/{id}")
     public ResponseEntity<SlidesDto> getDetailsById(@PathVariable Long id){
         
@@ -62,7 +60,6 @@ public class SlidesController {
         return new ResponseEntity<>(slide, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<SlidesDto> createSlide(@Valid @RequestBody SimpleSlideDto slideBody) {
 
@@ -71,7 +68,6 @@ public class SlidesController {
         return new ResponseEntity<>(slidesDto, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping(path = "/{id}")
     public ResponseEntity<SlidesDto> updateSlide(@PathVariable Long id, @Valid @RequestBody SimpleSlideDto slideBody){
 
@@ -80,7 +76,6 @@ public class SlidesController {
         return new ResponseEntity<>(slidesDto, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteSlide(@PathVariable Long id){
         slidesService.delete(id);

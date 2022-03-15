@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotBlank;
@@ -43,7 +42,6 @@ public class NewsController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(news));
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @ApiOperation(value = "List News")
     @GetMapping(params = {"page"})
     ResponseEntity<PageResponse<NewsDTO>> lisAllByPage(@RequestParam(name = "page") Integer page) {
@@ -57,7 +55,6 @@ public class NewsController {
         return ResponseEntity.status(HttpStatus.OK).body(pageResponse);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Get News by Id")
     @GetMapping("/{id}")
     public ResponseEntity<NewsDTO> showId(@PathVariable Long id) {
@@ -66,7 +63,6 @@ public class NewsController {
         return ResponseEntity.ok().body(newsDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<NewsDTO> updateNews(@PathVariable Long id, @RequestBody @Valid NewsDTO newsDto) {
         News news = newsService.findById(id);
@@ -78,7 +74,6 @@ public class NewsController {
         return ResponseEntity.ok().body(toDTO(news));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity deleteNews(@PathVariable Long id) {
         News news = newsService.findById(id);

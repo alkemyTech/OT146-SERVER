@@ -11,7 +11,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,7 +33,6 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @ApiOperation(value = "Insert the information of a new member to the DB.")
     @PostMapping
     public ResponseEntity<MemberDTO> save(@Valid @RequestBody MemberDTO dto) {
@@ -43,7 +41,6 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resultDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Bring all the members of the DB without paging")
     @GetMapping("/all")
     public ResponseEntity<List<MemberDTO>> getMembers() {
@@ -52,7 +49,6 @@ public class MemberController {
         return ResponseEntity.ok().body(dtoList);
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @ApiOperation(value = "Bring all the members of the DB with pagination")
     @GetMapping(params = {"page"})
     public ResponseEntity<PageResponse<MemberDTO>> getMembersByPage(@RequestParam(name = "page") Integer page) {
@@ -69,7 +65,7 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(pageResponse);
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
+   // @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @ApiOperation(value = "Modify a member by id")
     @PutMapping("/{id}")
     public ResponseEntity<MemberDTO> update(@Valid @PathVariable long id, @Valid @RequestBody MemberDTO dto) {
@@ -78,7 +74,7 @@ public class MemberController {
         return ResponseEntity.ok().body(resultDTO);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Delete a member by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@Valid @PathVariable long id) {
