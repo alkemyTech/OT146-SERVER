@@ -1,6 +1,6 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.data.gateways.SendGridMailGateway;
+import com.alkemy.ong.data.gateways.SendMailService;
 import com.alkemy.ong.domain.mail.EmailRequest;
 import com.sendgrid.Response;
 
@@ -23,12 +23,12 @@ import lombok.NoArgsConstructor;
 public class EmailController {
 
     @Autowired
-	private SendGridMailGateway  sendGridMailGateway;
+	private SendMailService sendMailService;
 	
 	@PostMapping("/sendemail")
 	public ResponseEntity<String> sendemail(@RequestBody EmailRequest emailrequest) {
 		
-		Response response=sendGridMailGateway.sendemail(emailrequest);
+		Response response= sendMailService.sendemail(emailrequest);
 		if(response.getStatusCode()==200||response.getStatusCode()==202)
 			return new ResponseEntity<>("send successfully",HttpStatus.OK);
 		return new ResponseEntity<>("failed to sent",HttpStatus.NOT_FOUND);
@@ -54,6 +54,5 @@ public class EmailController {
 
 
 	}
-
     
 }

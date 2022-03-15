@@ -1,7 +1,5 @@
 package com.alkemy.ong.data.gateways;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import java.io.IOException;
 
 import com.alkemy.ong.domain.mail.EmailRequest;
@@ -12,24 +10,21 @@ import com.sendgrid.Response;
 import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Email;
-import com.sendgrid.helpers.mail.objects.Personalization;
 import com.sendgrid.helpers.mail.objects.Content;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SendGridMailGateway {
+public class SendMailService {
 
     @Autowired
     SendGrid sendgrid;
 
     public Response sendemail(EmailRequest emailrequest) {
 
-        Mail mail = new Mail(new Email(MailUtils.MAIL_FROM), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
-        mail.setReplyTo(new Email("abc@gmail.com"));
-
-
+        Mail mail = new Mail(new Email(MailUtils.MAIL_FROM, "Lucas"), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
+        mail.setReplyTo(new Email(MailUtils.MAIL_FROM, "Lucas"));
         Request request = new Request();
 
         Response response = null;
