@@ -29,6 +29,7 @@ public class SendGridMailGateway {
         Mail mail = new Mail(new Email(MailUtils.MAIL_FROM), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
         mail.setReplyTo(new Email("abc@gmail.com"));
 
+
         Request request = new Request();
 
         Response response = null;
