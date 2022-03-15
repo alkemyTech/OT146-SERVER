@@ -5,10 +5,10 @@ import com.alkemy.ong.web.security.jwt.CustomAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -21,7 +21,6 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -46,13 +45,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/sendemail",
                         "/contacts/{id}",
                         "/comments/details",
-                        "/ong/**").hasRole("ADMIN")
+                        "/ong/categories/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT,"/organization/public/{id}", "/activities/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE,"/members/{id}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET,"/contacts").hasRole("ADMIN")
+
                 .antMatchers(
                         "/organization",
                         "/testimonials/{page}",
                         "/news/{page}",
                         "/members", "/members/{page}",
                         "/comments", "/comments/{id}", "/comments/post/{newsId}").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers(HttpMethod.GET,"/organization/public/{id}", "/activities/{id}").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers(HttpMethod.PUT,"/members/{id}").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers(HttpMethod.POST,"/contacts").hasAnyAuthority("ADMIN", "USER")
+
                 .anyRequest().permitAll()
                 .and().httpBasic();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));

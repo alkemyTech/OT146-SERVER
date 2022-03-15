@@ -65,7 +65,6 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.OK).body(pageResponse);
     }
 
-   // @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @ApiOperation(value = "Modify a member by id")
     @PutMapping("/{id}")
     public ResponseEntity<MemberDTO> update(@Valid @PathVariable long id, @Valid @RequestBody MemberDTO dto) {
@@ -74,7 +73,6 @@ public class MemberController {
         return ResponseEntity.ok().body(resultDTO);
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
     @ApiOperation(value = "Delete a member by id")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@Valid @PathVariable long id) {

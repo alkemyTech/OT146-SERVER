@@ -8,7 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.GeneratedValue;
@@ -32,14 +31,12 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
-    //@PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @GetMapping("/public/{id}")
     public OrganizationSimpleDto showOrganization(@PathVariable long id) {
         Organization organization = organizationService.findById(id);
         return toSimpleDto(organization);
     }
 
-    //@PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/public/{id}")
     public ResponseEntity<OrganizationDto> update(@Valid @RequestBody OrganizationDto organizationDto, @PathVariable long id){
         organizationDto.setIdOrganization(id);

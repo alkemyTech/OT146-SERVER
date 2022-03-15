@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,14 +25,12 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    @PreAuthorize("hasRole('USER') OR hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO){
         Contact contact = contactService.create(toDomain(contactDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<ContactDTO>> findAll(){
         List<Contact> contactsList = contactService.findAll();
