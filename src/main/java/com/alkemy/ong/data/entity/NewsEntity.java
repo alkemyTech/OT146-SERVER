@@ -9,6 +9,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "news")
@@ -43,8 +44,20 @@ public class NewsEntity {
 
     private boolean deleted;
 
-
 //    @ManyToOne(fetch = FetchType.EAGER)
 //    @JoinColumn(name="categories_id")
 //    private Category categories;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NewsEntity that = (NewsEntity) o;
+        return deleted == that.deleted && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(content, that.content) && Objects.equals(image, that.image);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, content, image, deleted);
+    }
 }

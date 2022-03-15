@@ -15,4 +15,6 @@ public interface UserGateway {
     User create(User user);
 
     boolean existsByEmail(String email);
+
+    User update(Long id, User user);
 }

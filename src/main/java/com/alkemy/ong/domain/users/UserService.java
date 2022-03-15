@@ -40,4 +40,7 @@ public class UserService {
         return userGateway.existsByEmail(email);
     }
 
+    public User update(Long id, User user) {
+        return userGateway.update(id, user);
+    }
 }
