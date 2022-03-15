@@ -41,7 +41,6 @@ public class UserController {
         return ResponseEntity.ok(toListDto(users));
     }
 
-
     @PostMapping("/auth/register")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO newUser) {
 
@@ -49,22 +48,17 @@ public class UserController {
             throw new BadRequestException("The email is already registered");
         }
 
-
         newUser.setPassword(encoder.encode(newUser.getPassword()));
         User user = userService.save(toDomain(newUser));
 
         return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<Void> deleteUser (@PathVariable Long id){
-        User user = userService.findById(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
         userService.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-
-
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable("id") Long id,

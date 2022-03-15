@@ -1,22 +1,19 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.MemberEntity;
 import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.RolesRepository;
 import com.alkemy.ong.data.repository.UserRepository;
-import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserGateway;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 @Component
 public class DefaultUserGateway implements UserGateway {
@@ -66,7 +63,9 @@ public class DefaultUserGateway implements UserGateway {
 
     @Override
     public void deleteById(Long id) {
-
+        UserEntity entity = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
+        entity.setDeleted(true);
+        userRepository.save(entity);
     }
 
     @Override
