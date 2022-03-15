@@ -1,4 +1,4 @@
-package com.alkemy.ong.web.document;
+package com.alkemy.ong.domain.mail;
 
 public class EmailRequest {
 

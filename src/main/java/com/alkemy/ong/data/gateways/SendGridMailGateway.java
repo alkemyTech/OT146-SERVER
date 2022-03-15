@@ -1,9 +1,11 @@
-package com.alkemy.ong.web.document;
+package com.alkemy.ong.data.gateways;
 
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.IOException;
 
+import com.alkemy.ong.domain.mail.EmailRequest;
+import com.alkemy.ong.web.utils.MailUtils;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
 import com.sendgrid.Response;
@@ -17,14 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailService {
+public class SendGridMailGateway {
 
     @Autowired
     SendGrid sendgrid;
 
     public Response sendemail(EmailRequest emailrequest) {
 
-        Mail mail = new Mail(new Email("javesq82@gmail.com"), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
+        Mail mail = new Mail(new Email(MailUtils.MAIL_FROM), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
         mail.setReplyTo(new Email("abc@gmail.com"));
 
         Request request = new Request();
@@ -39,7 +41,7 @@ public class EmailService {
             response=this.sendgrid.api(request);
 
         } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+            throw new RuntimeException();
 
         }
 
