@@ -30,6 +30,7 @@ public class TestimonialController {
         this.testimonialService = testimonialService;
     }
 
+
     @ApiOperation(value = "Save Testimonial")
     @PostMapping
     public ResponseEntity<TestimonialDTO> save(@Valid @RequestBody  TestimonialDTO dto) {
@@ -37,12 +38,14 @@ public class TestimonialController {
         return ResponseEntity.status(HttpStatus.CREATED).body(toDto(testimonial));
     }
 
+
     @ApiOperation(value = "Update Testimonial")
     @PutMapping(value = "/{id}")
     public ResponseEntity<TestimonialDTO> update(@PathVariable Long id, @Valid @RequestBody  TestimonialDTO dto) {
         Testimonial testimonial = testimonialService.update(id, toDomain(dto));
         return ResponseEntity.status(HttpStatus.OK).body(toDto(testimonial));
     }
+
 
     @ApiOperation(value = "Delete Testimonial")
     @DeleteMapping(value = "/{id}")
