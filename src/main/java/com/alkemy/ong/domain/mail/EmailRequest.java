@@ -1,5 +1,9 @@
 package com.alkemy.ong.domain.mail;
 
+import lombok.Builder;
+
+
+@Builder
 public class EmailRequest {
 
     private String to;
