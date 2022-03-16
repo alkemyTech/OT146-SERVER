@@ -33,8 +33,7 @@ public class ContactController {
     public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO){
         Contact contact = contactService.create(toDomain(contactDTO));
         EmailRequest emailRequest = new EmailRequest(contactDTO.getEmail(), "You’ve made a new contact", "Your contact message has been sent: " + contactDTO.getMessage());
-        String prueba = (sendMailService.sendemail(emailRequest)).getBody();
-        System.out.println(prueba);
+        sendMailService.sendemail(emailRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }
 
