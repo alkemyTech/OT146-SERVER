@@ -36,6 +36,10 @@ public class UserService {
         return userGateway.create(user);
     }
 
+    public void deleteById(Long id){
+        userGateway.deleteById(id);
+    }
+
     public boolean existsByEmail(String email){
         return userGateway.existsByEmail(email);
     }
