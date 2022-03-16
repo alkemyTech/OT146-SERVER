@@ -14,4 +14,3 @@ amazonProperties:
   bucketName:
 
 spring.sendgrid.api-key:
-

@@ -1,7 +1,9 @@
 package com.alkemy.ong.web.controller;
 
+import com.alkemy.ong.data.gateways.SendMailService;
 import com.alkemy.ong.domain.contacts.Contact;
 import com.alkemy.ong.domain.contacts.ContactService;
+import com.alkemy.ong.domain.mail.EmailRequest;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -20,14 +22,19 @@ import java.util.stream.Collectors;
 public class ContactController {
 
     private final ContactService contactService;
+    private final SendMailService sendMailService;
 
-    public ContactController(ContactService contactService) {
+    public ContactController(ContactService contactService, SendMailService sendMailService) {
         this.contactService = contactService;
+        this.sendMailService = sendMailService;
     }
 
     @PostMapping
     public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO){
         Contact contact = contactService.create(toDomain(contactDTO));
+        EmailRequest emailRequest = new EmailRequest(contactDTO.getEmail(), "You’ve made a new contact", "Your contact message has been sent: " + contactDTO.getMessage());
+        String prueba = (sendMailService.sendemail(emailRequest)).getBody();
+        System.out.println(prueba);
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }
 
