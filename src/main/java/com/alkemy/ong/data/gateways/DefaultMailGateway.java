@@ -25,9 +25,11 @@ public class DefaultMailGateway implements MailGateway  {
 
     @Override
     public Boolean sendMail(String to, String subject, String body) {
+
+        Email email = new Email(MailUtils.MAIL_FROM, MailUtils.MAIL_FROM_NAME);
         
-        Mail mail = new Mail(new Email(MailUtils.MAIL_FROM, "Lucas"), subject, new Email(to), new Content("text/plain", body));
-        mail.setReplyTo(new Email(MailUtils.MAIL_FROM, "Lucas"));
+        Mail mail = new Mail(email, subject, new Email(to), new Content("text/plain", body));
+        mail.setReplyTo(email);
         Request request = new Request();
 
         
