@@ -1,6 +1,7 @@
 package com.alkemy.ong.domain.users;
 
 import com.alkemy.ong.domain.mail.MailService;
+import com.alkemy.ong.web.utils.MailUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public class UserService {
 
     private final UserGateway userGateway;
     private final MailService mailService;
-    private final String BODY = " your registration was successful, you are now part of the best Alkemy team.";
+
 
     public UserService(UserGateway userGateway, MailService mailService) {
         this.userGateway = userGateway;
@@ -37,7 +38,7 @@ public class UserService {
     }
 
     public User save(User user){
-        mailService.sendMailWithTemplate(user.getEmail(), user.getFirstName(), user.getEmail() + BODY);
+        mailService.sendMailWithTemplate(user.getEmail(), "Successful registration", MailUtils.TEMPLATE);
         return userGateway.create(user);
     }
 

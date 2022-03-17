@@ -15,5 +15,4 @@ amazonProperties:
 
 spring.sendgrid.api-key:
 
-spring.sendgrid.template-id:
 

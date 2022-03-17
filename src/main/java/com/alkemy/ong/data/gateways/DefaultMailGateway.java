@@ -10,7 +10,6 @@ import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,8 +20,6 @@ public class DefaultMailGateway implements MailGateway  {
     @Autowired
     SendGrid sendgrid;
 
-    @Value("${spring.sendgrid.template-id}")
-    String templateId;
 
     @Override
     public Boolean sendMail(String to, String subject, String body) {
@@ -33,7 +30,7 @@ public class DefaultMailGateway implements MailGateway  {
         mail.setReplyTo(email);
         Request request = new Request();
 
-        
+
 
         try {
             request.setMethod(Method.POST);
@@ -51,20 +48,20 @@ public class DefaultMailGateway implements MailGateway  {
     }
 
     @Override
-    public Boolean sendMailWithTemplate(String to, String name, String body) {
+    public Boolean sendMailWithTemplate(String to, String subject, String body) {
 
-        Email from = new Email(MailUtils.MAIL_FROM, MailUtils.MAIL_FROM_NAME);
+        Email email = new Email(MailUtils.MAIL_FROM, MailUtils.MAIL_FROM_NAME);
         Email toEmail = new Email(to);
-        Mail mail = new Mail();
+
+        Mail mail = new Mail(email, subject, new Email(to), new Content("text/html", body));
+        mail.setReplyTo(email);
 
         Personalization personalization = new Personalization();
         personalization.addTo(toEmail);
-        mail.setFrom(from);
+        personalization.addSubstitution("%titulo%", "ACA LUEGO PASAR TITULO POR PARAMETRO");
+        personalization.addSubstitution("%body%", "ACA LUEGO PASAR BODY POR PARAMETRO");
 
-        personalization.addDynamicTemplateData("firstName", name);
-        personalization.addDynamicTemplateData("body", body);
         mail.addPersonalization(personalization);
-        mail.setTemplateId(templateId);
 
         Request request = new Request();
 
