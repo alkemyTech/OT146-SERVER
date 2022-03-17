@@ -61,8 +61,9 @@ public class ContactController {
                 .name(contact.getName())
                 .phone(contact.getPhone())
                 .email(contact.getEmail())
-                .message(contact.getEmail())
+                .message(contact.getMessage())
                 .createdAt(contact.getCreatedAt())
+                .updatedAt(contact.getUpdatedAt())
                 .build();
     }
 

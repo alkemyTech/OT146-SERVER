@@ -6,9 +6,9 @@ import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.security.jwt.CustomAuthenticationFilter;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.BeanUtils;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,7 +51,6 @@ public class UserController {
         return ResponseEntity.ok(toListDto(users));
     }
 
-
     @PostMapping("/auth/register")
     public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO newUser, HttpServletResponse response, HttpServletRequest request) throws ServletException {
 
@@ -75,6 +74,11 @@ public class UserController {
         return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity delete(@PathVariable Long id){
+        userService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable("id") Long id,
@@ -105,6 +109,9 @@ public class UserController {
         @Email
         private String email;
 
+        @NotBlank(message="The password can´t be empty")
+        @Size(min = 6, max = 255, message = "Password length must be between 6 and 255 characters")
+
         @NotBlank(message = "The password can´t be empty")
         @Size(min = 8, max = 255, message = "Password length must be between 8 and 255 characters")
         @Column(nullable = false)
@@ -119,11 +126,11 @@ public class UserController {
         private String roleName;
 
         @Column(name = "created_at")
-        @CreatedDate
+        @CreationTimestamp
         private LocalDateTime createdAt;
 
         @Column(name = "updated_at")
-        @LastModifiedDate
+        @UpdateTimestamp
         private LocalDateTime updatedAt;
     }
 
