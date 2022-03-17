@@ -29,8 +29,6 @@ public class DefaultMailGateway implements MailGateway  {
         mail.setReplyTo(email);
         Request request = new Request();
 
-        
-
         try {
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
