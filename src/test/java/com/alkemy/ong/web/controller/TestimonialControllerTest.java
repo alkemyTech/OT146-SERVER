@@ -38,7 +38,7 @@ class TestimonialControllerTest {
 
 
     @BeforeEach
-    public void beforeAll(){
+    public void setUp(){
         TestimonialEntity testimonialA = buildTestimonialEntity(1L, "A", "http://...", "content", false);
         TestimonialEntity testimonialB = buildTestimonialEntity(2L, "B", "http://...", "content", false);
         TestimonialEntity testimonialC = buildTestimonialEntity(3L, "C", "http://...", "content", false);
