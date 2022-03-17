@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/alkemy_ong
     username: root
-    password: 
+    password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
     initialization-mode: always
     continue-on-error: true
@@ -13,4 +13,4 @@ amazonProperties:
   secretKey:
   bucketName:
 
-spring.sendgrid.api-key:
+spring.sendgrid.api-key: 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

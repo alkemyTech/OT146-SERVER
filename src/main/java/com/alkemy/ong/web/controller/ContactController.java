@@ -1,9 +1,8 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.data.gateways.SendMailService;
+import com.alkemy.ong.data.gateways.DefaultMailGateway;
 import com.alkemy.ong.domain.contacts.Contact;
 import com.alkemy.ong.domain.contacts.ContactService;
-import com.alkemy.ong.domain.mail.EmailRequest;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -22,17 +21,19 @@ import java.util.stream.Collectors;
 public class ContactController {
 
     private final ContactService contactService;
-    private final SendMailService sendMailService;
+    private final DefaultMailGateway defaultMailGateway;
 
-    public ContactController(ContactService contactService, SendMailService sendMailService) {
+    public ContactController(ContactService contactService, DefaultMailGateway defaultMailGateway) {
         this.contactService = contactService;
-        this.sendMailService = sendMailService;
+        this.defaultMailGateway = defaultMailGateway;
     }
 
     @PostMapping
-    public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO){
-        EmailRequest emailRequest = new EmailRequest(contactDTO.getEmail(), "You’ve made a new contact", "Your contact message has been sent: " + contactDTO.getMessage());
-        sendMailService.sendemail(emailRequest);
+    public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO, String to, String subject, String body){
+        to = contactDTO.getEmail();
+        subject = "You’ve made a new contact";
+        body = "Your contact message has been sent: " + contactDTO.getMessage();
+        defaultMailGateway.sendMail(to,subject, body);
         Contact contact = contactService.create(toDomain(contactDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }
@@ -69,6 +70,7 @@ public class ContactController {
                 .email(contact.getEmail())
                 .message(contact.getMessage())
                 .createdAt(contact.getCreatedAt())
+                .updatedAt(contact.getUpdatedAt())
                 .build();
     }
 

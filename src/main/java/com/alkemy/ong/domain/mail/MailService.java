@@ -1,5 +1,8 @@
 package com.alkemy.ong.domain.mail;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public class MailService {
 
     private final MailGateway mailGateway; 
@@ -8,7 +11,7 @@ public class MailService {
         this.mailGateway = mailGateway;
     }
 
-    public String sendMail(String to, String subject, String body) {
+    public Boolean sendMail(String to, String subject, String body) {
         return mailGateway.sendMail(to, subject, body);
     }
 

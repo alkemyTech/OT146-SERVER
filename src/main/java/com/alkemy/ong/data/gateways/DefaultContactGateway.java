@@ -40,9 +40,10 @@ public class DefaultContactGateway implements ContactGateway {
 
     private ContactEntity toEntity(Contact contact) {
         return ContactEntity.builder()
+                .id(contact.getId())
                 .name(contact.getName())
-                .phone(contact.getPhone())
                 .email(contact.getEmail())
+                .phone(contact.getPhone())
                 .message(contact.getMessage())
                 .build();
     }
@@ -53,8 +54,10 @@ public class DefaultContactGateway implements ContactGateway {
                 .name(contactEntity.getName())
                 .phone(contactEntity.getPhone())
                 .email(contactEntity.getEmail())
+                .phone(contactEntity.getPhone())
                 .message(contactEntity.getMessage())
                 .createdAt(contactEntity.getCreatedAt())
+                .updatedAt(contactEntity.getUpdatedAt())
                 .build();
     }
 
