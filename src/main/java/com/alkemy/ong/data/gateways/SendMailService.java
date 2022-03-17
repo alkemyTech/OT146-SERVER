@@ -23,8 +23,8 @@ public class SendMailService {
 
     public Response sendemail(EmailRequest emailrequest) {
 
-        Mail mail = new Mail(new Email(MailUtils.MAIL_FROM, "Lucas"), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
-        mail.setReplyTo(new Email(MailUtils.MAIL_FROM, "Lucas"));
+        Mail mail = new Mail(new Email(MailUtils.MAIL_FROM, "Alkemy ONG"), emailrequest.getSubject(), new Email(emailrequest.getTo()), new Content("text/plain", emailrequest.getBody()));
+        mail.setReplyTo(new Email(MailUtils.MAIL_FROM, "Alkemy ONG"));
         Request request = new Request();
 
         Response response = null;

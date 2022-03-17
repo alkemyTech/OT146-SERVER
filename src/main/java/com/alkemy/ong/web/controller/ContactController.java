@@ -31,9 +31,9 @@ public class ContactController {
 
     @PostMapping
     public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO){
-        Contact contact = contactService.create(toDomain(contactDTO));
         EmailRequest emailRequest = new EmailRequest(contactDTO.getEmail(), "You’ve made a new contact", "Your contact message has been sent: " + contactDTO.getMessage());
         sendMailService.sendemail(emailRequest);
+        Contact contact = contactService.create(toDomain(contactDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }
 
@@ -67,7 +67,7 @@ public class ContactController {
                 .name(contact.getName())
                 .phone(contact.getPhone())
                 .email(contact.getEmail())
-                .message(contact.getEmail())
+                .message(contact.getMessage())
                 .createdAt(contact.getCreatedAt())
                 .build();
     }
