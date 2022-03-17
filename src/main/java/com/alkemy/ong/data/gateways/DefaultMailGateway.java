@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
-public class DefaultMailGateway implements MailGateway  {
+public class DefaultMailGateway implements MailGateway {
 
     @Autowired
     SendGrid sendgrid;
@@ -25,11 +25,10 @@ public class DefaultMailGateway implements MailGateway  {
     public Boolean sendMail(String to, String subject, String body) {
 
         Email email = new Email(MailUtils.MAIL_FROM, MailUtils.MAIL_FROM_NAME);
-        
+
         Mail mail = new Mail(email, subject, new Email(to), new Content("text/plain", body));
         mail.setReplyTo(email);
         Request request = new Request();
-
 
 
         try {
@@ -48,18 +47,18 @@ public class DefaultMailGateway implements MailGateway  {
     }
 
     @Override
-    public Boolean sendMailWithTemplate(String to, String subject, String body) {
+    public Boolean sendMailWithTemplate(String to, String subject, String template, String title, String body) {
 
         Email email = new Email(MailUtils.MAIL_FROM, MailUtils.MAIL_FROM_NAME);
         Email toEmail = new Email(to);
 
-        Mail mail = new Mail(email, subject, new Email(to), new Content("text/html", body));
+        Mail mail = new Mail(email, subject, new Email(to), new Content("text/html", template));
         mail.setReplyTo(email);
 
         Personalization personalization = new Personalization();
         personalization.addTo(toEmail);
-        personalization.addSubstitution("%titulo%", "ACA LUEGO PASAR TITULO POR PARAMETRO");
-        personalization.addSubstitution("%body%", "ACA LUEGO PASAR BODY POR PARAMETRO");
+        personalization.addSubstitution("%titulo%", title);
+        personalization.addSubstitution("%body%", body);
 
         mail.addPersonalization(personalization);
 
@@ -79,5 +78,5 @@ public class DefaultMailGateway implements MailGateway  {
 
         }
     }
-    
+
 }

@@ -12,6 +12,10 @@ public class UserService {
     private final UserGateway userGateway;
     private final MailService mailService;
 
+    private final String SUBJECT = "Successful registration";
+    private final String TITLE = "WELCOME ";
+    private final String BODY = "  your registration was successful, you are now part of the best Alkemy team.";
+
 
     public UserService(UserGateway userGateway, MailService mailService) {
         this.userGateway = userGateway;
@@ -37,16 +41,16 @@ public class UserService {
         return userGateway.findById(id);
     }
 
-    public User save(User user){
-        mailService.sendMailWithTemplate(user.getEmail(), "Successful registration", MailUtils.TEMPLATE);
+    public User save(User user) {
+        mailService.sendMailWithTemplate(user.getEmail(), SUBJECT, MailUtils.TEMPLATE, TITLE + user.getFirstName(), user.getEmail() + BODY);
         return userGateway.create(user);
     }
 
-    public void deleteById(Long id){
+    public void deleteById(Long id) {
         userGateway.deleteById(id);
     }
 
-    public boolean existsByEmail(String email){
+    public boolean existsByEmail(String email) {
         return userGateway.existsByEmail(email);
     }
 
