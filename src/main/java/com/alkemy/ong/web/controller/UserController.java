@@ -4,16 +4,22 @@ package com.alkemy.ong.web.controller;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
+import com.alkemy.ong.web.security.jwt.CustomAuthenticationFilter;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Column;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -21,6 +27,7 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.alkemy.ong.web.security.jwt.JwtUtils.generateAccessToken;
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -29,10 +36,13 @@ public class UserController {
 
     private final UserService userService;
     private final PasswordEncoder encoder;
+    private final AuthenticationManager authenticationManager;
 
-    public UserController(UserService userService, PasswordEncoder encoder) {
+
+    public UserController(UserService userService, PasswordEncoder encoder, AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.encoder = encoder;
+        this.authenticationManager = authenticationManager;
     }
 
     @GetMapping
@@ -42,14 +52,24 @@ public class UserController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO newUser) {
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO newUser, HttpServletResponse response, HttpServletRequest request) throws ServletException {
+
 
         if (userService.existsByEmail(newUser.email)) {
             throw new BadRequestException("The email is already registered");
         }
 
+        String plainPass = newUser.getPassword();
+
         newUser.setPassword(encoder.encode(newUser.getPassword()));
         User user = userService.save(toDomain(newUser));
+
+        CustomAuthenticationFilter customAuth = new CustomAuthenticationFilter(authenticationManager);
+        Authentication authentication = customAuth.attemptAuthentication(user.getEmail(), plainPass);
+        org.springframework.security.core.userdetails.User springUser = (org.springframework.security.core.userdetails.User) authentication.getPrincipal();
+
+        String access_token = generateAccessToken(springUser, request);
+        response.setHeader("access_token", access_token);
 
         return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
     }
