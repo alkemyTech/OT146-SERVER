@@ -29,11 +29,12 @@ public class ContactController {
     }
 
     @PostMapping
-    public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO, String to, String subject, String body){
+    public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO, String to, String subject, String title, String body){
         to = contactDTO.getEmail();
         subject = "You’ve made a new contact";
-        body = "Your contact message has been sent: " + contactDTO.getMessage();
-        defaultMailGateway.sendMail(to,subject, body);
+        title = "Your contact details have been added!";
+        body = contactDTO.getMessage();
+        defaultMailGateway.sendMailWithTemplate(to, subject, title, body);
         Contact contact = contactService.create(toDomain(contactDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }
