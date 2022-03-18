@@ -4,5 +4,5 @@ public interface MailGateway {
 
     Boolean sendMail(String to, String subject, String body);
 
-    Boolean sendMailWithTemplate(String to, String subject, String template, String title, String body);
+    Boolean sendMailWithTemplate(String to, String subject, String title, String body);
 }

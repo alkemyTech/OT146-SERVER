@@ -3,7 +3,7 @@ package com.alkemy.ong.web.utils;
 public class MailUtils {
 
     public static final String MAIL_FROM = "";
-    public static final String MAIL_FROM_NAME = "";
+    public static final String MAIL_FROM_NAME = "DEEP-CODE";
     public static String TEMPLATE = "<!doctype html>\n" +
             "<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\"\n" +
             "      xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
@@ -300,7 +300,7 @@ public class MailUtils {
             "                                    <div\n" +
             "                                            style=\"font-family:Ubuntu, Helvetica, Arial, sans-serif;font-size:11px;line-height:1.5;text-align:left;color:#000000;\">\n" +
             "                                        <p style=\"text-align: center;\"><span\n" +
-            "                                                style=\"font-size: 24px;\"><strong>%titulo%</strong></span></p>\n" +
+            "                                                style=\"font-size: 24px;\"><strong>%title%</strong></span></p>\n" +
             "                                        <p style=\"text-align: center;\">&nbsp;</p>\n" +
             "                                        <p style=\"text-align: center;\"><span\n" +
             "                                                style=\"font-size: 16px;\">%body%</span></p>\n" +
@@ -400,8 +400,5 @@ public class MailUtils {
             "\n" +
             "</body>\n" +
             "\n" +
-            "</html>\n" +
-            "plantilla_email.html\n" +
-            "Mostrando plantilla_email.html";
-
+            "</html>";
 }

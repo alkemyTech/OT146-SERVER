@@ -46,20 +46,20 @@ public class DefaultMailGateway implements MailGateway {
     }
 
     @Override
-    public Boolean sendMailWithTemplate(String to, String subject, String template, String title, String body) {
+    public Boolean sendMailWithTemplate(String to, String subject, String title, String body) {
 
         Email emailFrom = new Email(MailUtils.MAIL_FROM, MailUtils.MAIL_FROM_NAME);
 
         Email emailTo = new Email(to);
 
-        Mail mail = new Mail(emailFrom, subject, emailTo, new Content("text/html", template));
+        Mail mail = new Mail(emailFrom, subject, emailTo, new Content("text/html", MailUtils.TEMPLATE));
 
-        Request request = new Request();
-
-        mail.personalization.get(0).addSubstitution("%titulo%", title);
+        mail.personalization.get(0).addSubstitution("%title%", title);
         mail.personalization.get(0).addSubstitution("%body%", body);
 
         try {
+
+            Request request = new Request();
             request.setMethod(Method.POST);
             request.setEndpoint("mail/send");
             request.setBody(mail.build());

@@ -1,7 +1,6 @@
 package com.alkemy.ong.domain.users;
 
 import com.alkemy.ong.domain.mail.MailService;
-import com.alkemy.ong.web.utils.MailUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -42,7 +41,7 @@ public class UserService {
     }
 
     public User save(User user) {
-        mailService.sendMailWithTemplate(user.getEmail(), SUBJECT, MailUtils.TEMPLATE, TITLE + user.getFirstName(), user.getEmail() + BODY);
+        mailService.sendMailWithTemplate(user.getEmail(), SUBJECT, TITLE + user.getFirstName(), user.getEmail() + BODY);
         return userGateway.create(user);
     }
 
