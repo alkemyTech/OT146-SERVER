@@ -8,7 +8,6 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
-import com.sendgrid.helpers.mail.objects.Personalization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -49,20 +48,16 @@ public class DefaultMailGateway implements MailGateway {
     @Override
     public Boolean sendMailWithTemplate(String to, String subject, String template, String title, String body) {
 
-        Email email = new Email(MailUtils.MAIL_FROM, MailUtils.MAIL_FROM_NAME);
-        Email toEmail = new Email(to);
+        Email emailFrom = new Email(MailUtils.MAIL_FROM, MailUtils.MAIL_FROM_NAME);
 
-        Mail mail = new Mail(email, subject, new Email(to), new Content("text/html", template));
-        mail.setReplyTo(email);
+        Email emailTo = new Email(to);
 
-        Personalization personalization = new Personalization();
-        personalization.addTo(toEmail);
-        personalization.addSubstitution("%titulo%", title);
-        personalization.addSubstitution("%body%", body);
-
-        mail.addPersonalization(personalization);
+        Mail mail = new Mail(emailFrom, subject, emailTo, new Content("text/html", template));
 
         Request request = new Request();
+
+        mail.personalization.get(0).addSubstitution("%titulo%", title);
+        mail.personalization.get(0).addSubstitution("%body%", body);
 
         try {
             request.setMethod(Method.POST);
@@ -75,8 +70,8 @@ public class DefaultMailGateway implements MailGateway {
 
         } catch (IOException ex) {
             return false;
-
         }
+
     }
 
 }

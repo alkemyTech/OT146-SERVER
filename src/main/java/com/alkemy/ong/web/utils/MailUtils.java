@@ -2,8 +2,8 @@ package com.alkemy.ong.web.utils;
 
 public class MailUtils {
 
-    public static final String MAIL_FROM = "reyespabloeduardo@gmail.com";
-    public static final String MAIL_FROM_NAME = "Pablo";
+    public static final String MAIL_FROM = "";
+    public static final String MAIL_FROM_NAME = "";
     public static String TEMPLATE = "<!doctype html>\n" +
             "<html xmlns=\"http://www.w3.org/1999/xhtml\" xmlns:v=\"urn:schemas-microsoft-com:vml\"\n" +
             "      xmlns:o=\"urn:schemas-microsoft-com:office:office\">\n" +
