@@ -1,6 +1,7 @@
 package com.alkemy.ong.web.controller;
 
 
+import com.alkemy.ong.domain.comments.CommentaryService;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
@@ -26,6 +27,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import static com.alkemy.ong.web.security.jwt.JwtUtils.generateAccessToken;
 import static java.util.stream.Collectors.toList;
@@ -35,12 +38,14 @@ import static java.util.stream.Collectors.toList;
 public class UserController {
 
     private final UserService userService;
+    private final CommentaryService commentaryService;
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
 
 
-    public UserController(UserService userService, PasswordEncoder encoder, AuthenticationManager authenticationManager) {
+    public UserController(UserService userService, CommentaryService commentaryService, PasswordEncoder encoder, AuthenticationManager authenticationManager) {
         this.userService = userService;
+        this.commentaryService = commentaryService;
         this.encoder = encoder;
         this.authenticationManager = authenticationManager;
     }
@@ -72,6 +77,21 @@ public class UserController {
         response.setHeader("access_token", access_token);
 
         return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> show(@PathVariable Long id) {
+        UserDTO userDto = toDto(userService.findById(id));
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedUserMail = ((UserDetails) principal).getUsername();
+        User loggedUser = userService.findByEmail(loggedUserMail);
+
+        if (userDto.getEmail().equals(loggedUser)) {
+            return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<UserDTO>(userDto, HttpStatus.FORBIDDEN);
+        }      
     }
 
     @DeleteMapping("/{id}")
