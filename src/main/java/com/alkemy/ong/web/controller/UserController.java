@@ -1,6 +1,7 @@
 package com.alkemy.ong.web.controller;
 
 
+import com.alkemy.ong.domain.mail.MailService;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
@@ -35,12 +36,14 @@ import static java.util.stream.Collectors.toList;
 public class UserController {
 
     private final UserService userService;
+    private final MailService mailService;
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
 
 
-    public UserController(UserService userService, PasswordEncoder encoder, AuthenticationManager authenticationManager) {
+    public UserController(UserService userService, MailService mailService, PasswordEncoder encoder, AuthenticationManager authenticationManager) {
         this.userService = userService;
+        this.mailService = mailService;
         this.encoder = encoder;
         this.authenticationManager = authenticationManager;
     }
@@ -70,6 +73,12 @@ public class UserController {
 
         String access_token = generateAccessToken(springUser, request);
         response.setHeader("access_token", access_token);
+
+        String title = "Successful registration";
+        String subject = "Welcome aboard!!";
+        String body = "Hello, " + user.getFirstName() + "\nRemember that your username is: " + user.getEmail()
+                + "\nWe are happy that you decided to join Deep code.";
+        mailService.sendMailWithTemplate(user.getEmail(), subject, title, body);
 
         return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
     }
