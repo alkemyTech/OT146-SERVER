@@ -1,7 +1,5 @@
 package com.alkemy.ong.web.controller;
 
-
-import com.alkemy.ong.domain.comments.CommentaryService;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
@@ -28,8 +26,6 @@ import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import static com.alkemy.ong.web.security.jwt.JwtUtils.generateAccessToken;
 import static java.util.stream.Collectors.toList;
 
