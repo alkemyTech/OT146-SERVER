@@ -82,7 +82,7 @@ public class UserController {
         UserDTO userDto = toDto(userService.findById(id));
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String loggedUserMail = ((UserDetails) principal).getUsername();
+        String loggedUserMail =  ((String) principal);
 
         if (userDto.getEmail().equals(loggedUserMail)) {
             return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
