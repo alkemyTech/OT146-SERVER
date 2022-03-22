@@ -19,7 +19,4 @@ public class MailService {
         return mailGateway.sendMailWithTemplate(to, subject, title, body);
     }
 
-
-
-    
 }
