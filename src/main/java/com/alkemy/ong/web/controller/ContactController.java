@@ -1,8 +1,9 @@
 package com.alkemy.ong.web.controller;
 
-import com.alkemy.ong.data.gateways.DefaultMailGateway;
 import com.alkemy.ong.domain.contacts.Contact;
 import com.alkemy.ong.domain.contacts.ContactService;
+import com.alkemy.ong.domain.mail.MailGateway;
+import com.alkemy.ong.domain.mail.MailService;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
@@ -21,20 +22,20 @@ import java.util.stream.Collectors;
 public class ContactController {
 
     private final ContactService contactService;
-    private final DefaultMailGateway defaultMailGateway;
+    private final MailService mailService;
 
-    public ContactController(ContactService contactService, DefaultMailGateway defaultMailGateway) {
+    public ContactController(ContactService contactService, MailService mailService) {
         this.contactService = contactService;
-        this.defaultMailGateway = defaultMailGateway;
+        this.mailService = mailService;
     }
 
     @PostMapping
-    public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO, String to, String subject, String title, String body){
-        to = contactDTO.getEmail();
-        subject = "You’ve made a new contact";
-        title = "Your contact details have been added!";
-        body = contactDTO.getMessage();
-        defaultMailGateway.sendMailWithTemplate(to, subject, title, body);
+    public ResponseEntity<ContactDTO> create(@Valid @RequestBody ContactDTO contactDTO){
+        String to = contactDTO.getEmail();
+        String subject = "You’ve made a new contact";
+        String title = "Your contact details have been added!";
+        String body = contactDTO.getMessage();
+        mailService.sendMailWithTemplate(to, subject, title, body);
         Contact contact = contactService.create(toDomain(contactDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(toDTO(contact));
     }

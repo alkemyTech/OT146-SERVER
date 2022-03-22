@@ -44,7 +44,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/comments", "/comments/{id}", "/comments/post/{newsId}").hasAnyAuthority("ADMIN", "USER")
                 .antMatchers(HttpMethod.GET,"/organization/public/{id}", "/activities/{id}").hasRole("USER")
                 .antMatchers(HttpMethod.PUT,"/members/{id}").hasRole("USER")
-                .antMatchers(HttpMethod.POST,"/contacts").hasRole("USER")
 
                 .antMatchers(
                 "/users", "/users/{id}",
@@ -60,7 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.PUT,"/organization/public/{id}", "/activities/{id}", "/members/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/members/{id}").hasRole("ADMIN")
                 .antMatchers(HttpMethod.GET,"/contacts", "/organization/public/{id}", "/activities/{id}").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/contacts").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST,"/contacts").hasAnyRole("USER", "ADMIN")
                 .anyRequest().permitAll()
                 .and().httpBasic();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
