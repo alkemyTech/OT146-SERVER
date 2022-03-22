@@ -38,14 +38,12 @@ import static java.util.stream.Collectors.toList;
 public class UserController {
 
     private final UserService userService;
-    private final CommentaryService commentaryService;
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
 
 
-    public UserController(UserService userService, CommentaryService commentaryService, PasswordEncoder encoder, AuthenticationManager authenticationManager) {
+    public UserController(UserService userService, PasswordEncoder encoder, AuthenticationManager authenticationManager) {
         this.userService = userService;
-        this.commentaryService = commentaryService;
         this.encoder = encoder;
         this.authenticationManager = authenticationManager;
     }
@@ -85,9 +83,8 @@ public class UserController {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String loggedUserMail = ((UserDetails) principal).getUsername();
-        User loggedUser = userService.findByEmail(loggedUserMail);
 
-        if (userDto.getEmail().equals(loggedUser)) {
+        if (userDto.getEmail().equals(loggedUserMail)) {
             return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<UserDTO>(userDto, HttpStatus.FORBIDDEN);
