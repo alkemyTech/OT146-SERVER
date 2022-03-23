@@ -6,7 +6,9 @@ import com.alkemy.ong.data.entity.UserEntity;
 import com.alkemy.ong.data.repository.RolesRepository;
 import com.alkemy.ong.data.repository.UserRepository;
 import com.alkemy.ong.domain.users.User;
+import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.controller.UserController;
+import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,9 @@ public class AuthenticationControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    @Autowired
+    UserService userService;
+
     @MockBean
     UserRepository userRepository;
 
@@ -50,18 +55,21 @@ public class AuthenticationControllerTest {
     @Test
     public void loginAfterRegistration() throws Exception {
         RolesEntity rolesEntity = generateRoleEntity(1L, "Admin", "Admin");
-        UserEntity newUser = generateUserEntity(null, "Test", "Register", "new@mail.com", "12345678", null, rolesEntity);
-        UserEntity registerUserMock = generateUserEntity(1L, "Test", "Register", "new@mail.com", "12345678", null, rolesEntity);
-        //UserController.UserDTO userDTO = generateUserDto(1L,"Test", "Register", "new@mail.com", "12345678", 1L);
 
+        UserController.UserDTO userDTO = generateUserDto(1L,"Test", "Register", "new@mail.com", "12345678", 1L);
+        User registerUserMock = generateUser(1L, "Test", "Register", "new@mail.com", "12345678", 1L);
+        UserEntity userEntity = generateUserEntity(1L, "Test", "Register", "new@mail.com", "12345678", null, rolesEntity);
 
-        when(userRepository.save(newUser)).thenReturn(registerUserMock);
-        when(roleRepository.findById(newUser.getRole().getId())).thenReturn(Optional.of(registerUserMock.getRole()));
+        when(roleRepository.save(rolesEntity)).thenReturn(rolesEntity);
+        when(roleRepository.findById(registerUserMock.getRoleId())).thenReturn(Optional.of(rolesEntity));
+
+        when(userRepository.save(toEntity(toDomain(userDTO)))).thenReturn(userEntity);
+        when(userService.save(toDomain(userDTO))).thenReturn(registerUserMock);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(newUser));
+                .content(objectMapper.writeValueAsString(userDTO));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(header().exists("access_token"));
@@ -103,14 +111,54 @@ public class AuthenticationControllerTest {
                 .build();
     }
 
-//    private UserController.UserDTO generateUserDto(Long id, String firstName, String lastName, String email, String password, Long roleId){
-//        return UserController.UserDTO.builder()
-//                .id(id)
-//                .firstName(firstName)
-//                .lastName(lastName)
-//                .email(email)
-//                .password(password)
-//                .roleId(roleId)
-//                .build();
-//    }
+    private UserController.UserDTO generateUserDto(Long id, String firstName, String lastName, String email, String password, Long roleId){
+        return UserController.UserDTO.builder()
+                .id(id)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password(password)
+                .roleId(roleId)
+                .build();
+    }
+
+    private User toDomain(UserController.UserDTO dto) {
+        return User.builder()
+                .id(dto.getId())
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .photo(dto.getPhoto())
+                .createdAt(dto.getCreatedAt())
+                .updatedAt(dto.getUpdatedAt())
+                .roleId(dto.getRoleId())
+                .build();
+    }
+    private User generateUser(Long id, String firstName, String lastName, String email, String password, Long roleId){
+        return User.builder()
+                .id(id)
+                .firstName(firstName)
+                .lastName(lastName)
+                .email(email)
+                .password(password)
+                .roleId(roleId)
+                .build();
+    }
+
+    private UserEntity toEntity(User user) {
+        return UserEntity.builder()
+                .id(user.getId())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .photo(user.getPhoto())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .role(roleRepository.findById(user.getRoleId()).orElseThrow(
+                        () -> new ResourceNotFoundException("Rol not found")
+                ))
+                .build();
+    }
 }
