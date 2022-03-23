@@ -19,7 +19,7 @@ public class JwtUtils {
     public static String generateAccessToken(User user, HttpServletRequest request){
         return JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(currentTimeMillis() + 10 * 60 * 1000))
+                .withExpiresAt(new Date(currentTimeMillis() + 30 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(toList()))
                 .sign(algorithm);
