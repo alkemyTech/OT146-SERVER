@@ -64,7 +64,8 @@ public class AuthenticationControllerTest {
         when(roleRepository.findById(registerUserMock.getRoleId())).thenReturn(Optional.of(rolesEntity));
 
         when(userRepository.save(toEntity(toDomain(userDTO)))).thenReturn(userEntity);
-        when(userService.save(toDomain(userDTO))).thenReturn(registerUserMock);
+        when(userRepository.findByEmail("new@mail.com")).thenReturn(Optional.of(userEntity));
+        //when(userService.save(toDomain(userDTO))).thenReturn(registerUserMock);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/auth/register")
