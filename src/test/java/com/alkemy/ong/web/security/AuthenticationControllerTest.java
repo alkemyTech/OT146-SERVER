@@ -9,7 +9,9 @@ import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.controller.UserController;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +45,6 @@ public class AuthenticationControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @Autowired
-    UserService userService;
-
     @MockBean
     UserRepository userRepository;
 
@@ -56,16 +55,14 @@ public class AuthenticationControllerTest {
     public void loginAfterRegistration() throws Exception {
         RolesEntity rolesEntity = generateRoleEntity(1L, "Admin", "Admin");
 
-        UserController.UserDTO userDTO = generateUserDto(1L,"Test", "Register", "new@mail.com", "12345678", 1L);
-        User registerUserMock = generateUser(1L, "Test", "Register", "new@mail.com", "12345678", 1L);
-        UserEntity userEntity = generateUserEntity(1L, "Test", "Register", "new@mail.com", "12345678", null, rolesEntity);
+        UserController.UserDTO userDTO = generateUserDto(1L,"Test", "Register", "new@mail.com", "password", 1L);
+        UserEntity userEntity = generateUserEntity(1L, "Test", "Register", "new@mail.com", "$2a$10$R4QXAeROWWBkBsxO9UUxoeUV3HsdP2AmAom.iHqYjiQyEWo6X66a2", null, rolesEntity);
 
         when(roleRepository.save(rolesEntity)).thenReturn(rolesEntity);
-        when(roleRepository.findById(registerUserMock.getRoleId())).thenReturn(Optional.of(rolesEntity));
+        when(roleRepository.findById(userDTO.getRoleId())).thenReturn(Optional.of(rolesEntity));
 
         when(userRepository.save(toEntity(toDomain(userDTO)))).thenReturn(userEntity);
         when(userRepository.findByEmail("new@mail.com")).thenReturn(Optional.of(userEntity));
-        //when(userService.save(toDomain(userDTO))).thenReturn(registerUserMock);
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/users/auth/register")
@@ -77,18 +74,32 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    public void successLogin(){
+    public void successLogin() throws Exception {
+        UserLoginDto userLoginDto = generateUserLoginDto("Test", "password");
 
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userLoginDto));
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(header().exists("access_token"));
     }
 
     @Test
-    public void failLogin(){
+    public void failLogin() throws Exception {
+        UserLoginDto userLoginDto = generateUserLoginDto("Test", "not-the-password");
 
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/users/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(userLoginDto));
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(header().doesNotExist("access_token"));
     }
 
     private UserEntity generateUserEntity(Long id, String name, String lastname, String email, String password, String photo, RolesEntity rolesEntity) {
-        //RolesEntity role = new RolesEntity();
-        //role.setId(roleId);
         return UserEntity.builder()
                 .id(id)
                 .firstName(name)
@@ -123,6 +134,13 @@ public class AuthenticationControllerTest {
                 .build();
     }
 
+    private UserLoginDto generateUserLoginDto(String username, String password){
+        return UserLoginDto.builder()
+                .username(username)
+                .password(password)
+                .build();
+    }
+
     private User toDomain(UserController.UserDTO dto) {
         return User.builder()
                 .id(dto.getId())
@@ -134,16 +152,6 @@ public class AuthenticationControllerTest {
                 .createdAt(dto.getCreatedAt())
                 .updatedAt(dto.getUpdatedAt())
                 .roleId(dto.getRoleId())
-                .build();
-    }
-    private User generateUser(Long id, String firstName, String lastName, String email, String password, Long roleId){
-        return User.builder()
-                .id(id)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .password(password)
-                .roleId(roleId)
                 .build();
     }
 
@@ -161,5 +169,15 @@ public class AuthenticationControllerTest {
                         () -> new ResourceNotFoundException("Rol not found")
                 ))
                 .build();
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserLoginDto {
+        public String username;
+        public String password;
     }
 }
