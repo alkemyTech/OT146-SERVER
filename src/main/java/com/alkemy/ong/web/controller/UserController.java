@@ -1,6 +1,5 @@
 package com.alkemy.ong.web.controller;
 
-
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
@@ -29,7 +28,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import org.springframework.security.core.context.SecurityContextHolder;
 import static com.alkemy.ong.web.security.jwt.JwtUtils.generateAccessToken;
 import static java.util.stream.Collectors.toList;
 
@@ -75,6 +74,20 @@ public class UserController {
         response.setHeader("access_token", access_token);
 
         return new ResponseEntity<UserDTO>(toDto(user), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> show(@PathVariable Long id) {
+        UserDTO userDto = toDto(userService.findById(id));
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String loggedUserMail =  ((String) principal);
+
+        if (userDto.getEmail().equals(loggedUserMail)) {
+            return new ResponseEntity<UserDTO>(userDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<UserDTO>(userDto, HttpStatus.FORBIDDEN);
+        }      
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,9 @@
 package com.alkemy.ong.data.gateways;
 
 import com.alkemy.ong.domain.mail.MailGateway;
+
+import java.io.IOException;
+
 import com.alkemy.ong.web.utils.MailUtils;
 import com.sendgrid.Method;
 import com.sendgrid.Request;
@@ -11,7 +14,6 @@ import com.sendgrid.helpers.mail.objects.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 
 @Component
 public class DefaultMailGateway implements MailGateway {
@@ -28,7 +30,6 @@ public class DefaultMailGateway implements MailGateway {
         Mail mail = new Mail(email, subject, new Email(to), new Content("text/plain", body));
         mail.setReplyTo(email);
         Request request = new Request();
-
 
         try {
             request.setMethod(Method.POST);
