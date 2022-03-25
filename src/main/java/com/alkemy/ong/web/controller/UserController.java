@@ -4,7 +4,10 @@ import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserService;
 import com.alkemy.ong.web.exceptions.BadRequestException;
 import com.alkemy.ong.web.security.jwt.CustomAuthenticationFilter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.beans.BeanUtils;
@@ -104,7 +107,10 @@ public class UserController {
 
 
     @Data
-    private static class UserDTO {
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class UserDTO {
         private Long id;
 
         @NotBlank(message = "The first name can´t be empty")
