@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.alkemy.ong.data.entity.CategoryEntity;
-import com.alkemy.ong.data.repository.CategoryRepository;
+import com.alkemy.ong.data.entities.CategoryEntity;
+import com.alkemy.ong.data.repositories.CategoryRepository;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

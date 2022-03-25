@@ -1,9 +1,9 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.TestimonialEntity;
-import com.alkemy.ong.data.repository.TestimonialRepository;
-import com.alkemy.ong.domain.testimonial.TestimonialGateway;
-import com.alkemy.ong.domain.testimonial.Testimonial;
+import com.alkemy.ong.data.entities.TestimonialEntity;
+import com.alkemy.ong.data.repositories.TestimonialRepository;
+import com.alkemy.ong.domain.testimonials.TestimonialGateway;
+import com.alkemy.ong.domain.testimonials.Testimonial;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

@@ -1,6 +1,6 @@
 package com.alkemy.ong.domain.slides;
 
-import com.alkemy.ong.domain.organization.Organization;
+import com.alkemy.ong.domain.organizations.Organization;
 import lombok.*;
 
 import java.time.LocalDateTime;

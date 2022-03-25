@@ -1,11 +1,11 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.CommentaryEntity;
-import com.alkemy.ong.data.entity.NewsEntity;
-import com.alkemy.ong.data.entity.UserEntity;
-import com.alkemy.ong.data.repository.CommentaryRepository;
-import com.alkemy.ong.data.repository.NewsRepository;
-import com.alkemy.ong.data.repository.UserRepository;
+import com.alkemy.ong.data.entities.CommentaryEntity;
+import com.alkemy.ong.data.entities.NewsEntity;
+import com.alkemy.ong.data.entities.UserEntity;
+import com.alkemy.ong.data.repositories.CommentaryRepository;
+import com.alkemy.ong.data.repositories.NewsRepository;
+import com.alkemy.ong.data.repositories.UserRepository;
 import com.alkemy.ong.domain.comments.Commentary;
 import com.alkemy.ong.domain.comments.CommentaryGateway;
 import com.alkemy.ong.web.exceptions.BadRequestException;

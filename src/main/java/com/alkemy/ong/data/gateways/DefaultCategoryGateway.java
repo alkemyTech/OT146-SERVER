@@ -4,10 +4,10 @@ package com.alkemy.ong.data.gateways;
 import java.util.List;
 import java.util.stream.*;
 
-import com.alkemy.ong.data.entity.CategoryEntity;
-import com.alkemy.ong.data.repository.CategoryRepository;
-import com.alkemy.ong.domain.Category.Category;
-import com.alkemy.ong.domain.Category.CategoryGateway;
+import com.alkemy.ong.data.entities.CategoryEntity;
+import com.alkemy.ong.data.repositories.CategoryRepository;
+import com.alkemy.ong.domain.categories.Category;
+import com.alkemy.ong.domain.categories.CategoryGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

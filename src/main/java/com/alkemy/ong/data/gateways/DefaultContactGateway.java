@@ -1,7 +1,7 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.ContactEntity;
-import com.alkemy.ong.data.repository.ContactRepository;
+import com.alkemy.ong.data.entities.ContactEntity;
+import com.alkemy.ong.data.repositories.ContactRepository;
 import com.alkemy.ong.domain.contacts.Contact;
 import com.alkemy.ong.domain.contacts.ContactGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;

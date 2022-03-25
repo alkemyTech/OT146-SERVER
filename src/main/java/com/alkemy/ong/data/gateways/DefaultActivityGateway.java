@@ -1,7 +1,7 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.ActivityEntity;
-import com.alkemy.ong.data.repository.ActivityRepository;
+import com.alkemy.ong.data.entities.ActivityEntity;
+import com.alkemy.ong.data.repositories.ActivityRepository;
 import com.alkemy.ong.domain.activities.Activity;
 import com.alkemy.ong.domain.activities.ActivityGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;

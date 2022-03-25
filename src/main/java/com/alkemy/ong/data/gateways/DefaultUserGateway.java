@@ -1,8 +1,8 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.UserEntity;
-import com.alkemy.ong.data.repository.RolesRepository;
-import com.alkemy.ong.data.repository.UserRepository;
+import com.alkemy.ong.data.entities.UserEntity;
+import com.alkemy.ong.data.repositories.RolesRepository;
+import com.alkemy.ong.data.repositories.UserRepository;
 import com.alkemy.ong.domain.users.User;
 import com.alkemy.ong.domain.users.UserGateway;
 import com.alkemy.ong.web.exceptions.BadRequestException;

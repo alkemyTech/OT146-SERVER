@@ -1,9 +1,9 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.OrganizationEntity;
-import com.alkemy.ong.data.repository.OrganizationRepository;
-import com.alkemy.ong.domain.organization.Organization;
-import com.alkemy.ong.domain.organization.OrganizationGateway;
+import com.alkemy.ong.data.entities.OrganizationEntity;
+import com.alkemy.ong.data.repositories.OrganizationRepository;
+import com.alkemy.ong.domain.organizations.Organization;
+import com.alkemy.ong.domain.organizations.OrganizationGateway;
 
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Component;

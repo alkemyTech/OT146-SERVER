@@ -1,7 +1,7 @@
 package com.alkemy.ong.data.gateways;
 
-import com.alkemy.ong.data.entity.MemberEntity;
-import com.alkemy.ong.data.repository.MemberRepository;
+import com.alkemy.ong.data.entities.MemberEntity;
+import com.alkemy.ong.data.repositories.MemberRepository;
 import com.alkemy.ong.domain.members.Member;
 import com.alkemy.ong.domain.members.MemberGateway;
 import com.alkemy.ong.web.exceptions.ResourceNotFoundException;
