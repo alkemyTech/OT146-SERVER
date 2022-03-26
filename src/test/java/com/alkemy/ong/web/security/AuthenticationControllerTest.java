@@ -75,10 +75,20 @@ public class AuthenticationControllerTest {
 
     @Test
     public void successLogin() throws Exception {
-        UserLoginDto userLoginDto = generateUserLoginDto("Test", "password");
+        UserLoginDto userLoginDto = generateUserLoginDto("new@mail.com", "password");
+
+        RolesEntity rolesEntity = generateRoleEntity(1L, "Admin", "Admin");
+        UserController.UserDTO userDTO = generateUserDto(1L,"Test", "Register", "new@mail.com", "password", 1L);
+        UserEntity userEntity = generateUserEntity(1L, "Test", "Register", "new@mail.com", "$2a$10$R4QXAeROWWBkBsxO9UUxoeUV3HsdP2AmAom.iHqYjiQyEWo6X66a2", null, rolesEntity);
+        when(roleRepository.save(rolesEntity)).thenReturn(rolesEntity);
+        when(roleRepository.findById(userDTO.getRoleId())).thenReturn(Optional.of(rolesEntity));
+        when(userRepository.save(toEntity(toDomain(userDTO)))).thenReturn(userEntity);
+        when(userRepository.findByEmail("new@mail.com")).thenReturn(Optional.of(userEntity));
+
+
 
         RequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/users/login")
+                .post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userLoginDto));
 
